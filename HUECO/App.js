@@ -2,13 +2,17 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 //Import Screens
-import ToDoApp from '../HUECO/src/Screens/ToDoApp';
+import ToDoApp from './src/Screens/ToDoApp';
+
+//REdux
+import store from './src/Redux/Store';
+import {Provider} from 'react-redux';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <Provider store={store}>
       <ToDoApp />
-    </View>
+    </Provider>
   );
 }
 
