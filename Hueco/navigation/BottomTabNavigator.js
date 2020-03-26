@@ -10,6 +10,12 @@ import TestScreen2 from '../screens/Test2';
 import TestScreen3 from '../screens/Test3';
 import ToDoScreen from '../screens/ToDoApp';
 
+// //Redux imports
+import {connect} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
+// import { loginUserNormal } from '../redux/actions'
+// import {addTodo} from '../actions';
+
 const BottomTab = createBottomTabNavigator();
 let INITIAL_ROUTE_NAME = 'Login';
 
@@ -29,16 +35,16 @@ let INITIAL_ROUTE_NAME = 'Login';
 // }
 
 
-export default function BottomTabNavigator({ navigation, route }) {
+function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerShown: getHeaderShown(route),  headerTitle: getHeaderTitle(route) });
-  let loggedIn = true
+  const login = useSelector(state => state.login)
+  const loggedIn = login.status
+  // alert('User Logged Props from nav: ' + JSON.stringify(login))
 
-  
   if(!loggedIn){
-    
     return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
         <BottomTab.Screen
@@ -96,6 +102,8 @@ export default function BottomTabNavigator({ navigation, route }) {
     );
   }
 }
+export default connect()(BottomTabNavigator);
+
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;

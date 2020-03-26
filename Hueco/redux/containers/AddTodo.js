@@ -14,7 +14,7 @@ class AddTodo extends Component {
     state = {
         text: ''
     }
-    AddTodo = (text) => {
+    AddTodo2 = (text) => {
         this.props.dispatch(addTodo(text))
         this.setState({text: ''})
     }
@@ -28,7 +28,7 @@ class AddTodo extends Component {
                     style={{borderWidth: 1, borderColor: '#f2f2e1', backgroundColor: '#eaeaea', height: 50, flex: 1, padding: 5}} 
                     placeholder="Add New Item"
                 />
-                <TouchableOpacity onPress={()=> this.AddTodo(this.state.text)}>
+                <TouchableOpacity onPress={()=> this.AddTodo2(this.state.text)}>
                     <View style={{height:50, backgroundColor: '#eaeaea', alignItems: 'center', justifyContent: 'center'}}>
                         <Ionicons name="md-add" size={30} style={{color: '#de9595', padding: 10}} />
                     </View>

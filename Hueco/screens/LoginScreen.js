@@ -11,34 +11,56 @@ import {
 //Import Screens/Components/Styles
 import {view_style, text_input, buttons} from '../assets/styles/styles';
 
+//Redux imports
+import {connect} from 'react-redux';
+import { loginUserNormal } from '../redux/actions'
+
+const mapStateToProps = state => (
+    {
+    login: state.login
+    }
+)
+
 class Login extends Component {
     state = {
         username: '',
         password: '',
         loggedIn: false,
+        loggedInStr: 'false',
         errorPresent: false,
         error_text: '',
         loginSuccess: false,
         registerUser: false
     }
     login_username = (user, pass) => {
-        this.setState({errorPresent: false, error_text: ""})
-        alert('Logging in user')
+        
+        this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
+        // alert('Logging in user')
         if (this.state.username.length===0 || this.state.password.length===0 ){
             this.setState({errorPresent: true, error_text: "Please Enter a Username/Password"})
             return
         } 
         //Call API to validate login
-        if(this.state.loginSuccess) {
+
+
+        if( this.state.loginSuccess) {
             this.setState({errorPresent: true, error_text: "Invalid Login"})
             return
         } else {
-            this.setState({loginSuccess: true})
+            this.setState({loginSuccess: true, loggedInStr: 'true'})
+            this.props.dispatch(loginUserNormal(user, true))
+            //Update Redux with new state (true)
+            // alert('User Logged In: ' + user)
+            
+            // alert('User Logged State: ' + this.state.login)
+            return
+
         }
 
         this.setState({errorPresent: true, error_text: 'Invalid Login'})
     }
     render() {
+        // alert('User Logged Props: ' + JSON.stringify(this.props.login))
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
@@ -75,7 +97,7 @@ class Login extends Component {
                         {this.state.errorPresent ? this.state.error_text: ""}
                     </Text>
 
-                    <TouchableOpacity style={view_style.center } onPress={()=> this.login_username(this.state.user, this.state.pass)}>
+                    <TouchableOpacity style={view_style.center } onPress={()=> this.login_username(this.state.username, this.state.password)}>
                         <Text style={buttons.primary}
                         >
                             Login
@@ -87,18 +109,26 @@ class Login extends Component {
                             Login With Google or Facebook
                         </Text>
                     </TouchableOpacity>
+
+                    <Text style={{color: 'pink'}}>Logged In: {this.state.loggedInStr}</Text>
+                    
                     <TouchableOpacity style={ view_style.center} onPress={() => alert('Register')}>
                         <Text style={buttons.primary}
                         >
                             Register
                         </Text>
                     </TouchableOpacity>
+
+
+                    
                 </View>
             </View>
         );
     }
 }
-export default Login;
+export default connect(mapStateToProps)(Login);
+// export default connect()(Login);
+
 
 const styles = StyleSheet.create({
     container: {
