@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import TestScreen1 from '../screens/Test1';
 import TestScreen2 from '../screens/Test2';
 import TestScreen3 from '../screens/Test3';
+import AppToDo from '../screens/ToDoApp';
 
 const BottomTab = createBottomTabNavigator();
 let INITIAL_ROUTE_NAME = 'Login';
