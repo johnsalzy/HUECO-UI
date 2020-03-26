@@ -11,6 +11,10 @@ import useLinking from './navigation/useLinking';
 
 const Stack = createStackNavigator();
 
+//REdux
+import store from './redux/store';
+import {Provider} from 'react-redux';
+
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -48,19 +52,21 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {/* {Platform.OS === 'ios' && <StatusBar barStyle="default" />} */}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen 
-              name="Root"
-              header='none'
-              component={BottomTabNavigator}
-              options={{stackBarLabel:null}}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          {/* {Platform.OS === 'ios' && <StatusBar barStyle="default" />} */}
+          <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+            <Stack.Navigator>
+              <Stack.Screen 
+                name="Root"
+                header='none'
+                component={BottomTabNavigator}
+                options={{stackBarLabel:null}}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </Provider>
     );
   }
 }

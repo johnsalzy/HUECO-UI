@@ -8,7 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import TestScreen1 from '../screens/Test1';
 import TestScreen2 from '../screens/Test2';
 import TestScreen3 from '../screens/Test3';
-import AppToDo from '../screens/ToDoApp';
+import ToDoScreen from '../screens/ToDoApp';
 
 const BottomTab = createBottomTabNavigator();
 let INITIAL_ROUTE_NAME = 'Login';
@@ -34,7 +34,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   navigation.setOptions({ headerShown: getHeaderShown(route),  headerTitle: getHeaderTitle(route) });
-  let loggedIn = false
+  let loggedIn = true
 
   
   if(!loggedIn){
@@ -85,8 +85,8 @@ export default function BottomTabNavigator({ navigation, route }) {
           }}
         />
         <BottomTab.Screen
-          name="About2"
-          component={TestScreen3}
+          name="ToDo"
+          component={ToDoScreen}
           options={{
             title: 'About Us 2',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
@@ -104,8 +104,8 @@ function getHeaderTitle(route) {
       return 'Join Today';
     case 'About':
       return 'About Us';
-      case 'About2':
-        return 'about us2';
+      case 'ToDo':
+        return 'To So Screen';
   }
 }
 
@@ -116,7 +116,7 @@ function getHeaderShown(route) {
       return false;
     case 'About':
       return true;
-      case 'About2':
+      case 'ToDo':
         return true;
   }
 }
