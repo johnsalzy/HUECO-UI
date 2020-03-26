@@ -42,8 +42,14 @@ class Login extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
-                    <Text style={{color:'#F4DF73', paddingBottom: '5%', fontSize:70, textAlign: 'center', fontWeight: 'bold'}}>
-                      Hueco
+                    <Text style={{color:'#F4DF73', paddingBottom: '0%', marginTop: '-2%', fontSize:60, textAlign: 'center', fontWeight: 'bold'}}>
+                      Rock
+                    </Text>
+                    <Text style={{color:'#F4DF73', paddingBottom: '0%', fontSize:60, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
+                      & 
+                    </Text>
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
+                      Rope
                     </Text>
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
