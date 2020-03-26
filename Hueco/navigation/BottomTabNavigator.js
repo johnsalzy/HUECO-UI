@@ -6,13 +6,12 @@ import TabBarIcon from '../components/TabBarIcon';
 import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
 import TestScreen1 from '../screens/Test1';
-import TestScreen2 from '../screens/Test2';
-import TestScreen3 from '../screens/Test3';
+import Profile from '../screens/Profile';
 import ToDoScreen from '../screens/ToDoApp';
 
 // //Redux imports
 import {connect} from 'react-redux';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 // import { loginUserNormal } from '../redux/actions'
 // import {addTodo} from '../actions';
 
@@ -83,10 +82,10 @@ function BottomTabNavigator({ navigation, route }) {
           }}
         />
         <BottomTab.Screen
-          name="About"
-          component={TestScreen2}
+          name="Profile"
+          component={Profile}
           options={{
-            title: 'About Us',
+            title: 'Profile',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
           }}
         />
@@ -94,7 +93,7 @@ function BottomTabNavigator({ navigation, route }) {
           name="ToDo"
           component={ToDoScreen}
           options={{
-            title: 'About Us 2',
+            title: 'List',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
           }}
         />
@@ -110,8 +109,8 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Login':
       return 'Join Today';
-    case 'About':
-      return 'About Us';
+    case 'Profile':
+      return 'Profile';
       case 'ToDo':
         return 'To So Screen';
   }
@@ -122,7 +121,7 @@ function getHeaderShown(route) {
   switch (routeName) {
     case 'Login':
       return false;
-    case 'About':
+    case 'Profile':
       return true;
       case 'ToDo':
         return true;

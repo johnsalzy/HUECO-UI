@@ -1,33 +1,48 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 
-import { MonoText } from '../components/StyledText';
+//Redux imports
+import {connect} from 'react-redux';
 
-export default function HomeScreen() {
-  return (
-      <ScrollView>
-          <View style={{paddingTop: 10, alignItems: 'center'}}>
-            <Text>Welcome to Heuco!!</Text>
-
-            <Text>Test3</Text>
-            <Text>Hello!!</Text>
-            <Text>Hello!!</Text>
-            <Text>Hello!!</Text>
-            <Text>Hello!!</Text>
-            <Text>Hello!!</Text>
-            <Text>Hello!!</Text>
-          </View>
-      </ScrollView>
+class Profile extends Component {
+  state = {
+    username: '',
+  }
 
 
-  );
+  logout_username = (username) => {
+    alert('Logging out user: ' + username)
+  }
+  
+  render(){
+    
+
+    return (
+        <ScrollView>
+            <View style={{paddingTop: 10, alignItems: 'center'}}>
+              <Text>Welcome to Heuco!!</Text>
+
+              <Text>Username:   </Text>
+              <Text>Photo </Text>
+              <Text>Hello!!</Text>
+              <Text>Hello!!</Text>
+              <Text>Hello!!</Text>
+              <Text>Hello!!</Text>
+
+              <TouchableOpacity onPress={()=> this.logout_username(this.state.username)} style={{paddingTop: 20}}>
+                <Text style={{color: 'red'}}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+        </ScrollView>
+
+
+    );
+  }
 }
+export default connect()(Profile)
 
-HomeScreen.navigationOptions = {
-  header: null,
-};
 
 
 
