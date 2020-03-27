@@ -69,7 +69,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={Profile}
           options={{
             title: 'Profile',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
           }}
         />
         <BottomTab.Screen
@@ -107,7 +107,7 @@ function getHeaderShown(route) {
     case 'Home':
       return false;
     case 'Profile':
-      return true;
+      return false;
     case 'ToDo':
       return true;
   }

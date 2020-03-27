@@ -24,8 +24,8 @@ const mapStateToProps = state => (
 
 class Login extends Component {
     state = {
-        username: '',
-        password: '',
+        username: 'John',
+        password: 'Gruffalo',
         loggedIn: false,
         errorPresent: false,
         error_text: '',
@@ -104,6 +104,7 @@ class Login extends Component {
                             placeholder='Password'
                             onChangeText = {(password) => this.setState({password})}
                             value = {this.state.password}
+                            secureTextEntry={true}
                         />
                     </View>
                     <TouchableOpacity onPress={() => alert('Reset Password Page Here')}>
