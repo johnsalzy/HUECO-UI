@@ -5,26 +5,37 @@ import * as WebBrowser from 'expo-web-browser';
 
 //Redux imports
 import {connect} from 'react-redux';
+import { logoutUser } from '../redux/actions'
+
+const mapStateToProps = state => (
+  {
+  login: state.login
+  }
+)
 
 class Profile extends Component {
   state = {
-    username: '',
+    username: this.props.login.username,
+    access_token: this.props.login.access_token,
   }
 
 
   logout_username = (username) => {
     alert('Logging out user: ' + username)
+    this.props.dispatch(logoutUser(username))
+
   }
   
   render(){
-    
+    const username = this.state.username
+    const access_token = this.state.access_token
 
     return (
         <ScrollView>
             <View style={{paddingTop: 10, alignItems: 'center'}}>
               <Text>Welcome to Heuco!!</Text>
-
-              <Text>Username:   </Text>
+              <Text style = {{color:'blue', fontSize: 15}}>Username:  {username} </Text>
+              <Text style = {{color:'green', fontSize: 15}}>access_token:  {access_token} </Text>
               <Text>Photo </Text>
               <Text>Hello!!</Text>
               <Text>Hello!!</Text>
@@ -41,7 +52,7 @@ class Profile extends Component {
     );
   }
 }
-export default connect()(Profile)
+export default connect(mapStateToProps)(Profile)
 
 
 

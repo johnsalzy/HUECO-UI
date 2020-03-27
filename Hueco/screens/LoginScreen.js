@@ -21,53 +21,74 @@ const mapStateToProps = state => (
     }
 )
 
+
 class Login extends Component {
     state = {
         username: '',
         password: '',
         loggedIn: false,
-        loggedInStr: 'false',
         errorPresent: false,
         error_text: '',
         loginSuccess: false,
-        registerUser: false
+        registerUser: false,
+        response: {},
+        loginDataLoaded: false
     }
-    login_username = (user, pass) => {
-        
-        this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
-        // alert('Logging in user')
-        if (this.state.username.length===0 || this.state.password.length===0 ){
-            this.setState({errorPresent: true, error_text: "Please Enter a Username/Password"})
-            return
-        } 
-        //Call API to validate login
-
-
-        if( this.state.loginSuccess) {
-            this.setState({errorPresent: true, error_text: "Invalid Login"})
-            return
-        } else {
-            this.setState({loginSuccess: true, loggedInStr: 'true'})
-            this.props.dispatch(loginUserNormal(user, true))
-            //Update Redux with new state (true)
-            // alert('User Logged In: ' + user)
-            
-            // alert('User Logged State: ' + this.state.login)
-            return
-
+    componentDidUpdate(){
+        // alert('Comp Updated: ' + JSON.stringify(this.state))
+        if(this.state.loginDataLoaded){
+            this.setState({loginDataLoaded: false})
+            this.login_username(this.state.username, this.state.password)
         }
-
-        this.setState({errorPresent: true, error_text: 'Invalid Login'})
     }
+
+    getLoginDetails = (user, pass) => {
+        // alert('Comp Updated: ' + JSON.stringify(this.state))
+        fetch("http://3.133.123.120:8000/auth/token", {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            client_id: 'NTMtzF7gzZPU9Ka35UFsDHvpR8e4D1Fy4OPRsurx',
+            grant_type: 'password', 
+            username: user, 
+            password: pass, 
+          })
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            this.setState({response: responseData, loginDataLoaded: true})
+        })
+        .done();
+        
+    }
+
+    login_username = (user, pass) => {
+        // Clear slate    
+        this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
+        let response = this.state.response;
+        if(response.error){
+            this.setState({loginSuccess: false, errorPresent: true, error_text: response.error_description})
+            return
+        }
+        this.props.dispatch(loginUserNormal(user, pass, response.access_token, response.refresh_token, true))
+        return
+
+        
+    }
+
+
     render() {
-        // alert('User Logged Props: ' + JSON.stringify(this.props.login))
+
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
                     <Text style={{color:'#F4DF73', paddingBottom: '0%', marginTop: '-2%', fontSize:60, textAlign: 'center', fontWeight: 'bold'}}>
                       Rock
                     </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '0%', fontSize:60, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
+                    <Text style={{color:'#F4DF73', paddingBottom: '0%', fontSize:40, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
                       & 
                     </Text>
                     <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
@@ -97,9 +118,8 @@ class Login extends Component {
                         {this.state.errorPresent ? this.state.error_text: ""}
                     </Text>
 
-                    <TouchableOpacity style={view_style.center } onPress={()=> this.login_username(this.state.username, this.state.password)}>
-                        <Text style={buttons.primary}
-                        >
+                    <TouchableOpacity style={view_style.center } onPress={() => this.getLoginDetails(this.state.username, this.state.password)}>
+                        <Text style={buttons.primary}>
                             Login
                         </Text>
                     </TouchableOpacity>
@@ -110,8 +130,6 @@ class Login extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={{color: 'pink'}}>Logged In: {this.state.loggedInStr}</Text>
-                    
                     <TouchableOpacity style={ view_style.center} onPress={() => alert('Register')}>
                         <Text style={buttons.primary}
                         >

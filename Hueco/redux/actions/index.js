@@ -1,4 +1,4 @@
-import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL} from './actionTypes'
+import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL} from './actionTypes'
 
 let nextId = 0
 export const addTodo = (text) => ({
@@ -15,9 +15,19 @@ export const toggleTodo = (id) => ({
 
 
 // Login Actions
-export const loginUserNormal = (user, loggedInStat) => ({
+export const loginUserNormal = (user, pass, access_token, refresh_token, loggedInStat) => ({
     type: LOGIN_USER_NORMAL,
     username: user,
-    loggedIn: loggedInStat
+    password: pass,
+    loggedIn: loggedInStat,
+    access_token: access_token, 
+    refresh_token: refresh_token
+})
 
+
+export const logoutUser = (user) => ({
+    type: LOGOUT_USER_NORMAL,
+    username: '',
+    password: '',
+    loggedIn: false
 })
