@@ -19,12 +19,6 @@ class Profile extends Component {
     access_token: this.props.login.access_token,
   }
 
-
-  logout_username = (username) => {
-    alert('Logging out user: ' + username)
-    this.props.dispatch(logoutUser(username))
-
-  }
   
   render(){
     const username = this.state.username
@@ -42,7 +36,7 @@ class Profile extends Component {
               <Text>Hello!!</Text>
               <Text>Hello!!</Text>
 
-              <TouchableOpacity onPress={()=> this.logout_username(this.state.username)} style={{paddingTop: 20}}>
+              <TouchableOpacity onPress={()=> this.props.dispatch(logoutUser(this.state.username))} style={{paddingTop: 20}}>
                 <Text style={{color: 'red'}}>Logout</Text>
               </TouchableOpacity>
             </View>

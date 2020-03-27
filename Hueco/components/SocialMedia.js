@@ -1,9 +1,7 @@
 import React from 'react';
-import { Linking } from 'react-native';
+import { Linking, View } from 'react-native';
 import { SocialIcon } from 'react-native-elements'
-import {
-  View,
-} from 'react-native';
+
 
 export default function SocialMedia() {
   return (

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
 
-import { MonoText } from '../components/StyledText';
+//Import files/componenets
+import SocialMedia from '../components/SocialMedia';
 
 export default function HomeScreen() {
   return (
@@ -11,13 +11,23 @@ export default function HomeScreen() {
           <View style={{paddingTop: 10, alignItems: 'center'}}>
             <Text>Welcome to Heuco!!</Text>
 
-            <Text>Test1</Text>
+            <Text>Test1 test</Text>
             <Text>Hello!!</Text>
             <Text>Hello!!</Text>
             <Text>Hello!!</Text>
             <Text>Hello!!</Text>
             <Text>Hello!!</Text>
             <Text>Hello!!</Text>
+          </View>
+
+
+
+
+
+
+          <View>
+            <SocialMedia />
+            <Text>{"\n"}{"\n"}</Text>{/* Breaks needed so social media does not get covered by nav bar */}
           </View>
       </ScrollView>
 
