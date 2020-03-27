@@ -5,7 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 //Import screens/fonts
 import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
-import TestScreen1 from '../screens/Test1';
+import HomePage from '../screens/HomePage';
 import Profile from '../screens/Profile';
 import ToDoScreen from '../screens/ToDoApp';
 
@@ -18,22 +18,6 @@ import { useSelector } from 'react-redux'
 const BottomTab = createBottomTabNavigator();
 let INITIAL_ROUTE_NAME = 'Login';
 
-// export default class BottomNavigation extends React.Component {
-//     render(){
-//       navigation = this.props.navigation;
-//       route = this.props.route;
-
-//       return(
-//         <View>  <Text>Hello</Text></View>
-
-
-//       );
-//     }
-
-
-// }
-
-
 function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
@@ -41,7 +25,6 @@ function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerShown: getHeaderShown(route),  headerTitle: getHeaderTitle(route) });
   const login = useSelector(state => state.login)
   const loggedIn = login.status
-  // alert('User Logged Props from nav: ' + JSON.stringify(login))
 
   if(!loggedIn){
     return (
@@ -71,10 +54,10 @@ function BottomTabNavigator({ navigation, route }) {
     return (
       <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
         <BottomTab.Screen
-          name="Login"
-          component={TestScreen1}
+          name="Home"
+          component={HomePage}
           options={{
-            title: 'Login',
+            title: 'Home',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
           }}
           navigationOptions={{
@@ -121,9 +104,11 @@ function getHeaderShown(route) {
   switch (routeName) {
     case 'Login':
       return false;
+    case 'Home':
+      return false;
     case 'Profile':
       return true;
-      case 'ToDo':
-        return true;
+    case 'ToDo':
+      return true;
   }
 }
