@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 // Import needed componenets
 import TabIcon from './TabIcon';
 import StatView from '../components/Stats'
+import Posts from '../components/Posts'
 
 
 const mapStateToProps = state => (
@@ -16,12 +17,6 @@ const mapStateToProps = state => (
     user: state.user
   }
 )
-
-function ImagePage(){
-    return (
-        <Text>Selected is Image Page</Text>
-    );
-}
 
 
 class UserStatView extends Component {
@@ -54,7 +49,7 @@ class UserStatView extends Component {
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatView />: <ImagePage/>
+                { selectedIndex ? <StatView />: <Posts />
 
                 }
             </View>
