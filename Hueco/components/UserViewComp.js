@@ -44,7 +44,7 @@ class UserStatView extends Component {
     const { selectedIndex } = this.state
     // alert('this.state render' + JSON.stringify(this.state))
     return (
-        <ScrollView>
+        <ScrollView style={{marginBottom: 40}}>
             <View style={{alignItems: 'center'}}>
                 <ButtonGroup
                     onPress={this.updateIndex}

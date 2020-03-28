@@ -1,4 +1,4 @@
-import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA} from './actionTypes'
+import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA, UPDATE_USER_STATS} from './actionTypes'
 
 let nextId = 0
 export const addTodo = (text) => ({
@@ -44,8 +44,15 @@ export const updateProfile = (userData) => ({
     private: userData.profile.private,
 })
 
-
-// User Actions
 export const clearProfile = (username) => ({
     type: DELETE_USER_DATA,
+})
+
+
+// Stat actions
+export const updateUserStats = (data) => ({
+    type: UPDATE_USER_STATS,
+    toprope: {},
+    boulder: {},
+    alltime: {}
 })
