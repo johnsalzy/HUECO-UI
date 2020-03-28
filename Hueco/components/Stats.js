@@ -27,7 +27,7 @@ class Stats extends Component {
       userData: this.props.user,
       switch1Value: false,
       data: { //Show bolder by default
-        type: 'bolder',
+        type: 'Boulder',
         sends: this.props.stats.allTime.boulder
     },
 
@@ -37,10 +37,10 @@ class Stats extends Component {
   toggleSwitchAllTime(){
       let currentVal = this.state.switch1Value
       let type = this.state.data.type
-      if (type == 'bolder'){
-        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.toprope, type: 'toprope'}})
+      if (type == 'Boulder'){
+        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.toprope, type: 'TopRope'}})
       } else {
-        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.boulder, type: 'bolder'}})
+        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.boulder, type: 'Boulder'}})
       }
   }
 
@@ -58,7 +58,7 @@ class Stats extends Component {
                     <Text>Top Rope</Text>
                 </View>
                 <VictoryChart domainPadding={15} width={chartWidth} theme={VictoryTheme.material}>
-                    <VictoryLabel text="All Time Sends" x={chartWidth/2} y={10} textAnchor="middle"/>
+                    <VictoryLabel text={"All Time " + this.state.data.type + " Sends"} x={chartWidth/2} y={10} textAnchor="middle"/>
                     <VictoryAxis
                         // Needed to have x axis present
                     />

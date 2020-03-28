@@ -53,7 +53,7 @@ class UserStatView extends Component {
                     containerStyle={{height: 50, width: '95%'}}
                 />
             </View>
-            <View style={{width: '95%', alignItems: 'center', alignContent: 'center'}}>
+            <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
                 { selectedIndex ? <StatView />: <ImagePage/>
 
                 }
