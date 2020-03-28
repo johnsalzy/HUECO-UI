@@ -38,7 +38,7 @@ class Stats extends Component {
       let currentVal = this.state.switch1Value
       let type = this.state.data.type
       if (type == 'Boulder'){
-        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.toprope, type: 'TopRope'}})
+        this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.toprope, type: 'Top Rope & Lead'}})
       } else {
         this.setState({switch1Value: !currentVal, data: {sends: this.props.stats.allTime.boulder, type: 'Boulder'}})
       }
