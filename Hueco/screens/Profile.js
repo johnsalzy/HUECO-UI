@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
-//Redux imports
 import {connect} from 'react-redux';
+
+import UserStatView from '../components/UserViewComp';
 import { logoutUser, updateProfile, clearProfile } from '../redux/actions'
 
 const mapStateToProps = state => (
@@ -73,6 +73,7 @@ class Profile extends Component {
     this.setState({profileDataLoaded: false})
   }
 
+  
   render(){
     
     const username = this.state.username
@@ -110,20 +111,14 @@ class Profile extends Component {
                             <Text style={{color: 'red'}}>Logout</Text>
                           </TouchableOpacity>
                       </View>
+
+
                   </View>
               </View>
-
-
-              {/* End of profile view, start of stats view */}
-              <View>
-                <Text>Test </Text>
-                <Text>Hello!!</Text>
-                <Text>Hello!!</Text>
-                <Text>Hello!!</Text>
-                <Text>Hello!!</Text>
-              </View>
-
             </View>
+            {/* End of profile view, start of stats view */}
+
+            <UserStatView />
         </ScrollView>
 
 
