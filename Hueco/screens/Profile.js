@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 //Redux imports
@@ -21,17 +21,17 @@ class Profile extends Component {
       access_token: this.props.login.access_token,
       userData: this.props.user,
       profileDataLoaded: false,
-      userData2: {profile: {sends: 0, first_name: "", last_name:"", profile_pic: ""}}
+      userData2: {profile: {sends: 0, first_name: "", last_name:"", profile_pic: "https://www.facebook.com/ProfilePictures/photos/a.466471457743/10154888128487744/?type=1&theater"}}
     }
   }
 
-  componentDidUpdate(){
-    // alert('Comp Updated: ' + JSON.stringify(this.state.userData))
-    if(!this.state.profileDataLoaded){
-      this.setState({profileDataLoaded: true})
-      this.loadUserData()
-    }
-  }
+  // componentDidUpdate(){
+  //   // alert('Comp Updated: ' + JSON.stringify(this.state.userData))
+  //   if(!this.state.profileDataLoaded){
+  //     this.setState({profileDataLoaded: true})
+  //     this.loadUserData()
+  //   }
+  // }
   // shouldComponentUpdate(nextProps, nextState){
   //   // alert('it should update' + JSON.stringify(nextProps) + '--------------' + JSON.stringify(nextState))
   //   if(nextProps !== nextState){
@@ -87,22 +87,25 @@ class Profile extends Component {
               {/* <ProfileInfo name={this.state.userData2.name} role={'n/a'} bio={'sdafasd'} avatar={profile_pic} /> */}
               <View style={styles.container}>
                   <View style={{backgroundColor: "#EBEBEB", paddingTop: '4%', verticalAlign: 'center', justifyContent: 'center'}}>
-                      <View style={styles.headerContent, {flex: 1, flexDirection: "row"}}>
+                      <View style={styles.headerContent, {flex: 1, flexDirection: "row", alignItems: 'center'}}>
+                        
                         <View style={{alignItems: 'center', alignContent: "center", paddingLeft: "2%",width:"58%"}}>
                           <Image style={styles.avatar}
                               source={{uri: profile_pic}}
                           />
                         </View>
-                        <View sytle={{alignItems: "center", alignContent: "center", borderWidth: 2, borderColor: 'black'}}>
-                          <Text style={{paddingTop:"4%", paddingBottom: "0%"}}>Following: {this.state.userData2.profile.following}</Text>
-                          <Text >Followers: {this.state.userData2.profile.followers}</Text>
-                          <Text >Sends: {this.state.userData2.profile.sends}</Text>
+
+                        <View>
+                          <View style={styles.flexInRow}><Text style={styles.userStats}>Following: </Text><Text style={styles.userStats}>{this.state.userData2.profile.following}</Text></View>
+                          <View style={styles.flexInRow}><Text style={styles.userStats}>Followers: </Text><Text style={styles.userStats}>{this.state.userData2.profile.followers}</Text></View>
+                          <View style={styles.flexInRow}><Text style={styles.userStats}>Sends: </Text><Text style={styles.userStats}>{this.state.userData2.profile.sends}</Text></View>
                         </View>
                       </View>
+
                       <View style={{alignItems: "center", alignContent: "center", paddingBottom: "5%", justifyContent: 'center'}}>
                           <Text style={styles.name}>{this.state.userData2.first_name + ' ' + this.state.userData2.last_name} </Text>
                           <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
-                          <Text style={styles.userInfo}>About: {'Loves to spray beta'} </Text>
+                          <Text style={styles.userInfo}>Achievement: {'King Beta Sprayer'} </Text>
                           <TouchableOpacity onPress={()=> this.logoutUser()}>
                             <Text style={{color: 'red'}}>Logout</Text>
                           </TouchableOpacity>
@@ -110,14 +113,15 @@ class Profile extends Component {
                   </View>
               </View>
 
-              {/* <Text style = {{color:'blue', fontSize: 15}}>Username:  {username} </Text>
-              <Text style = {{color:'green', fontSize: 15}}>access_token:  {access_token} </Text> */}
-              <Text>Test </Text>
-              <Text>Hello!!</Text>
-              <Text>Hello!!</Text>
-              <Text>Hello!!</Text>
-              <Text>Hello!!</Text>
 
+              {/* End of profile view, start of stats view */}
+              <View>
+                <Text>Test </Text>
+                <Text>Hello!!</Text>
+                <Text>Hello!!</Text>
+                <Text>Hello!!</Text>
+                <Text>Hello!!</Text>
+              </View>
 
             </View>
         </ScrollView>
@@ -128,22 +132,9 @@ class Profile extends Component {
 }
 export default connect(mapStateToProps)(Profile)
 
-
-// Class layout for how a exec member is displayed
-// class ProfileInfo extends Component {
-//   render() {
-//     alert('IN PROFIle')
-//     return (
-
-//     );
-//   }
-// }
-
-
-
 const styles = StyleSheet.create({
 
-  //   For Profile 
+  //   For Profile
     container: {
       flex: 1,
       alignSelf: 'stretch',
@@ -169,5 +160,14 @@ const styles = StyleSheet.create({
       color:"#778899",
       fontWeight:'600',
     },
+    flexInRow: {
+      flexDirection: 'row',
+      paddingTop: '1%',
+      paddingBottom: '1%',
+    },
+    userStats: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    }
   
   });
