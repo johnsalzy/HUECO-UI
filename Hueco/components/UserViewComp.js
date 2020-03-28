@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 
 
 // Import needed componenets
-import TabIcon from '../components/TabIcon';
-
+import TabIcon from './TabIcon';
+import StatView from '../components/Stats'
 
 
 const mapStateToProps = state => (
@@ -23,17 +23,14 @@ function ImagePage(){
     );
 }
 
-function StatPage(){
-    return (
-        <Text>Selected is stat Page</Text>
-    );
-}
 
 class UserStatView extends Component {
   constructor(props){
     super(props);
     this.state= {
-        selectedIndex: 0
+        selectedIndex: 0,
+        userInfo: this.props.user,
+        loginInfo: this.props.login,
     }
     this.updateIndex = this.updateIndex.bind(this)
   }
@@ -45,7 +42,7 @@ class UserStatView extends Component {
   render(){
     const buttons = [<TabIcon focused={true} name='md-camera'/>, <TabIcon name='md-stats'/>]
     const { selectedIndex } = this.state
-
+    // alert('this.state render' + JSON.stringify(this.state))
     return (
         <ScrollView>
             <View style={{alignItems: 'center'}}>
@@ -57,7 +54,7 @@ class UserStatView extends Component {
                 />
             </View>
             <View style={{width: '95%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatPage />: <ImagePage/>
+                { selectedIndex ? <StatView />: <ImagePage/>
 
                 }
             </View>
