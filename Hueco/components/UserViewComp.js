@@ -49,9 +49,7 @@ class UserStatView extends Component {
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatView />: <Posts />
-
-                }
+                { selectedIndex ? <StatView />: <Posts /> }
             </View>
         </ScrollView>
 

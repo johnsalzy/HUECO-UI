@@ -24,21 +24,21 @@ class Posts extends Component {
     }
 
 
-  render(){
+    render(){
 
-    return (
-        <View style={styles.container}>
-
-
-            <Text>This is posts page</Text>
-            <Text>Test</Text>
-            <Text>Test</Text>
-            <Text>Test</Text>
-            <Text>Test</Text>
+        return (
+            <View style={styles.container}>
 
 
-        </View>
-    );
+                <Text>This is posts page</Text>
+                <Text>Test</Text>
+                <Text>Test</Text>
+                <Text>Test</Text>
+                <Text>Test</Text>
+
+
+            </View>
+        );
   }
 }
 export default connect(mapStateToProps)(Posts)
