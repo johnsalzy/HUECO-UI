@@ -105,8 +105,9 @@ class Profile extends Component {
 
                       <View style={{alignItems: "center", alignContent: "center", paddingBottom: "5%", justifyContent: 'center'}}>
                           <Text style={styles.name}>{this.state.userData2.first_name + ' ' + this.state.userData2.last_name} </Text>
-                          <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
                           <Text style={styles.userInfo}>Achievement: {'King Beta Sprayer'} </Text>
+                          <Text style={styles.userInfo}>Member Since: {'3/27/2020'} </Text>
+                          <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
                           <TouchableOpacity onPress={()=> this.logoutUser()}>
                             <Text style={{color: 'red'}}>Logout</Text>
                           </TouchableOpacity>
