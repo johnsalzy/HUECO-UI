@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 
 
@@ -12,6 +12,8 @@ const mapStateToProps = state => (
   }
 )
 
+
+
 class Posts extends Component {
     constructor(props){
         super(props);
@@ -19,18 +21,32 @@ class Posts extends Component {
             username: this.props.login.username,
             access_token: this.props.login.access_token,
             userData: this.props.user,
-            switch1Value: false,
+            postData: []
         }
     }
-
+    async componentDidMount(){
+        const response = await fetch(`https://jsonplaceholder.typicode.com/photos`)
+        const json = await response.json();
+        this.setState({ postData: json.slice(1,5) });
+        // alert('mount: ' + JSON.stringify(this.state.postData))
+    }
 
     render(){
 
         return (
             <View style={styles.container}>
+                <Text style={{fontWeight: 'bold', fontSize: 20}}>This is posts page</Text>
 
+                {this.state.postData.map((data, index) => (
+                    <View style={{paddingTop: 18}} key={index}>
+                        <Text >Title: {data.title}</Text>
+                        <Image 
+                            source={{'uri': data.url}}  
+                            style={{width: 400, height: 400}} 
+                        />
+                    </View>
+                ))}
 
-                <Text>This is posts page</Text>
                 <Text>Test</Text>
                 <Text>Test</Text>
                 <Text>Test</Text>
