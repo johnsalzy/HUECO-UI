@@ -50,7 +50,7 @@ class Posts extends Component {
         let loadedPosts = this.state.loadedPosts
         this.setState({loadedPosts: loadedPosts += 5})
     }
-    visitProfile = () => {
+    visitProfile = (id) => {
         alert('Visiting profile for: ' + id)
     }
 
