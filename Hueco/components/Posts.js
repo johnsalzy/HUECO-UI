@@ -87,7 +87,7 @@ class Posts extends Component {
                                         <View style={{justifyContent: 'center', paddingRight: 10}}>
                                             <TouchableOpacity  onPress={() => this.visitProfile(data.id)}>
                                                 <Image 
-                                                    source={{'uri': data.url}}  
+                                                    source={{'uri': this.state.userData.profile_pic}}  
                                                     style={{    
                                                         height: 50,
                                                         width: 50,
