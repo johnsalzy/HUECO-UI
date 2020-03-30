@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import HomePage from '../screens/HomePage';
 import Profile from '../screens/Profile';
 import ToDoScreen from '../screens/ToDoApp';
+import SearchScreen from '../screens/SearchScreen';
 
 // //Redux imports
 import {connect} from 'react-redux';
@@ -65,19 +66,27 @@ function BottomTabNavigator({ navigation, route }) {
           }}
         />
         <BottomTab.Screen
-          name="Profile"
-          component={Profile}
+          name="Search"
+          component={SearchScreen}
           options={{
-            title: 'Profile',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
+            title: 'Search',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />,
           }}
         />
         <BottomTab.Screen
           name="ToDo"
           component={ToDoScreen}
           options={{
-            title: 'List',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
+            title: 'Add',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
+          }}
+        />
+        <BottomTab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: 'Profile',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
           }}
         />
       </BottomTab.Navigator>
@@ -94,8 +103,10 @@ function getHeaderTitle(route) {
       return 'Join Today';
     case 'Profile':
       return 'Profile';
-      case 'ToDo':
-        return 'To So Screen';
+    case 'Search':
+      return 'Search';
+    case 'ToDo':
+      return 'To So Screen';
   }
 }
 
@@ -107,6 +118,8 @@ function getHeaderShown(route) {
     case 'Home':
       return false;
     case 'Profile':
+      return false;
+    case 'Search':
       return false;
     case 'ToDo':
       return true;
