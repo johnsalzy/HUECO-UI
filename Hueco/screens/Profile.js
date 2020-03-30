@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
@@ -25,20 +25,6 @@ class Profile extends Component {
     }
   }
 
-  // componentDidUpdate(){
-  //   // alert('Comp Updated: ' + JSON.stringify(this.state.userData))
-  //   if(!this.state.profileDataLoaded){
-  //     this.setState({profileDataLoaded: true})
-  //     this.loadUserData()
-  //   }
-  // }
-  // shouldComponentUpdate(nextProps, nextState){
-  //   // alert('it should update' + JSON.stringify(nextProps) + '--------------' + JSON.stringify(nextState))
-  //   if(nextProps !== nextState){
-  //     return true
-  //   }
-  //   // this.setState({})
-  // }
   componentDidMount(){
     this.loadUserData()
   }
