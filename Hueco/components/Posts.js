@@ -80,7 +80,7 @@ class Posts extends Component {
                         />
                             <View style={{
                                 backgroundColor: '#bfbcb2',
-                                padding: 5,
+                                padding: 3,
                                 }}>
                                     <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                                         {/* This is the thumbnail section */}
@@ -91,7 +91,7 @@ class Posts extends Component {
                                                     style={{    
                                                         height: 50,
                                                         width: 50,
-                                                        borderRadius: 5,
+                                                        borderRadius: 50,
                                                         borderColor: 'black',
                                                         borderWidth: 1,
                                                     }} 
@@ -99,7 +99,7 @@ class Posts extends Component {
                                             </TouchableOpacity>
                                         </View>
                                         {/* This is the Title section */}
-                                        <View style= {{alignItems: 'center', justifyContent: 'center', width: '70%'}}>
+                                        <View style= {{alignItems: 'center', justifyContent: 'center', width: '65%'}}>
                                             <Text style={{fontWeight: 'bold', fontSize: 15, textAlign: 'center',}}>{data.title}</Text>
                                         </View>
                                         {/* This is likes/comments section */}
