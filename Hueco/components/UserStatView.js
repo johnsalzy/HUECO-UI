@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 
 // Import needed componenets
 import TabIcon from './TabIcon';
-import StatView from '../components/Stats'
-import Posts from '../components/Posts'
+import StatView from './Stats'
+import Posts from './Posts'
 
 
 const mapStateToProps = state => (
