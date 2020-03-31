@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import { SearchBar, ButtonGroup } from 'react-native-elements';
+import { SearchBar, ButtonGroup, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const windowWidth = Dimensions.get('window').width;
@@ -19,7 +19,9 @@ export default class SearchScreen extends React.Component {
       }
     
 
-
+    searchItem = search => {
+        alert('search: ' + this.state.search + ' ' + this.state.searchCat)
+    };
     updateSearch = search => {
         this.setState({ search });
     };
@@ -55,19 +57,24 @@ export default class SearchScreen extends React.Component {
                         buttons={buttons}
                         containerStyle={{height: 50, width: windowWidth*.95}}
                     />
-                    <View style={{height: windowHeight, width: windowWidth*.9}}>
-                        <SearchBar
-                            placeholder={placeholder}
-                            onChangeText={this.updateSearch}
-                            onCancel={() => this.clearSearch()}
-                            platform='default'
-                            value={search}
-                            inputStyle={{backgroundColor: 'white'}}
-                            leftIconContainerStyle={{backgroundColor: 'white'}}
-                            containerStyle={{backgroundColor: 'white', borderWidth: 1, borderRadius: 5}}
-                            inputContainerStyle={{backgroundColor: 'white'}}
-                            // placeholderTextColor={'#g5g5g5'}
-                        />
+                    <View style={{height: windowHeight, width: windowWidth*.9, flexDirection: 'row'}}>
+                        <View style={{width: windowWidth*.7}}>
+                            <SearchBar
+                                placeholder={placeholder}
+                                onChangeText={this.updateSearch}
+                                onCancel={() => this.clearSearch()}
+                                platform='default'
+                                value={search}
+                                inputStyle={{backgroundColor: 'white'}}
+                                leftIconContainerStyle={{backgroundColor: 'white'}}
+                                containerStyle={{backgroundColor: 'white', height: 60, borderWidth: 1, borderRadius: 5}}
+                                inputContainerStyle={{backgroundColor: 'white'}}
+                                // placeholderTextColor={'#g5g5g5'}
+                            />
+                        </View>
+                        <View style={{width: windowWidth*.2, paddingLeft: 1}}>
+                            <Button title='Search' onPress={this.searchItem} buttonStyle={{width: windowWidth*.2, height: 60, borderRadius: 5}}/>
+                        </View>
                     </View>
                     <Text>Hello!!</Text>
                     <Text>Hello!!</Text>
