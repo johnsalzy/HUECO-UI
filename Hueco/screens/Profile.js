@@ -34,13 +34,14 @@ class Profile extends Component {
     try {
       //Assign the promise unresolved first then get the data using the json method. 
       // const aboutApiCall = await fetch('https://salzyjohn.pythonanywhere.com/AboutUs');
-      fetch("http://3.133.123.120:8000/api/v1/users/profile", {
+      fetch("http://3.133.123.120:8000/api/v1/users/me", {
         headers: {
             'Authorization': 'Bearer ' + this.state.access_token,
         }
       })
       .then((response) => response.json())
       .then((responseData) => {
+          // alert('test' + JSON.stringify(responseData))
           this.setState({profileDataLoaded: true, userData2: responseData})
           this.props.dispatch(updateProfile(responseData))
       })
@@ -61,11 +62,8 @@ class Profile extends Component {
 
   
   render(){
-    
-    const username = this.state.username
-    const access_token = this.state.access_token
     let profile_pic = this.state.userData2.profile.profile_pic
-    // alert('render  ' + JSON.stringify(this.state) + '--------' + profile_pic + ' ----' + this.state.userData.name)
+    // alert('render  ' + '--------' + profile_pic + '--------' )
 
 
     return (
@@ -78,7 +76,7 @@ class Profile extends Component {
                         
                         <View style={{alignItems: 'center', alignContent: "center", paddingLeft: "2%",width:"58%"}}>
                           <Image style={styles.avatar}
-                              source={{uri: profile_pic}}
+                              source={{uri: this.state.userData2.profile.profile_pic}}
                           />
                         </View>
 
@@ -92,7 +90,7 @@ class Profile extends Component {
                       <View style={{alignItems: "center", alignContent: "center", paddingBottom: "5%", justifyContent: 'center'}}>
                           <Text style={styles.name}>{this.state.userData2.first_name + ' ' + this.state.userData2.last_name} </Text>
                           <Text style={styles.userInfo}>Achievement: {'King Beta Sprayer'} </Text>
-                          <Text style={styles.userInfo}>Member Since: {'3/27/2020'} </Text>
+                          <Text style={styles.userInfo}>Member Since: {this.state.userData2.date_joined} </Text>
                           <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
                           <TouchableOpacity onPress={()=> this.logoutUser()}>
                             <Text style={{color: 'red'}}>Logout</Text>
