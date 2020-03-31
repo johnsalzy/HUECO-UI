@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
-import UserStatView from '../components/UserViewComp';
+import UserStatView from '../components/UserStatView';
 import { logoutUser, updateProfile, clearProfile } from '../redux/actions'
 
 const mapStateToProps = state => (
@@ -62,14 +62,9 @@ class Profile extends Component {
 
   
   render(){
-    let profile_pic = this.state.userData2.profile.profile_pic
-    // alert('render  ' + '--------' + profile_pic + '--------' )
-
-
     return (
         <ScrollView>
             <View style={{paddingTop: 10, alignItems: 'center'}}>
-              {/* <ProfileInfo name={this.state.userData2.name} role={'n/a'} bio={'sdafasd'} avatar={profile_pic} /> */}
               <View style={styles.container}>
                   <View style={{backgroundColor: "#EBEBEB", paddingTop: '4%', verticalAlign: 'center', justifyContent: 'center'}}>
                       <View style={styles.headerContent, {flex: 1, flexDirection: "row", alignItems: 'center'}}>
