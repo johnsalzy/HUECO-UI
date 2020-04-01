@@ -6,10 +6,15 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
+    Dimensions
 } from "react-native";
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 //Import Screens/Components/Styles
 import {view_style, text_input, buttons} from '../assets/styles/styles';
+import Register from '../components/Modals/register'
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -32,7 +37,8 @@ class Login extends Component {
         loginSuccess: false,
         registerUser: false,
         response: {},
-        loginDataLoaded: false
+        loginDataLoaded: false,
+        modalVisible: false,
     }
     componentDidUpdate(){
         // alert('Comp Updated: ' + JSON.stringify(this.state))
@@ -78,10 +84,12 @@ class Login extends Component {
 
         
     }
-
+    closeModal = () => {
+        this.setState({modalVisible: false});
+    }
 
     render() {
-
+        let {modalVisible} = this.state
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
@@ -131,16 +139,19 @@ class Login extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={ view_style.center} onPress={() => alert('Register')}>
+                    <TouchableOpacity style={ view_style.center} onPress={() => this.setState({modalVisible: true})}>
                         <Text style={buttons.primary}
                         >
                             Register
                         </Text>
                     </TouchableOpacity>
-
-
-                    
                 </View>
+                {modalVisible ? 
+                    <View style={styles.viewModalIn}>
+                        <Register closeModal={() => this.closeModal()} modalVisible={modalVisible}/>
+                    </View>
+                : null
+                }
             </View>
         );
     }
@@ -154,5 +165,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#052F5F',
         paddingTop: 40
+    },
+    viewModalIn: {
+        width: windowWidth, 
+        height: windowHeight,
+        backgroundColor: '#00000080',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
     }
 });
