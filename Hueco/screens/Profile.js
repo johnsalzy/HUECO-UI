@@ -21,7 +21,7 @@ class Profile extends Component {
       access_token: this.props.login.access_token,
       userData: this.props.user,
       profileDataLoaded: false,
-      userData2: {profile: {sends: 0, first_name: "", last_name:"", profile_pic: "https://www.facebook.com/ProfilePictures/photos/a.466471457743/10154888128487744/?type=1&theater"}}
+      userData2: {date_joined: '', profile: { sends: 0, first_name: "", last_name:"", profile_pic: "https://www.facebook.com/ProfilePictures/photos/a.466471457743/10154888128487744/?type=1&theater"}}
     }
   }
 
@@ -62,6 +62,7 @@ class Profile extends Component {
 
   
   render(){
+    alert('test' + JSON.stringify(this.state.userData))
     return (
         <ScrollView>
             <View style={{paddingTop: 10, alignItems: 'center'}}>
@@ -85,7 +86,7 @@ class Profile extends Component {
                       <View style={{alignItems: "center", alignContent: "center", paddingBottom: "5%", justifyContent: 'center'}}>
                           <Text style={styles.name}>{this.state.userData2.first_name + ' ' + this.state.userData2.last_name} </Text>
                           <Text style={styles.userInfo}>Achievement: {'King Beta Sprayer'} </Text>
-                          <Text style={styles.userInfo}>Member Since: {this.state.userData2.date_joined} </Text>
+                          <Text style={styles.userInfo}>Member Since: {this.state.userData2.date_joined.split('T')[0]} </Text>
                           <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
                           <TouchableOpacity onPress={()=> this.logoutUser()}>
                             <Text style={{color: 'red'}}>Logout</Text>
@@ -98,7 +99,7 @@ class Profile extends Component {
             </View>
             {/* End of profile view, start of stats view */}
 
-            <UserStatView />
+            {/* <UserStatView />  Temp disabled till matthew does some API work for a change */}
         </ScrollView>
 
 
