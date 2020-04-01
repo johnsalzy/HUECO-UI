@@ -11,7 +11,6 @@ import {
     Dimensions,
     Button,
 } from "react-native";
-import { ButtonGroup } from 'react-native-elements';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 //Import Screens/Components/Styles
@@ -38,14 +37,6 @@ const User = t.struct({
 //   private: t.Boolean,
   terms: t.Boolean
 });
-const Gym = t.struct({
-    gymName: Email,
-    email: t.String,
-    username: t.String,
-    location: t.String,
-    password: t.String,
-    terms: t.Boolean
-  });
 const formStyles = {
     ...Form.stylesheet,
     formGroup: {
@@ -83,9 +74,6 @@ const options = {
       terms: {
         label: 'Agree to Terms',
       },
-      gymName: {
-          label: 'Name of Gym',
-      }
     },
     stylesheet: formStyles,
 };
@@ -103,20 +91,9 @@ class Register extends Component {
         this.state = {
             modalVisible: this.props.modalVisible,
             login: this.props.login,
-            selectedIndex: 0,
-            index: "User",
         };
-        this.updateIndex = this.updateIndex.bind(this)
     }
-    updateIndex (selectedIndex) {
-        let index = ''
-        if(selectedIndex == 0){
-            index = "User"
-        }else{
-            index = "Gym"
-        }
-        this.setState({selectedIndex, index: index})
-    }
+
     closeModal = () => {
         this.props.closeModal()
     }
@@ -125,7 +102,7 @@ class Register extends Component {
         alert('value: '+ JSON.stringify(value));
     }
     render() {
-        let {modalVisible, selectedIndex, index} = this.state;
+        let { modalVisible } = this.state;
         const buttons = [<Text>User</Text>, <Text>Gym</Text>]
         return (
                 <Modal
@@ -140,39 +117,18 @@ class Register extends Component {
                                     <TouchableOpacity onPress={() => this.closeModal() }>
                                         <Text style={styles.modalLeave}>X</Text>
                                     </TouchableOpacity>
-                                    <ButtonGroup
-                                        onPress={this.updateIndex}
-                                        selectedIndex={selectedIndex}
-                                        buttons={buttons}
-                                        containerStyle={{height: 50, width: windowWidth*.80, borderColor: 'black'}}
-                                        innerBorderStyle={{color: 'black'}}
-                                    />
                                     <View style={styles.containerForm}>
-                                        {index == "User" ? 
-                                            <View>
-                                                <Form 
-                                                ref={c => this._form = c}
-                                                type={User} 
-                                                options={options}
-                                                />
-                                                <Button
-                                                title="Sign Up!"
-                                                onPress={() => this.handleSubmit()}
-                                                />
-                                            </View>
-                                            : 
-                                            <View>
-                                                <Form 
-                                                ref={c => this._form = c}
-                                                type={Gym} 
-                                                options={options}
-                                                />
-                                                <Button
-                                                title="Sign Up!"
-                                                onPress={() => this.handleSubmit()}
-                                                />
-                                            </View>
-                                        }
+                                        <View>
+                                            <Form 
+                                            ref={c => this._form = c}
+                                            type={User} 
+                                            options={options}
+                                            />
+                                            <Button
+                                            title="Sign Up!"
+                                            onPress={() => this.handleSubmit()}
+                                            />
+                                        </View>
                                     </View>
                                 </ScrollView>
                                 
