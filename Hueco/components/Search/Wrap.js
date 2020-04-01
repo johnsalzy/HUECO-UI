@@ -13,7 +13,6 @@ class SearchScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            access_token: this.props.login.access_token,
             category: this.props.searchCat,
             data: this.props.data
         };
