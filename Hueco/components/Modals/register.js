@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     Modal,
     Dimensions
 } from "react-native";
@@ -35,23 +36,31 @@ class Register extends Component {
     render() {
         let {modalVisible} = this.state
         return (
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                }}
-            >
-                <View style={styles.container}
+            
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    }}
                 >
-                    <Text>This is inmodal</Text>
-                    <TouchableOpacity onPress={() => this.closeModal() }>
-                        <Text>Close Modal</Text>
+                    <TouchableOpacity onPress={() => this.closeModal() } >
+                        <TouchableWithoutFeedback>
+                            <View style={styles.container}>
+                                
+                                    <View>
+                                        <TouchableOpacity onPress={() => this.closeModal() }>
+                                            <Text style={styles.modalLeave}>X</Text>
+                                        </TouchableOpacity>
+                                        <Text>This is inmodal</Text>
+                                    </View>
+                                
+                            </View>
+                        </TouchableWithoutFeedback>
                     </TouchableOpacity>
-                </View>
-            </Modal>
-
+                </Modal>
+            
         );
     }
 }
@@ -67,6 +76,11 @@ const styles = StyleSheet.create({
         marginLeft: windowWidth*.1,
         padding: 10,
         borderRadius: 4,
-
+    },
+    modalLeave: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginLeft: 'auto',
+        color: 'red',
     }
 });
