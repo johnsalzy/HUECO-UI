@@ -58,7 +58,9 @@ class SearchScreen extends React.Component {
             apiRoute = apiRoute + 'users/?search=' + search
         }else if(searchCat == "Areas"){
             apiRoute = apiRoute + 'areas/?name=' + search
-        }else{
+        }else if(searchCat == "Walls"){
+            apiRoute = apiRoute + 'walls/?name=' + search
+        } else{
             apiRoute = apiRoute + 'routes/?name=' + search
         }
         this.loadUserData(apiRoute)
@@ -76,10 +78,13 @@ class SearchScreen extends React.Component {
         let placeholder = ''
         if(selectedIndex == 0){
             searchCat = "Users"
-            placeholder = "Username"
+            placeholder = "Username / Name"
         }else if(selectedIndex == 1){
             searchCat = "Areas"
             placeholder = "Gym/Area Name"
+        }else if(selectedIndex == 2){
+            searchCat = "Walls"
+            placeholder = "Wall Name"
         }else{
             searchCat = "Routes"
             placeholder = "Route Name"
@@ -96,7 +101,7 @@ class SearchScreen extends React.Component {
         let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData } = this.state;
         // alert('render: '  + JSON.stringify(fetchData))
         
-        const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Routes</Text>]
+        const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
             <ScrollView >
                 <View style={{paddingTop: 25, alignItems: 'center', backgroundColor: 'white'}}>

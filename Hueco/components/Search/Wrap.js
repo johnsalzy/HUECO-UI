@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import {connect} from 'react-redux';
+import { View } from 'react-native';
 
-import UserView from './Users'
-import AreaView from './Area'
-import RouteView from './Routes'
+// Import Components
+import UserView from './Users';
+import AreaView from './Area';
+import RouteView from './Routes';
+import WallView from './Walls';
 
-const mapStateToProps = state => (
-  {
-    login: state.login,
-  }
-)
+
 
 class SearchScreen extends React.Component {
     constructor(props){
@@ -32,17 +28,9 @@ class SearchScreen extends React.Component {
                 {category == 'Users' ? <UserView data={data}/>: null}
                 {category == 'Areas' ? <AreaView data={data}/>: null}
                 {category == 'Routes' ? <RouteView data={data}/>: null}
-                
+                {category == 'Walls' ? <WallView data={data}/>: null}
             </View>
         );
     }
 }
-export default connect(mapStateToProps)(SearchScreen)
-
-
-
-
-
-const styles = StyleSheet.create({
-
-});
+export default SearchScreen
