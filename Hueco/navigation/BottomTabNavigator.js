@@ -7,7 +7,7 @@ import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
 import HomePage from '../screens/HomePage';
 import Profile from '../screens/Profile';
-import ToDoScreen from '../screens/ToDoApp';
+import AddScreen from '../screens/Add';
 import SearchScreen from '../screens/SearchScreen';
 
 // //Redux imports
@@ -74,8 +74,8 @@ function BottomTabNavigator({ navigation, route }) {
           }}
         />
         <BottomTab.Screen
-          name="ToDo"
-          component={ToDoScreen}
+          name="Add"
+          component={AddScreen}
           options={{
             title: 'Add',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
@@ -121,7 +121,7 @@ function getHeaderShown(route) {
       return false;
     case 'Search':
       return false;
-    case 'ToDo':
+    case 'Add':
       return false;
   }
 }
