@@ -36,7 +36,7 @@ class SearchScreen extends React.Component {
         this.setState({dataFetched: false, prevData: false, nextData: false})
         try {
           //Assign the promise unresolved first then get the data using the json method.
-          const response = await fetch(apiPath, {
+          await fetch(apiPath, {
             headers: {
                 'Authorization': 'Bearer ' + this.state.access_token,
             }
