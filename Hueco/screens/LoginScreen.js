@@ -132,12 +132,12 @@ class Login extends Component {
                             Login
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={ view_style.center} onPress={() => alert('Logging In with FB/Google')}>
+                    {/* <TouchableOpacity style={ view_style.center} onPress={() => alert('Logging In with FB/Google')}>
                         <Text style={buttons.primary}
                         >
                             Login With Google or Facebook
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity style={ view_style.center} onPress={() => this.setState({modalVisible: true})}>
                         <Text style={buttons.primary}
