@@ -122,6 +122,6 @@ function getHeaderShown(route) {
     case 'Search':
       return false;
     case 'ToDo':
-      return true;
+      return false;
   }
 }
