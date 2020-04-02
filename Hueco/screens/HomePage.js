@@ -5,8 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 //Import files/componenets
 import SocialMedia from '../components/SocialMedia';
 import Ionicon from '../components/Ionicon';
-import AddOptionModal from '../components/Modals/AddOptions'
-import {app_styles} from '../assets/styles/universal'
+import AddOptionModal from '../components/Modals/AddOptions';
+import AddPostModal from '../components/Modals/CreatePost';
+import {app_styles} from '../assets/styles/universal';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,13 +35,12 @@ export default class HomeScreen extends Component {
     });
   }
   createPost = () => {
-    alert('creating post')
     this.setState({
       modalAddVisable: false, 
       modalAddPost: true,});
   }
   render(){
-    let {modalAddVisable} = this.state
+    let {modalAddVisable, modalAddPost, modalAddTick} = this.state
     return (
         <View style={app_styles.screen}>
           <ScrollView>
@@ -97,6 +97,10 @@ export default class HomeScreen extends Component {
               createTick={() => this.createTick()}
               closeModal={() => this.closeAllModals()} 
               modalVisible={modalAddVisable}
+            />
+            <AddPostModal 
+              modalVisible={modalAddPost}
+              closeModal={() => this.closeAllModals()} 
             />
           </View>
         </View>
