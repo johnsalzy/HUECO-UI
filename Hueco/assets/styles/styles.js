@@ -31,8 +31,15 @@ const text_input = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 2, 
         color: '#E0F2E9',
-        
-        
+    },
+    post: {
+        height: 50,
+        backgroundColor: 'white',
+        borderColor: 'black',
+        paddingLeft: 15,
+        width: '80%',
+        borderRadius: 20,
+        borderWidth: 2, 
     }
 })
 
