@@ -73,14 +73,14 @@ function BottomTabNavigator({ navigation, route }) {
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />,
           }}
         />
-        <BottomTab.Screen
+        {/* <BottomTab.Screen
           name="Add"
           component={AddScreen}
           options={{
             title: 'Add',
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
           }}
-        />
+        /> */}
         <BottomTab.Screen
           name="Profile"
           component={Profile}

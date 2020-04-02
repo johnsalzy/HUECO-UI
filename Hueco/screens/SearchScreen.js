@@ -33,12 +33,13 @@ class SearchScreen extends React.Component {
     }
     
     async loadUserData(apiPath){
+        let {access_token} = this.state
         this.setState({dataFetched: false, prevData: false, nextData: false})
         try {
           //Assign the promise unresolved first then get the data using the json method.
           await fetch(apiPath, {
             headers: {
-                'Authorization': 'Bearer ' + this.state.access_token,
+                'Authorization': 'Bearer ' + access_token,
             }
           })
           .then((response) => response.json())
@@ -99,10 +100,11 @@ class SearchScreen extends React.Component {
     }
     render(){
         let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData } = this.state;
-        // alert('render: '  + JSON.stringify(fetchData))
+        // alert('render: '  + JSON.stringify(this.state.access_token))
         
         const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
+            <View style={{backgroundColor: 'white', height: '100%'}}>
             <ScrollView >
                 <View style={{paddingTop: 25, alignItems: 'center', backgroundColor: 'white'}}>
                     <ButtonGroup
@@ -154,7 +156,7 @@ class SearchScreen extends React.Component {
                     
                 </View>
             </ScrollView>
-
+            </View>
 
     );
     }

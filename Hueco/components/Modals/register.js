@@ -103,7 +103,6 @@ class Register extends Component {
     }
     render() {
         let { modalVisible } = this.state;
-        const buttons = [<Text>User</Text>, <Text>Gym</Text>]
         return (
                 <Modal
                     animationType="slide"
