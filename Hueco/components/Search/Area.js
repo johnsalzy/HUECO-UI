@@ -17,7 +17,7 @@ class AreaView extends React.Component {
     render(){
         let {data} = this.state
         return (
-            <View style={app_styles.backgroundColor, {alignItems: 'center'}}>
+            <View style={{alignItems: 'center'}, app_styles.background}>
                 {data.count > 0 ?
                     data.results.map((data, index) => (
                         <View key={index} style={styles.container}>

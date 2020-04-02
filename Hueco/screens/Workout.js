@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
     View,
     Text,
-    StyleSheet,
     TouchableOpacity,
     TouchableWithoutFeedback,
     Modal,
@@ -16,8 +15,9 @@ import {app_styles} from '../assets/styles/universal'
 
 class Workout extends Component {
     render() {
+
         return (
-            <View style={app_styles.backgroundColor, styles.container}>
+            <View style={app_styles.screen}>
                 <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>This is Workouts Page</Text>
 
                 <View>
@@ -32,11 +32,3 @@ class Workout extends Component {
     }
 }
 export default Workout;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 25,
-        padding: 10,
-    },
-});

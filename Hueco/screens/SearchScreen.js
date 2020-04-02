@@ -105,9 +105,9 @@ class SearchScreen extends React.Component {
         
         const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
-            <View style={app_styles.backgroundColor, {height: '100%'}}>
+            <View style={app_styles.screen}>
             <ScrollView >
-                <View style={app_styles.backgroundColor, {paddingTop: 25, alignItems: 'center'}}>
+                <View style={app_styles.backgroundColor, {alignItems: 'center'}}>
                     <ButtonGroup
                         onPress={this.updateIndex}
                         selectedIndex={selectedIndex}
