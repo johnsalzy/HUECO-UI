@@ -1,49 +1,85 @@
-import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { Component } from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 //Import files/componenets
 import SocialMedia from '../components/SocialMedia';
+import Ionicon from '../components/Ionicon';
+import AddOptionModal from '../components/Modals/AddOptions'
 
-export default function HomeScreen() {
-  return (
-      <ScrollView>
-          <View style={{paddingTop: 20, alignItems: 'center'}}>
-            <Text style={{fontWeight: 'bold', fontSize: 40, color: 'blue'}}>Welcome to Heuco!!</Text>
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-            <Text style={styles.textHeader}>New Routes Near You</Text>
-            <View style={styles.headerRow}/>
-            <Text> Setter   |    Type      |            Name            | Grade </Text>
-            <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-            <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-            <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-            <Text>  Matt  | Top Rope  | Matt's First Route |   5.9</Text>
+export default class HomeScreen extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+        modalAddVisable: false,
+    };
+  }
+  closeAddModal = () => {
+    this.setState({modalAddVisable: false});
+  }
+  render(){
+    let {modalAddVisable} = this.state
+    return (
+        <View style={{height: '100%', backgroundColor: 'white'}}>
+          <ScrollView>
+            <View style={{paddingTop: 20, alignItems: 'center'}}>
+              <Text style={styles.textHeader}>New Routes Near You</Text>
+              <View style={styles.headerRow} >
+                <Text> Setter   |    Type      |            Name            | Grade </Text>
+                <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
+                <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
+                <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
+                <Text>  Matt  | Top Rope  | Matt's First Route |   5.9</Text>
+              </View>
 
-            <Text style={styles.textHeader}>Your Send Group Updates</Text>
-            <View style={styles.headerRow}/>
-            <Text>John Says: Hello!!</Text>
-            <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
-            <Text>John Climbed: v10</Text>
-            <Text>Matt Climbed: 5.7</Text>
+              <Text style={styles.textHeader}>Your Send Group Updates</Text>
+              <View style={styles.headerRow} >
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+                <Text>John Says: Hello!!</Text>
+                <Text>Matt Says: Just did first v0!!! I am soooo good! (:</Text>
+                <Text>John Climbed: v10</Text>
+                <Text>Matt Climbed: 5.7</Text>
+              </View>
+
+              <SocialMedia />
+              <Text>{"\n"}{"\n"}</Text>{/* Breaks needed so social media does not get covered by nav bar */}
+            </View>
+          </ScrollView>
+          <View style={styles.addButton}>
+            <TouchableOpacity onPress={() => this.setState({modalAddVisable: true})}>
+                <Ionicon color={'cornflowerblue'} name={'add-circle'} size={60}/>
+            </TouchableOpacity>
           </View>
-
           <View>
-            <SocialMedia />
-            <Text>{"\n"}{"\n"}</Text>{/* Breaks needed so social media does not get covered by nav bar */}
+            <AddOptionModal closeModal={() => this.closeAddModal()} modalVisible={modalAddVisable}/>
           </View>
-      </ScrollView>
+        </View>
 
-
-  );
+    );
 }
-
-HomeScreen.navigationOptions = {
-  header: null,
-};
-
-
-
-
+}
 
 const styles = StyleSheet.create({
   textHeader: {
@@ -56,5 +92,11 @@ const styles = StyleSheet.create({
     width: '90%',
     borderColor:'black',
     margin:10,
-}
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    padding: 20,
+  }
 });
