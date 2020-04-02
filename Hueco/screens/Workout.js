@@ -12,13 +12,13 @@ import {
 //Import Component/Store/etc.
 import AddTodo from '../redux/containers/AddTodo'
 import VisableTodos from '../redux/containers/VisableTodos'
-// import { Ionicons } from "@expo/vector-icons";
+import {app_styles} from '../assets/styles/universal'
 
-class Add extends Component {
+class Workout extends Component {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>This is add page</Text>
+            <View style={app_styles.backgroundColor, styles.container}>
+                <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>This is Workouts Page</Text>
 
                 <View>
                     <AddTodo />
@@ -31,7 +31,7 @@ class Add extends Component {
         );
     }
 }
-export default Add;
+export default Workout;
 
 const styles = StyleSheet.create({
     container: {

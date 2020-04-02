@@ -7,7 +7,7 @@ import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
 import HomePage from '../screens/HomePage';
 import Profile from '../screens/Profile';
-import AddScreen from '../screens/Add';
+import WorkOutScreen from '../screens/Workout';
 import SearchScreen from '../screens/SearchScreen';
 
 // //Redux imports
@@ -73,14 +73,14 @@ function BottomTabNavigator({ navigation, route }) {
             tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />,
           }}
         />
-        {/* <BottomTab.Screen
-          name="Add"
-          component={AddScreen}
+        <BottomTab.Screen
+          name="Workout"
+          component={WorkOutScreen}
           options={{
-            title: 'Add',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add-circle" />,
+            title: 'Work Outs',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-bicycle" />,
           }}
-        /> */}
+        />
         <BottomTab.Screen
           name="Profile"
           component={Profile}
@@ -121,7 +121,7 @@ function getHeaderShown(route) {
       return false;
     case 'Search':
       return false;
-    case 'Add':
+    case 'Workout':
       return false;
   }
 }
