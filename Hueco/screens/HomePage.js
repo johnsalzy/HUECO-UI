@@ -15,10 +15,15 @@ export default class HomeScreen extends Component {
     super(props);
     this.state = {
         modalAddVisable: false,
+        modalAddTick: false,
+        modalAddPost: false,
     };
   }
-  closeAddModal = () => {
-    this.setState({modalAddVisable: false});
+  closeAllModals = () => {
+    this.setState({
+      modalAddVisable: false, 
+      modalAddTick: false,
+      modalAddPost: false,});
   }
   render(){
     let {modalAddVisable} = this.state
@@ -73,7 +78,7 @@ export default class HomeScreen extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <AddOptionModal closeModal={() => this.closeAddModal()} modalVisible={modalAddVisable}/>
+            <AddOptionModal closeModal={() => this.closeAllModals()} modalVisible={modalAddVisable}/>
           </View>
         </View>
 
