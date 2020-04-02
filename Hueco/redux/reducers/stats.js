@@ -1,6 +1,6 @@
 const stats = (state = 
     {
-        dataLoaded: false,
+        dataLoaded: true,
         allTime: {
             toprope: [
                 { Grade: "5.7", Count: 19 },
