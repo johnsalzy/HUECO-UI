@@ -11,7 +11,7 @@ import {
     TextInput,
 } from "react-native";
 import { Divider } from 'react-native-elements';
-// import CameraRollPicker from 'react-native-camera-roll-picker';
+import ImagePickerExample from '../ImagePicker';
 
 //Import Screens/Components/Styles
 import Icon from '../../components/Ionicon';
@@ -61,19 +61,32 @@ class CreatePost extends Component {
                             <View style={{padding: 10}}>
                                 <Text>Title</Text>
                                 <TextInput style={text_input.post} 
-                                    placeholder='Title'
+                                    placeholder='Sent this sick v5 today...'
                                     onChangeText = {(title) => this.setState({title})}
                                     value = {this.state.title}
                                 />
-                                <Text>Tag A route(Optional)</Text>
-                                <Text>Tag A friend(Optional)</Text>
-                                <Text>Upload A picture(Optional)</Text>
-                                {/* <CameraRollPicker callback={this.getSelectedImages}/> */}
 
-                                <Button
-                                    title="Post!"
-                                    onPress={() => this.handleSubmit()}
-                                />
+                                <Text style={styles.text}>Tag A Friend/Route(Optional)</Text>
+                                <View style={styles.flexRow}>
+                                    <TouchableOpacity onPress={() => alert('tag friend') }>
+                                        <Icon size={30} color='pink' name='person-add'/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => alert('add route') }>
+                                        <Icon size={30} color='orange' name='map'/>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={styles.text}>Attach Media(Optional)</Text>
+                                <ImagePickerExample />
+                                
+                                
+                                
+                                
+                                <View style={{paddingTop: 10}}>
+                                    <Button
+                                        title="Post!"
+                                        onPress={() => this.handleSubmit()}
+                                    />
+                                </View>
                             </View>
                         </ScrollView>
                     </View>
@@ -94,4 +107,11 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 4,
     },
+    text: {
+        paddingTop: 5,
+        fontSize: 16,
+    },
+    flexRow: {
+        flexDirection: 'row',
+    }
 });
