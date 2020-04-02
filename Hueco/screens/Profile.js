@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
@@ -62,7 +63,7 @@ class Profile extends Component {
 
   
   render(){
-    alert('test' + JSON.stringify(this.state.userData))
+    // alert('test' + JSON.stringify(this.state.userData))
     return (
         <ScrollView>
             <View style={{paddingTop: 10, alignItems: 'center'}}>
@@ -85,9 +86,15 @@ class Profile extends Component {
 
                       <View style={{alignItems: "center", alignContent: "center", paddingBottom: "5%", justifyContent: 'center'}}>
                           <Text style={styles.name}>{this.state.userData2.first_name + ' ' + this.state.userData2.last_name} </Text>
-                          <Text style={styles.userInfo}>Achievement: {'King Beta Sprayer'} </Text>
-                          <Text style={styles.userInfo}>Member Since: {this.state.userData2.date_joined.split('T')[0]} </Text>
-                          <Text style={styles.userInfo}>Location: {this.state.userData2.profile.location}</Text>
+                          <View style={styles.flexInRow}>
+                          <Icon name='stars' /><Text style={styles.userInfo}> {'King Beta Sprayer'} </Text>
+                          </View>
+                          <View style={styles.flexInRow}>
+                            <Icon name='event' /><Text style={styles.userInfo}> {this.state.userData2.date_joined.split('T')[0]} </Text>
+                          </View>
+                          <View style={styles.flexInRow}>
+                            <Icon name='place' /><Text style={styles.userInfo}> {this.state.userData2.profile.location}</Text>
+                          </View>
                           <TouchableOpacity onPress={()=> this.logoutUser()}>
                             <Text style={{color: 'red'}}>Logout</Text>
                           </TouchableOpacity>
