@@ -35,7 +35,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={LoginScreen}
           options={{
             title: 'Login',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="lock" />,
           }}
           navigationOptions={{
             headerShown: false
@@ -46,7 +46,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={AboutUs}
           options={{
             title: 'About Us',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="people" />,
           }}
         />
       </BottomTab.Navigator>
@@ -59,7 +59,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={HomePage}
           options={{
             title: 'Home',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="home" />,
           }}
           navigationOptions={{
             headerShown: false
@@ -70,7 +70,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={SearchScreen}
           options={{
             title: 'Search',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="search" />,
           }}
         />
         <BottomTab.Screen
@@ -78,7 +78,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={WorkOutScreen}
           options={{
             title: 'Work Outs',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-bicycle" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="fitness-center" />,
           }}
         />
         <BottomTab.Screen
@@ -86,7 +86,7 @@ function BottomTabNavigator({ navigation, route }) {
           component={Profile}
           options={{
             title: 'Profile',
-            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-person" />,
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="person" />,
           }}
         />
       </BottomTab.Navigator>
