@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
 import WrapComp from '../components/Search/Wrap'
+import {app_styles} from '../assets/styles/universal'
 
 const mapStateToProps = state => (
   {
@@ -104,9 +105,9 @@ class SearchScreen extends React.Component {
         
         const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
-            <View style={{backgroundColor: 'white', height: '100%'}}>
+            <View style={app_styles.backgroundColor, {height: '100%'}}>
             <ScrollView >
-                <View style={{paddingTop: 25, alignItems: 'center', backgroundColor: 'white'}}>
+                <View style={app_styles.backgroundColor, {paddingTop: 25, alignItems: 'center'}}>
                     <ButtonGroup
                         onPress={this.updateIndex}
                         selectedIndex={selectedIndex}
