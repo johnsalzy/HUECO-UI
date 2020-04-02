@@ -28,10 +28,10 @@ class AddButtons extends Component {
                             <View style={styles.container}>
                                 <View style={styles.containerModal}>
                                     <View style={styles.containerForm}>
-                                        <TouchableOpacity onPress={() => this.props.closeModal()}>
+                                        <TouchableOpacity onPress={() => this.props.createTick()}>
                                             <Text style={styles.optionStyle}>Add Route Tick</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => this.props.closeModal()}>
+                                        <TouchableOpacity onPress={() => this.props.createPost()}>
                                             <Text style={styles.optionStyle}>Create Post</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => this.props.closeModal()}>

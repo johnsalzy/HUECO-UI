@@ -25,6 +25,19 @@ export default class HomeScreen extends Component {
       modalAddTick: false,
       modalAddPost: false,});
   }
+  createTick = () => {
+    alert('creating tick')
+    this.setState({
+      modalAddVisable: false, 
+      modalAddTick: true,
+    });
+  }
+  createPost = () => {
+    alert('creating post')
+    this.setState({
+      modalAddVisable: false, 
+      modalAddPost: true,});
+  }
   render(){
     let {modalAddVisable} = this.state
     return (
@@ -78,7 +91,12 @@ export default class HomeScreen extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <AddOptionModal closeModal={() => this.closeAllModals()} modalVisible={modalAddVisable}/>
+            <AddOptionModal 
+              createPost={() => this.createPost()}
+              createTick={() => this.createTick()}
+              closeModal={() => this.closeAllModals()} 
+              modalVisible={modalAddVisable}
+            />
           </View>
         </View>
 
