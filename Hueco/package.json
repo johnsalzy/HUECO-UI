@@ -36,7 +36,9 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "tcomb-form-native": "^0.6.20",
-    "victory-native": "^34.1.0"
+    "victory-native": "^34.1.0",
+    "expo-image-picker": "~8.0.1",
+    "expo-permissions": "~8.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
