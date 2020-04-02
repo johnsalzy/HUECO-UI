@@ -2,14 +2,11 @@
 import React, { Component } from "react";
 import {
     View,
-    ScrollView,
     Text,
     StyleSheet,
     TouchableOpacity,
-    TouchableWithoutFeedback,
     Modal,
     Dimensions,
-    Button,
 } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -31,10 +28,10 @@ class AddButtons extends Component {
                             <View style={styles.container}>
                                 <View style={styles.containerModal}>
                                     <View style={styles.containerForm}>
-                                        <TouchableOpacity onPress={() => alert('adding route tick') }>
+                                        <TouchableOpacity onPress={() => this.props.closeModal()}>
                                             <Text style={styles.optionStyle}>Add Route Tick</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => alert('creating post') }>
+                                        <TouchableOpacity onPress={() => this.props.closeModal()}>
                                             <Text style={styles.optionStyle}>Create Post</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => this.props.closeModal()}>
@@ -53,21 +50,17 @@ export default AddButtons;
 
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'red', 
+    container: { 
         width: '100%', 
         height: '100%',
         backgroundColor: '#00000080',
-        right: 0,
         marginBottom: windowHeight*.05,
         marginRight: windowWidth*.05,
-        padding: 3,
-        borderRadius: 4,
     },
     containerModal: {
         position: 'absolute',
-        bottom: 150,
-        right: 75,
+        bottom: windowHeight*.225,
+        right: windowWidth*.20,
     },
     modalLeave: {
         fontSize: 20,
@@ -92,7 +85,7 @@ const styles = StyleSheet.create({
       optionDismiss: {
         fontWeight: 'bold',
         fontSize: 20,
-        color: 'salmon',
+        color: 'sandybrown',
         justifyContent: 'center',
         textAlign: 'center',
         padding: 2,
