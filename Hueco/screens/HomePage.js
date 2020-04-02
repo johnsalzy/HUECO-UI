@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SocialMedia from '../components/SocialMedia';
 import Ionicon from '../components/Ionicon';
 import AddOptionModal from '../components/Modals/AddOptions'
+import {app_styles} from '../assets/styles/universal'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -41,9 +42,9 @@ export default class HomeScreen extends Component {
   render(){
     let {modalAddVisable} = this.state
     return (
-        <View style={{height: '100%', backgroundColor: 'white'}}>
+        <View style={app_styles.screen}>
           <ScrollView>
-            <View style={{paddingTop: 20, alignItems: 'center'}}>
+            <View style={{alignItems: 'center'}}>
               <Text style={styles.textHeader}>New Routes Near You</Text>
               <View style={styles.headerRow} >
                 <Text> Setter   |    Type      |            Name            | Grade </Text>
