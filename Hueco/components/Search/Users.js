@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 
+// Import
+import {app_styles} from '../../assets/styles/universal'
+import {search_results} from '../../assets/styles/styles'
+
 
 class UserView extends React.Component {
     constructor(props){
@@ -14,11 +18,11 @@ class UserView extends React.Component {
     render(){
         let {data} = this.state
         return (
-            <View style={{alignItems: 'center', backgroundColor: 'white'}}>
+            <View style={app_styles.backgroundColor, {alignItems: 'center'}}>
                 {data.count > 0 ?
                     data.results.map((data, index) => (
                         <View key={index} style={styles.container}>
-                            <View style={styles.resultContainer}>
+                            <View style={search_results.resultContainer}>
                                 <View style={styles.headerContent}>
                                     <Image style={styles.avatar}
                                         source={{uri: data.profile.profile_pic}}
@@ -77,9 +81,4 @@ const styles = StyleSheet.create({
         color:"#778899",
         fontWeight:'600',
       },
-      resultContainer: {
-        padding: 7, 
-        borderRadius: 8, 
-        backgroundColor: "#EBEBEB",
-      }
     });

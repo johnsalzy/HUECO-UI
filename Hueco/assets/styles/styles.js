@@ -42,5 +42,15 @@ const view_style = StyleSheet.create({
         alignContent: 'center'
     }
 })
-  
-export { view_style, text_input, buttons }
+
+const search_results = StyleSheet.create({
+    resultContainer: {
+        padding: 7, 
+        borderRadius: 8, 
+        backgroundColor: "white",
+        borderWidth: 2,
+        borderColor: 'black'
+    },
+})
+
+export { view_style, text_input, buttons, search_results }
