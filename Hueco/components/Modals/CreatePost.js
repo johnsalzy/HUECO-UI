@@ -12,7 +12,7 @@ import {
     Platform
 } from "react-native";
 import { Divider } from 'react-native-elements';
-import ImagePickerExample from '../ImagePicker';
+import MediaPicker from '../ImagePicker';
 
 //Import Screens/Components/Styles
 import Icon from '../../components/Ionicon';
@@ -47,7 +47,7 @@ class CreatePost extends Component {
     }
     handleSubmit = () => {
         // Get all post data...
-        let { title, caption, media } = this.state;
+        let { title, caption, media, login } = this.state;
         let post = {}
         post.title = title
         if(media){
@@ -57,6 +57,7 @@ class CreatePost extends Component {
                 uri: Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
             }
         }
+        post.postedByUser = login.username
         post.tagged_users = []
         post.tagged_route = {}
         this.handleUploadPost(post)
@@ -85,9 +86,6 @@ class CreatePost extends Component {
             alert("Upload failed!");
           });
     };
-    setImageData(image){
-        alert('post ' + JSON.stringify(image))
-    }
     render() {
         return (
                 <Modal
@@ -105,6 +103,7 @@ class CreatePost extends Component {
                                 <Text>Title</Text>
                                 <TextInput style={styles.text_input} 
                                     placeholder='Sent this sick v5 today...'
+                                    placeholderTextColor="darkblue"
                                     onChangeText = {(title) => this.setState({title})}
                                     value = {this.state.title}
                                 />
@@ -119,7 +118,7 @@ class CreatePost extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
-                                <ImagePickerExample 
+                                <MediaPicker 
                                     setCaption= {(caption) => this.setState({caption})} 
                                     propSetImage={(media) => this.setState({media})}
                                     deleteMedia={() => this.setState({media: null, caption: null})}
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     },
     text_input: {
         borderWidth: 2,
-        backgroundColor: 'antiquewhite',
+        backgroundColor: 'lightskyblue',
         borderColor: 'black',
         borderRadius: 4,
         paddingLeft: 10,
