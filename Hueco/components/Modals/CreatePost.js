@@ -9,13 +9,14 @@ import {
     Modal,
     Button,
     TextInput,
+    Platform
 } from "react-native";
 import { Divider } from 'react-native-elements';
 import ImagePickerExample from '../ImagePicker';
 
 //Import Screens/Components/Styles
 import Icon from '../../components/Ionicon';
-import { text_input } from '../../assets/styles/styles';
+// import { text_input } from '../../assets/styles/styles';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -35,7 +36,9 @@ class CreatePost extends Component {
         this.state = {
             modalVisible: this.props.modalVisible,
             login: this.props.login,
+            media: null,
             title: '',
+            caption: null,
         };
     }
 
@@ -43,7 +46,47 @@ class CreatePost extends Component {
         this.props.closeModal()
     }
     handleSubmit = () => {
-        alert('value: '+ JSON.stringify(this.state));
+        // Get all post data...
+        let { title, caption, media } = this.state;
+        let post = {}
+        post.title = title
+        if(media){
+            post.media = {
+                caption: caption,//photo.fileName,
+                type: media.type,
+                uri: Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+            }
+        }
+        post.tagged_users = []
+        post.tagged_route = {}
+        this.handleUploadPost(post)
+    }
+
+
+    handleUploadPost = (post) => {
+        alert('postData: '+ JSON.stringify(post));
+
+        return
+        fetch("http://localhost:3000/api/upload", {
+            method: "POST",
+            body: {
+                'Authorization': 'Bearer ' + this.state.access_token,
+                post: post,
+            }
+        })
+          .then(response => response.json())
+          .then(response => {
+            console.log("upload succes", response);
+            alert("Upload success!");
+            this.setState({ post: null });
+          })
+          .catch(error => {
+            console.log("upload error", error);
+            alert("Upload failed!");
+          });
+    };
+    setImageData(image){
+        alert('post ' + JSON.stringify(image))
     }
     render() {
         return (
@@ -55,12 +98,12 @@ class CreatePost extends Component {
                     <View style={styles.container}>
                         <ScrollView>
                             <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.closeModal() }>
-                                <Icon size={40} color='red' name='arrow-back'/>
+                                <Icon size={40} color='firebrick' name='arrow-back'/>
                             </TouchableOpacity>
                             <Divider style={{ marginTop: 5, backgroundColor: 'black', height: 2 }} />
                             <View style={{padding: 10}}>
                                 <Text>Title</Text>
-                                <TextInput style={text_input.post} 
+                                <TextInput style={styles.text_input} 
                                     placeholder='Sent this sick v5 today...'
                                     onChangeText = {(title) => this.setState({title})}
                                     value = {this.state.title}
@@ -69,17 +112,18 @@ class CreatePost extends Component {
                                 <Text style={styles.text}>Tag A Friend/Route(Optional)</Text>
                                 <View style={styles.flexRow}>
                                     <TouchableOpacity onPress={() => alert('tag friend') }>
-                                        <Icon size={30} color='pink' name='person-add'/>
+                                        <Icon size={30} color='dodgerblue' name='person-add'/>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={() => alert('add route') }>
-                                        <Icon size={30} color='orange' name='map'/>
+                                        <Icon size={30} color='dodgerblue' name='map'/>
                                     </TouchableOpacity>
                                 </View>
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
-                                <ImagePickerExample />
-                                
-                                
-                                
+                                <ImagePickerExample 
+                                    setCaption= {(caption) => this.setState({caption})} 
+                                    propSetImage={(media) => this.setState({media})}
+                                    deleteMedia={() => this.setState({media: null, caption: null})}
+                                />
                                 
                                 <View style={{paddingTop: 10}}>
                                     <Button
@@ -113,5 +157,12 @@ const styles = StyleSheet.create({
     },
     flexRow: {
         flexDirection: 'row',
+    },
+    text_input: {
+        borderWidth: 2,
+        backgroundColor: 'antiquewhite',
+        borderColor: 'black',
+        borderRadius: 4,
+        paddingLeft: 10,
     }
 });

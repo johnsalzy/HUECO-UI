@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Image, View, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { Text, Image, View, TouchableOpacity, Dimensions, StyleSheet, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -10,10 +10,11 @@ import Icon from '../components/Ionicon';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default class ImagePickerExample extends React.Component {
+export default class ImagePickerComp extends React.Component {
   state = {
     image: null,
     result: null,
+    caption: null,
   };
 
   componentDidMount() {
@@ -33,20 +34,22 @@ export default class ImagePickerExample extends React.Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      quality: 1
+      quality: .8 // 0-1(max)
     });
     if (!result.cancelled) {
       this.setState({ result: result, image: result.uri });
+      this.props.propSetImage(result)
     }
   };
 
   removeImage(){
-    this.setState({image: null, result: null})
+    this.setState({image: null, result: null, caption: null})
+    this.props.deleteMedia()
   }
 
   render() {
     let { image } = this.state;
-    alert(JSON.stringify(this.state))
+    // alert(JSON.stringify(this.state))
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         
@@ -55,6 +58,11 @@ export default class ImagePickerExample extends React.Component {
                 <View style={styles.image}>
                     <Image source={{ uri: image }} style={{ width: windowWidth*.7, height: windowHeight*.6 }} />
                 </View>
+                <TextInput style={styles.mediaDescription} 
+                    placeholder='Media Caption(Optional)'
+                    onChangeText = {(caption) => this.props.setCaption(caption)}
+                    value = {this.props.caption}
+                />
                 <TouchableOpacity onPress={() => this.removeImage()}>
                     <Text style={{color: 'red', fontSize: 20, textAlign: 'center'}}>Remove Media</Text>
                 </TouchableOpacity>
@@ -73,6 +81,15 @@ const styles = StyleSheet.create({
     image: {
         borderWidth: 2,
         borderColor: 'black',
-        borderRadius: 4,
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 4,
     },
+    mediaDescription: {
+      borderWidth: 2,
+      backgroundColor: 'antiquewhite',
+      borderColor: 'black',
+      borderBottomLeftRadius: 4,
+      borderBottomRightRadius: 4,
+      paddingLeft: 10,
+    }
 });
