@@ -23,7 +23,7 @@ function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerShown: getHeaderShown(route),  headerTitle: getHeaderTitle(route) });
+  navigation.setOptions({ headerShown: false,  headerTitle: getHeaderTitle(route) });
   const login = useSelector(state => state.login)
   const loggedIn = login.status
 
@@ -110,18 +110,18 @@ function getHeaderTitle(route) {
   }
 }
 
-function getHeaderShown(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  switch (routeName) {
-    case 'Login':
-      return false;
-    case 'Home':
-      return false;
-    case 'Profile':
-      return false;
-    case 'Search':
-      return false;
-    case 'Workout':
-      return false;
-  }
-}
+// function getHeaderShown(route) {
+//   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+//   switch (routeName) {
+//     case 'Login':
+//       return false;
+//     case 'Home':
+//       return false;
+//     case 'Profile':
+//       return false;
+//     case 'Search':
+//       return false;
+//     case 'Workout':
+//       return false;
+//   }
+// }
