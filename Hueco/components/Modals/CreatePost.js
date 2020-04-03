@@ -12,10 +12,12 @@ import {
     Platform
 } from "react-native";
 import { Divider } from 'react-native-elements';
-import MediaPicker from '../ImagePicker';
+
 
 //Import Screens/Components/Styles
 import Icon from '../../components/Ionicon';
+import MediaPicker from '../ImagePicker';
+import TagFriend from '../Tags/tagFriend';
 // import { text_input } from '../../assets/styles/styles';
 
 //Redux imports
@@ -38,6 +40,8 @@ class CreatePost extends Component {
             login: this.props.login,
             media: null,
             title: '',
+            tagFriend: false,
+            tagRoute: false,
             caption: null,
         };
     }
@@ -87,6 +91,7 @@ class CreatePost extends Component {
           });
     };
     render() {
+        let { tagFriend, tagRoute } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -109,14 +114,17 @@ class CreatePost extends Component {
                                 />
 
                                 <Text style={styles.text}>Tag A Friend/Route(Optional)</Text>
+                                
                                 <View style={styles.flexRow}>
-                                    <TouchableOpacity onPress={() => alert('tag friend') }>
+                                    <TouchableOpacity onPress={() => this.setState({tagFriend: true})}>
                                         <Icon size={30} color='dodgerblue' name='person-add'/>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => alert('add route') }>
+                                    <TouchableOpacity onPress={() => this.setState({tagRoute: true})}>
                                         <Icon size={30} color='dodgerblue' name='map'/>
                                     </TouchableOpacity>
                                 </View>
+                                {tagFriend && <TagFriend />}
+                                {tagRoute && <TagFriend />}
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
                                 <MediaPicker 
                                     setCaption= {(caption) => this.setState({caption})} 
