@@ -18,6 +18,23 @@ const buttons = StyleSheet.create({
         textAlignVertical: 'center',
         alignContent: 'center'
 
+    },
+    closeText: {
+        paddingTop: 5,
+        fontSize: 14,
+        color: 'red',
+        textAlign: 'center',
+    },
+    searchText: {
+        padding: 4,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: 'black',
+        backgroundColor: 'lightblue',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 15,
     }
 })
 const text_input = StyleSheet.create({
@@ -59,5 +76,8 @@ const search_results = StyleSheet.create({
         borderColor: 'black'
     },
 })
+const dividers = StyleSheet.create({
+    standard: { margin: 5, backgroundColor: 'black', height: 2 }
+})
 
-export { view_style, text_input, buttons, search_results }
+export { view_style, text_input, buttons, search_results, dividers }
