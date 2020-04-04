@@ -5,14 +5,12 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Modal,
-    Button,
     TextInput,
 } from "react-native";
+import { Divider } from 'react-native-elements';
 
 //Import Screens/Components/Styles
-
-// import { text_input } from '../../assets/styles/styles';
+import { buttons, dividers } from '../../assets/styles/styles'
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -37,7 +35,12 @@ class TagRoute extends Component {
     render() {
         return (
             <View>
-                <Text>Tag a Friend</Text>
+                <Divider style={dividers.standard}/>
+                <Text>Tag a Route</Text>
+                <TouchableOpacity onPress={() => this.props.closeRoute()}>
+                    <Text style={buttons.closeText}>Close</Text>
+                </TouchableOpacity>
+                <Divider style={dividers.standard}/>
             </View>
         );
     }
@@ -54,10 +57,6 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         padding: 10,
         borderRadius: 4,
-    },
-    text: {
-        paddingTop: 5,
-        fontSize: 16,
     },
     flexRow: {
         flexDirection: 'row',

@@ -18,6 +18,7 @@ import { Divider } from 'react-native-elements';
 import Icon from '../../components/Ionicon';
 import MediaPicker from '../ImagePicker';
 import TagFriend from '../Tags/tagFriend';
+import TagRoute from '../Tags/tagRoute';
 // import { text_input } from '../../assets/styles/styles';
 
 //Redux imports
@@ -30,7 +31,24 @@ const mapStateToProps = state => (
     login: state.login
     }
 )
+async function handleUploadPost(post, access_token){
+    alert('post' + JSON.stringify(post))
+    let {baseAPI, login} = this.state;
+    await fetch('http://3.133.123.120:8000/api/v1/post/', {
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    })
+    .then((responseData) => {
+      alert(
+          "POST Response" + JSON.stringify(responseData)
+      )
+    })
 
+};
 
 class CreatePost extends Component {
     constructor(props){
@@ -41,8 +59,11 @@ class CreatePost extends Component {
             media: null,
             title: '',
             tagFriend: false,
+            taggedFriends: [],
+            taggedRoute: null,
             tagRoute: false,
             caption: null,
+            baseAPI: "http://3.133.123.120:8000/api/v1/",
         };
     }
 
@@ -50,46 +71,42 @@ class CreatePost extends Component {
         this.props.closeModal()
     }
     handleSubmit = () => {
-        // Get all post data...
-        let { title, caption, media, login } = this.state;
-        let post = {}
-        post.title = title
+        let {login, media, title, taggedFriends, taggedRoute} = this.state
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", "Bearer " + login.access_token);
+        myHeaders.append("Content-Transfer-Encoding", "multipart/form-data");
+
+        var formdata = new FormData();
+        // formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'}, "The_Earth_seen_from_Apollo_17.jpg");
         if(media){
-            post.media = {
-                caption: caption,//photo.fileName,
-                type: media.type,
-                uri: Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+                let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+                formdata.append("media.media", {uri:uri,type:'image/jpeg', name:'image.jpeg'});
             }
+        formdata.append("text", title);
+        formdata.append("tagged_users", taggedFriends);
+        if(taggedRoute){
+            formdata.append("route", taggedRoute);
         }
-        post.postedByUser = login.username
-        post.tagged_users = []
-        post.tagged_route = {}
-        this.handleUploadPost(post)
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'manual'
+        };
+        console.log('this is data: ', requestOptions)
+        fetch("3.133.123.120:8000/api/v1/post/", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+        // handleUploadPost(post, login.access_token)
     }
 
 
-    handleUploadPost = (post) => {
-        alert('postData: '+ JSON.stringify(post));
 
-        return
-        fetch("http://localhost:3000/api/upload", {
-            method: "POST",
-            body: {
-                'Authorization': 'Bearer ' + this.state.access_token,
-                post: post,
-            }
-        })
-          .then(response => response.json())
-          .then(response => {
-            console.log("upload succes", response);
-            alert("Upload success!");
-            this.setState({ post: null });
-          })
-          .catch(error => {
-            console.log("upload error", error);
-            alert("Upload failed!");
-          });
-    };
     render() {
         let { tagFriend, tagRoute } = this.state;
         return (
@@ -116,15 +133,19 @@ class CreatePost extends Component {
                                 <Text style={styles.text}>Tag A Friend/Route(Optional)</Text>
                                 
                                 <View style={styles.flexRow}>
-                                    <TouchableOpacity onPress={() => this.setState({tagFriend: true})}>
+                                    <TouchableOpacity onPress={() => this.setState({tagFriend: !tagFriend})}>
                                         <Icon size={30} color='dodgerblue' name='person-add'/>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.setState({tagRoute: true})}>
+                                    <TouchableOpacity onPress={() => this.setState({tagRoute: !tagRoute})}>
                                         <Icon size={30} color='dodgerblue' name='map'/>
                                     </TouchableOpacity>
                                 </View>
-                                {tagFriend && <TagFriend />}
-                                {tagRoute && <TagFriend />}
+                                {tagFriend && 
+                                    <TagFriend 
+                                    updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
+                                    closeFriends={() => this.setState({tagFriend: false})}/>
+                                }
+                                {tagRoute && <TagRoute closeRoute={() => this.setState({tagRoute: false})}/>}
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
                                 <MediaPicker 
                                     setCaption= {(caption) => this.setState({caption})} 
@@ -173,3 +194,27 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     }
 });
+
+
+
+
+        // alert('postData: '+ JSON.stringify(post));
+        // fetch(baseAPI + 'post', {
+        //     method: "POST",
+        //     // headers: {
+        //     //     'Authorization': 'Bearer ' + login.access_token,
+        //     //     'Accept': 'application/json',
+        //     //     'Content-Type': 'application/json'
+        //     // },
+        //     // body: "uname=value1&password=value2"
+        // })
+        //   .then(response => response.json())
+        //   .then(response => {
+        //     console.log("upload succes" + response);
+        //     alert("Upload success!" + JSON.stringify(response));
+        //     // this.setState({ post: null });
+        //   })
+        //   .catch(error => {
+        //     // console.log("upload error" + error);
+        //     // alert("Upload failed!" + error);
+        //   });
