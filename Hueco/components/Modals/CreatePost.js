@@ -66,7 +66,7 @@ class CreatePost extends Component {
         formdata.append("text", title);
         var arrayLength = taggedFriends.length;
         for (var i = 0; i < arrayLength; i++) {
-            formdata.append("tagged_users", taggedFriends[i]);
+            formdata.append("tagged_users", taggedFriends[i].id);
         }
         if(taggedRoute){
             formdata.append("route", taggedRoute);

@@ -63,26 +63,46 @@ class TagFriend extends Component {
         let { friend_name } = this.state;
         this.loadFriendData(this.state.baseAPI + 'users/?search=' + friend_name)
     }
-    tagUser = (id, username) => {
-        let { login } = this.state;
+
+
+    tagUser = (data, type) => {
+        let username = data.username
         let currentlyTagged = this.props.currentlyTagged;
-        if(username == login.username){
-            alert('You cannot tag yourself')
-            return
-        } else if(currentlyTagged.includes(id)){
-            alert('User already tagged')
-            return
+        let currentlyTaggedCount = currentlyTagged.length;
+        let user = {id: data.id, name: data.first_name + ' ' + data.last_name, profile_pic: data.profile_pic}
+        let newTagged = currentlyTagged
+        if(type == 'add'){
+            let { login } = this.state;
+            if(username == login.username){
+                alert('You cannot tag yourself')
+                return
+            } else if(newTagged.some(temp => temp.id == user.id)){
+                alert('User already tagged')
+                return
+            } else {
+                if(currentlyTaggedCount >= 10){
+                    alert('You can not tag any more than 10!')
+                    return
+                }
+                newTagged.push(user)
+                this.props.updateTagFriends(newTagged)
+                return
+            }
         } else {
-            alert('tagging user ' + id + username)
-            let newTagged = currentlyTagged
-            newTagged.push(id)
-            this.props.updateTagFriends(newTagged)
-            return
+            for (var i = 0; i < currentlyTaggedCount; i++) {
+                if(newTagged[i].id == user.id){
+                    newTagged.splice(i,1)
+                    this.props.updateTagFriends(newTagged)
+                    return
+                }
+            }
         }
     }
+
     render() {
         let {friendResults} = this.state
-        // alert('test' + this.props.currentlyTagged)
+        let currentlyTagged = this.props.currentlyTagged;
+        let currentlyTaggedCount = currentlyTagged.length;
         return (
             <View>
                 <Divider style={dividers.standard}/>
@@ -112,14 +132,32 @@ class TagFriend extends Component {
                                         source={{uri: data.profile.profile_pic}}
                                     />
                                     <Text style={styles.userInfo}>{data.first_name + ' ' + data.last_name}</Text>
-                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data.id, data.username)}>
-                                        <Icon size={40} color='firebrick' name='add'/>
+                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'add')}>
+                                        <Icon size={40} color='green' name='add'/>
                                     </TouchableOpacity>
                                     {/* <Text>ID: {data.id}</Text> */}
                                 </View>
                             </View>
                         ))
                     }
+                </View>
+                <View>
+                    {currentlyTaggedCount > 0 &&
+                        currentlyTagged.map((data, index) => (
+                            <View key={index} style={styles.resContainer}>
+                                <View style={styles.flexRow}>
+                                    <Image style={styles.avatar}
+                                        source={{uri: data.profile_pic}}
+                                    />
+                                    <Text style={styles.userInfo}>{data.name}</Text>
+                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'remove')}>
+                                        <Icon size={40} color='firebrick' name='remove'/>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        ))
+                    }
+
                 </View>
 
                 <TouchableOpacity onPress={() => this.props.closeFriends()}>
