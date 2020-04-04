@@ -31,24 +31,6 @@ const mapStateToProps = state => (
     login: state.login
     }
 )
-async function handleUploadPost(post, access_token){
-    alert('post' + JSON.stringify(post))
-    let {baseAPI, login} = this.state;
-    await fetch('http://3.133.123.120:8000/api/v1/post/', {
-        method: "POST",
-        headers: {
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(post)
-    })
-    .then((responseData) => {
-      alert(
-          "POST Response" + JSON.stringify(responseData)
-      )
-    })
-
-};
 
 class CreatePost extends Component {
     constructor(props){
@@ -59,11 +41,14 @@ class CreatePost extends Component {
             media: null,
             title: '',
             tagFriend: false,
-            taggedFriends: [],
-            taggedRoute: null,
+            taggedFriends: [1,2],
+            taggedRoute: 510,
+            imagePosted: null,
             tagRoute: false,
             caption: null,
-            baseAPI: "https://hueco.pythonanywhere.com/api/v1/",
+            baseAPI: "http://3.133.123.120:8000/api/v1/",
+            response: null,
+            postingMedia: null
         };
     }
 
@@ -75,55 +60,44 @@ class CreatePost extends Component {
 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json")
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        // myHeaders.append("Content-type", "application/json");
         myHeaders.append("Authorization", "Bearer " + login.access_token);
         myHeaders.append("Content-type", "multipart/form-data");
 
         var formdata = new FormData();
-        // formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'}, "The_Earth_seen_from_Apollo_17.jpg");
-        if(media){
-            let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
-            formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
-        }
         formdata.append("text", title);
-        formdata.append("tagged_users", taggedFriends);
+        var arrayLength = taggedFriends.length;
+        for (var i = 0; i < arrayLength; i++) {
+            formdata.append("tagged_users", taggedFriends[i]);
+        }
         if(taggedRoute){
             formdata.append("route", taggedRoute);
         }
-
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
         };
-        console.log('this is data: ', requestOptions)
-        
-        fetch('http://3.133.123.120:8000/api/v1/post/', requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-
-//         fetch('http://3.133.123.120:8000/api/v1/post/', {
-//     method: 'POST',
-//     body: JSON.stringify({
-//       text: 'working post',
-//       tagged_users: [1],
-//       route: 1
-//     }),
-//     headers: {
-//       "Content-type": "application/json; charset=UTF-8"
-//     }
-//   })
-//   .then(response => response.json())
-//   .then(json => console.log(json))
-
+        if(media){
+            let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+            formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
+        }
+        this.setState({response: null, postingMedia: true})
+        fetch(baseAPI + 'post/', requestOptions)
+        .then(result => this.setState({response: result}))
+        .catch(error => console.log('error ' + error));
     }
 
-
-
     render() {
-        let { tagFriend, tagRoute } = this.state;
+        let { tagFriend, tagRoute, response } = this.state;
+        if (response!= null){
+            this.setState({postingMedia: false})
+            if(response.status == 201){
+                alert('post worked')
+            } else {
+                alert('Post failed: '+ JSON.stringify(response.status))
+            }
+            
+        }
         return (
                 <Modal
                     animationType="fade"
