@@ -65,7 +65,7 @@ class TagFriend extends Component {
     }
     tagUser = (id, username) => {
         let { login } = this.state;
-        let currentlyTagged = [];
+        let currentlyTagged = this.props.currentlyTagged;
         if(username == login.username){
             alert('You cannot tag yourself')
             return
@@ -82,6 +82,7 @@ class TagFriend extends Component {
     }
     render() {
         let {friendResults} = this.state
+        // alert('test' + this.props.currentlyTagged)
         return (
             <View>
                 <Divider style={dividers.standard}/>

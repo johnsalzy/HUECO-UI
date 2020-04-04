@@ -41,7 +41,7 @@ class CreatePost extends Component {
             media: null,
             title: '',
             tagFriend: false,
-            taggedFriends: [1,2],
+            taggedFriends: [],
             taggedRoute: 510,
             imagePosted: null,
             tagRoute: false,
@@ -51,13 +51,12 @@ class CreatePost extends Component {
             postingMedia: null
         };
     }
-
-    closeModal = () => {
-        this.props.closeModal()
-    }
     handleSubmit = () => {
         let {login, media, title, taggedFriends, taggedRoute, baseAPI} = this.state
-
+        if (title == ""){
+            alert('Please enter a title')
+            return
+        }
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json")
         myHeaders.append("Authorization", "Bearer " + login.access_token);
@@ -88,12 +87,15 @@ class CreatePost extends Component {
     }
 
     render() {
-        let { tagFriend, tagRoute, response } = this.state;
+        let { tagFriend, tagRoute, response, taggedFriends } = this.state;
         if (response!= null){
             this.setState({postingMedia: false})
             if(response.status == 201){
                 alert('post worked')
+                this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null})
+                this.props.closeModal()
             } else {
+                this.setState({response: null})
                 alert('Post failed: '+ JSON.stringify(response.status))
             }
             
@@ -106,7 +108,7 @@ class CreatePost extends Component {
                 >
                     <View style={styles.container}>
                         <ScrollView>
-                            <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.closeModal() }>
+                            <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.props.closeModal() }>
                                 <Icon size={40} color='firebrick' name='arrow-back'/>
                             </TouchableOpacity>
                             <Divider style={{ marginTop: 5, backgroundColor: 'black', height: 2 }} />
@@ -131,6 +133,7 @@ class CreatePost extends Component {
                                 </View>
                                 {tagFriend && 
                                     <TagFriend 
+                                    currentlyTagged={taggedFriends}
                                     updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
                                     closeFriends={() => this.setState({tagFriend: false})}/>
                                 }
