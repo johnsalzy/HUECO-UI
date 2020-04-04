@@ -76,16 +76,16 @@ class CreatePost extends Component {
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json")
         // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        myHeaders.append("Content-Type", "multipart/form-data");
+        // myHeaders.append("Content-type", "application/json");
         myHeaders.append("Authorization", "Bearer " + login.access_token);
-        //myHeaders.append("Content-Transfer-Encoding", "multipart/form-data");
+        myHeaders.append("Content-type", "multipart/form-data");
 
         var formdata = new FormData();
         // formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'}, "The_Earth_seen_from_Apollo_17.jpg");
         if(media){
-                let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
-                formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'});
-            }
+            let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+            formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
+        }
         formdata.append("text", title);
         formdata.append("tagged_users", taggedFriends);
         if(taggedRoute){
@@ -96,15 +96,28 @@ class CreatePost extends Component {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
-            redirect: 'manual'
         };
         console.log('this is data: ', requestOptions)
-        fetch(baseAPI + "post/", requestOptions)
+        
+        fetch('http://3.133.123.120:8000/api/v1/post/', requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 
-        // handleUploadPost(post, login.access_token)
+//         fetch('http://3.133.123.120:8000/api/v1/post/', {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       text: 'working post',
+//       tagged_users: [1],
+//       route: 1
+//     }),
+//     headers: {
+//       "Content-type": "application/json; charset=UTF-8"
+//     }
+//   })
+//   .then(response => response.json())
+//   .then(json => console.log(json))
+
     }
 
 
