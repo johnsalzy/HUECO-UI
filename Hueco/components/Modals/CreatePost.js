@@ -63,7 +63,7 @@ class CreatePost extends Component {
             taggedRoute: null,
             tagRoute: false,
             caption: null,
-            baseAPI: "http://3.133.123.120:8000/api/v1/",
+            baseAPI: "https://hueco.pythonanywhere.com/api/v1/",
         };
     }
 
@@ -71,18 +71,20 @@ class CreatePost extends Component {
         this.props.closeModal()
     }
     handleSubmit = () => {
-        let {login, media, title, taggedFriends, taggedRoute} = this.state
+        let {login, media, title, taggedFriends, taggedRoute, baseAPI} = this.state
 
         var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Accept", "application/json")
+        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        myHeaders.append("Content-Type", "multipart/form-data");
         myHeaders.append("Authorization", "Bearer " + login.access_token);
-        myHeaders.append("Content-Transfer-Encoding", "multipart/form-data");
+        //myHeaders.append("Content-Transfer-Encoding", "multipart/form-data");
 
         var formdata = new FormData();
         // formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'}, "The_Earth_seen_from_Apollo_17.jpg");
         if(media){
                 let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
-                formdata.append("media.media", {uri:uri,type:'image/jpeg', name:'image.jpeg'});
+                formdata.append("media.media", {uri:uri,type:'image/png', name:'image.png'});
             }
         formdata.append("text", title);
         formdata.append("tagged_users", taggedFriends);
@@ -97,7 +99,7 @@ class CreatePost extends Component {
             redirect: 'manual'
         };
         console.log('this is data: ', requestOptions)
-        fetch("3.133.123.120:8000/api/v1/post/", requestOptions)
+        fetch(baseAPI + "post/", requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));

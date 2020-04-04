@@ -64,12 +64,21 @@ class TagFriend extends Component {
         this.loadFriendData(this.state.baseAPI + 'users/?search=' + friend_name)
     }
     tagUser = (id, username) => {
-        let { taggedFriends, login } = this.state;
-        let newFriends = [id]
-        alert('tagging user ' + id + username)
-        this.setState({taggedFriends: newFriends})
-        this.props.updateTagFriends(newFriends)
-
+        let { login } = this.state;
+        let currentlyTagged = [];
+        if(username == login.username){
+            alert('You cannot tag yourself')
+            return
+        } else if(currentlyTagged.includes(id)){
+            alert('User already tagged')
+            return
+        } else {
+            alert('tagging user ' + id + username)
+            let newTagged = currentlyTagged
+            newTagged.push(id)
+            this.props.updateTagFriends(newTagged)
+            return
+        }
     }
     render() {
         let {friendResults} = this.state
@@ -102,7 +111,7 @@ class TagFriend extends Component {
                                         source={{uri: data.profile.profile_pic}}
                                     />
                                     <Text style={styles.userInfo}>{data.first_name + ' ' + data.last_name}</Text>
-                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data.id, data)}>
+                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data.id, data.username)}>
                                         <Icon size={40} color='firebrick' name='add'/>
                                     </TouchableOpacity>
                                     {/* <Text>ID: {data.id}</Text> */}
