@@ -42,9 +42,10 @@ class Login extends Component {
     }
     componentDidUpdate(){
         // alert('Comp Updated: ' + JSON.stringify(this.state))
+        let {username, password} = this.state;
         if(this.state.loginDataLoaded){
             this.setState({loginDataLoaded: false})
-            this.login_username(this.state.username, this.state.password)
+            this.login_username(username, password)
         }
     }
 
@@ -72,14 +73,14 @@ class Login extends Component {
     }
 
     login_username = (user, pass) => {
-        // Clear slate    
+        // Clear slate
         this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
         let response = this.state.response;
         if(response.error){
             this.setState({loginSuccess: false, errorPresent: true, error_text: response.error_description})
             return
         }
-        this.props.dispatch(loginUserNormal(user, pass, response.access_token, response.refresh_token, true))
+        this.props.dispatch(loginUserNormal(user, response.access_token, response.refresh_token, true))
         return
 
         
