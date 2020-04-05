@@ -63,7 +63,6 @@ class Profile extends Component {
 
   
   render(){
-    // alert('test' + JSON.stringify(this.state.userData))
     return (
         <ScrollView>
             <View style={{paddingTop: 10, alignItems: 'center'}}>
@@ -106,7 +105,7 @@ class Profile extends Component {
             </View>
             {/* End of profile view, start of stats view */}
 
-            {/* <UserStatView />  Temp disabled till matthew does some API work for a change */}
+            <UserStatView />
         </ScrollView>
 
 

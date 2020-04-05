@@ -43,16 +43,13 @@ class Posts extends Component {
     }
     async componentDidMount(){
         let {baseAPI, access_token} = this.state;
-        const response = await fetch('https://jsonplaceholder.typicode.com/photos')
-        const json = await response.json();
-        this.setState({ postData: json});
-        this.loadPostData(baseAPI + 'feed', access_token)
+        this.loadPostData(baseAPI + 'post', access_token)
     }
+
     async loadPostData(apiPath, access_token){
         this.setState({dataFetched: false, prevData: false, nextData: false})
         try {
-          //Assign the promise unresolved first then get the data using the json method.
-          const response = await fetch(apiPath, {
+          await fetch(apiPath, {
             headers: {
                 'Authorization': 'Bearer ' + access_token,
             }
@@ -73,22 +70,15 @@ class Posts extends Component {
     likePhoto = (id) => {
         alert('Liking photo for: ' + id)
     }
-    loadMorePosts = () => {
-        let loadedPosts = this.state.loadedPosts
-        this.setState({loadedPosts: loadedPosts += 5})
-    }
     visitProfile = (id) => {
         alert('Visiting profile for: ' + id)
     }
 
     render(){
-        let totalPosts = this.state.postData.length
-        let loadedPosts = this.state.loadedPosts
-        let postData = this.state.postData.slice(2, loadedPosts)
-        let {fetchData} = this.state;
+        let { fetchData } = this.state;
+        alert('fetchdata' + JSON.stringify(fetchData))
         return (
             <View style={styles.container}>
-                {/* <Text>Post Dat: {JSON.stringify(fetchData.results[0])}</Text> */}
                 {fetchData.length == 0 ? <Text>No Posts ):</Text> : 
                     fetchData.results.map((data, index) => (
                     <View style={{
@@ -98,7 +88,8 @@ class Posts extends Component {
                         borderRadius: 5,
                         width: '95%'
                         }} 
-                        key={index}>
+                        key={index}
+                    >
                         <Image 
                             source={{'uri': data.media.media}}  
                             style={{    
@@ -107,53 +98,53 @@ class Posts extends Component {
                                 width: 400,
                         }} 
                         />
-                            <View style={{
-                                backgroundColor: '#bfbcb2',
-                                padding: 3,
-                                }}>
-                                    <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-                                        {/* This is the thumbnail section */}
-                                        <View style={{justifyContent: 'center', paddingRight: 10}}>
-                                            <TouchableOpacity  onPress={() => this.visitProfile(data.user.id)}>
-                                                <Image 
-                                                    source={{'uri': data.media.media}}  
-                                                    style={{    
-                                                        height: 50,
-                                                        width: 50,
-                                                        borderRadius: 50,
-                                                        borderColor: 'black',
-                                                        borderWidth: 1,
-                                                    }} 
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        {/* This is the Title section */}
-                                        <View style= {{alignItems: 'center', justifyContent: 'center', width: '65%'}}>
-                                            <Text style={{fontWeight: 'bold', fontSize: 15, textAlign: 'center',}}>{data.comments}</Text>
-                                        </View>
-                                        {/* This is likes/comments section */}
-                                        <View style={{marginLeft: 'auto'}}>
-                                            <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                                <TabBarIcon color='red' name={'md-heart'}/><Text style={{ paddingLeft: 5, color: 'red', fontSize: 15}}>{data.likes}</Text>
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity onPress={() => this.viewPhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                                <TabBarIcon color='#b863c7' name={'ios-text'}/>
-                                                <Text style={{paddingLeft: 5, color: '#b863c7', fontSize: 15}}>{data.stars}</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                        <View style={{
+                            backgroundColor: '#bfbcb2',
+                            padding: 3,
+                            }}>
+                                <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+                                    {/* This is the thumbnail section */}
+                                    <View style={{justifyContent: 'center', paddingRight: 10}}>
+                                        <TouchableOpacity  onPress={() => this.visitProfile(data.id)}>
+                                            <Image 
+                                                source={{'uri': data.user.profile_pic}}  
+                                                style={{    
+                                                    height: 50,
+                                                    width: 50,
+                                                    borderRadius: 50,
+                                                    borderColor: 'black',
+                                                    borderWidth: 1,
+                                                }} 
+                                            />
+                                        </TouchableOpacity>
                                     </View>
-                                    
-                            </View>
+                                    {/* This is the Title section */}
+                                    <View style= {{alignItems: 'center', justifyContent: 'center', width: '65%'}}>
+                                        <Text style={{fontWeight: 'bold', fontSize: 15, textAlign: 'center',}}>{data.text}</Text>
+                                    </View>
+
+                                    {/* This is likes/comments section */}
+                                    <View style={{marginLeft: 'auto'}}>
+                                        <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
+                                            <TabBarIcon color='red' name={'md-heart'}/><Text style={{ paddingLeft: 5, color: 'red', fontSize: 15}}>{data.likes}</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => this.viewPhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
+                                            <TabBarIcon color='#b863c7' name={'ios-text'}/>
+                                            <Text style={{paddingLeft: 5, color: '#b863c7', fontSize: 15}}>{data.comment_count}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                        </View>
                     </View>
                     ))
                 }
-                { loadedPosts <= totalPosts ? 
+                {/* { loadedPosts <= totalPosts ? 
                 <TouchableOpacity onPress={() => this.loadMorePosts()} style={{alignItems: 'center',}}>
                     <Text style={{color: '#b863c7', fontWeight: 'bold', fontSize: 20}}>Load more posts</Text>
                 </TouchableOpacity> :
                 <Text>{"\n"}</Text>
-                }
+                } */}
             </View>
         );
   }
