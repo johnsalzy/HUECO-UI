@@ -8,56 +8,62 @@ import UserModal from '../Modals/UserView';
 
 
 
-class UserView extends React.Component {
+class Users extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             data: this.props.data,
-            modalVisable: false
+            modalVisable: false,
+            index: null,
         };
 
     }
 
     render(){
-        let { data, modalVisable } = this.state
+        let { data, index, modalVisable } = this.state
         return (
             
               <View style={app_styles.background}>
                   {data.count > 0 ?
                       data.results.map((data, index) => (
                         <View key={index}>
-                          <TouchableOpacity  onPress={() => this.setState({modalVisable: true})}>
+                          <TouchableOpacity  onPress={() => this.setState({index: index, modalVisable: true })}>
                               <View style={styles.container}>
                                   <View style={search_results.resultContainer}>
                                       <View style={styles.headerContent}>
-                                          <Image style={styles.avatar}
-                                              source={{uri: data.profile.profile_pic}}
-                                          />
-                                          <Text style={styles.name}>{data.first_name + ' ' + data.last_name}</Text>
-                                          <Text style={styles.userInfo}>Achievement: Is a pro</Text>
-                                          <Text style={styles.userInfo}>Description: {data.profile.description} </Text>
-                                          <Text style={styles.userInfo}>Location: {data.profile.location} </Text>
-                                          <Text style={styles.userInfo}>Following: {data.profile.following} </Text>
-                                          <Text style={styles.userInfo}>Followers: {data.profile.followers} </Text>
-                                          <Text style={styles.userInfo}>Sends: {data.profile.sends} </Text>
+                                          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                            <View style={{width: '30%'}}>
+                                              <Image style={styles.avatar}
+                                                  source={{uri: data.profile.profile_pic}}
+                                              />
+                                            </View>
+                                            <View style={{paddingLeft: 10, width: '70%'}}>
+                                              <Text style={styles.name}>{data.first_name + ' ' + data.last_name}</Text>
+                                              <Text style={styles.userInfo}>Following: {data.profile.following} </Text>
+                                              <Text style={styles.userInfo}>Followers: {data.profile.followers} </Text>
+                                              <Text style={styles.userInfo}>Sends: {data.profile.sends} </Text>
+                                            </View>
+                                          </View>
                                       </View>
                                   </View>
                               </View>
                             </TouchableOpacity>
                           </View>
                       ))
-                      : <Text>No Users Found :(</Text> }
-                <UserModal 
-                  closeModal={() => this.setState({modalVisable: false})} 
-                  modalVisable={modalVisable} 
-                  data={data}
-                />
+                  : <Text>No Users Found :(</Text> }
+                  {modalVisable && 
+                    <UserModal 
+                      closeModal={() => this.setState({modalVisable: false})}
+                      data={data.results[index]}
+                      modalVisable={modalVisable} 
+                    />
+                  }
               </View>
             
         );
     }
 }
-export default UserView
+export default Users
 
 
 
@@ -71,16 +77,15 @@ const styles = StyleSheet.create({
         width: '100%'
       },
       headerContent:{
-        padding:30,
+        padding:5,
         alignItems: 'center',
       },
       avatar: {
         width: 90,
         height: 90,
-        borderRadius: 63,
+        borderRadius: 50,
         borderWidth: 4,
         borderColor: "black",
-        marginBottom:10,
       },
       name:{
         fontSize:22,
