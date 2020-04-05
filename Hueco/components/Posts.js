@@ -76,7 +76,7 @@ class Posts extends Component {
 
     render(){
         let { fetchData } = this.state;
-        alert('fetchdata' + JSON.stringify(fetchData))
+        // alert('fetchdata' + JSON.stringify(fetchData))
         return (
             <View style={styles.container}>
                 {fetchData.length == 0 ? <Text>No Posts ):</Text> : 
