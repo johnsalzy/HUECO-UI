@@ -22,7 +22,7 @@ class Profile extends Component {
       access_token: this.props.login.access_token,
       userData: this.props.user,
       profileDataLoaded: false,
-      userData2: {date_joined: '', profile: { sends: 0, first_name: "", last_name:"", profile_pic: "https://www.facebook.com/ProfilePictures/photos/a.466471457743/10154888128487744/?type=1&theater"}}
+      userData2: {date_joined: '', profile: { sends: 0, first_name: "", last_name:"", profile_picture: "https://www.facebook.com/ProfilePictures/photos/a.466471457743/10154888128487744/?type=1&theater"}}
     }
   }
 
@@ -72,7 +72,7 @@ class Profile extends Component {
                         
                         <View style={{alignItems: 'center', alignContent: "center", paddingLeft: "2%",width:"58%"}}>
                           <Image style={styles.avatar}
-                              source={{uri: this.state.userData2.profile.profile_pic}}
+                              source={{uri: this.state.userData2.profile.profile_picture}}
                           />
                         </View>
 

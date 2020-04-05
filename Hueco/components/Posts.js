@@ -90,14 +90,16 @@ class Posts extends Component {
                         }} 
                         key={index}
                     >
-                        <Image 
-                            source={{'uri': data.media.media}}  
-                            style={{    
-                                alignSelf: 'center',
-                                height: 400,
-                                width: 400,
-                        }} 
-                        />
+                        {data.media && 
+                            <Image 
+                                source={{'uri': data.media.media}}  
+                                style={{    
+                                    alignSelf: 'center',
+                                    height: 400,
+                                    width: 400,
+                                }} 
+                            />
+                        }
                         <View style={{
                             backgroundColor: '#bfbcb2',
                             padding: 3,

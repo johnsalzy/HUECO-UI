@@ -34,7 +34,7 @@ class Users extends React.Component {
                                           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <View style={{width: '30%'}}>
                                               <Image style={styles.avatar}
-                                                  source={{uri: data.profile.profile_pic}}
+                                                  source={{uri: data.profile.thumbnail}}
                                               />
                                             </View>
                                             <View style={{paddingLeft: 10, width: '70%'}}>
@@ -68,7 +68,6 @@ export default Users
 
 
 const styles = StyleSheet.create({
-
     //   For Profile 
       container: {
         flex: 1,

@@ -129,7 +129,7 @@ class TagFriend extends Component {
                             <View key={index} style={styles.resContainer}>
                                 <View style={styles.flexRow}>
                                     <Image style={styles.avatar}
-                                        source={{uri: data.profile.profile_pic}}
+                                        source={{uri: data.profile.thumbnail}}
                                     />
                                     <Text style={styles.userInfo}>{data.first_name + ' ' + data.last_name}</Text>
                                     <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'add')}>
