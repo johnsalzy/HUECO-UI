@@ -57,6 +57,15 @@ const text_input = StyleSheet.create({
         width: '80%',
         borderRadius: 20,
         borderWidth: 2, 
+    },
+    register: {
+        height: 50,
+        borderColor: '#E0F2E9',
+        paddingLeft: 10,
+        width: '80%',
+        borderRadius: 50,
+        borderWidth: 2, 
+        color: 'black',
     }
 })
 
