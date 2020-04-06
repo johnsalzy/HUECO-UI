@@ -14,6 +14,7 @@ import { Tooltip } from 'react-native-elements';
 
 import Icon from '../Ionicon';
 import UserStatView from '../UserStatView';
+import Settings from './Settings'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -35,8 +36,8 @@ class Profile extends Component {
             baseAPI: 'http://3.133.123.120:8000/api/v1/',
             userData: null,
             is_following: null,
-            profileDataLoaded: false
-            
+            profileDataLoaded: false,
+            settingModalVisable: false,
         };
     }
     loadUserData(apiRoute){
@@ -70,10 +71,6 @@ class Profile extends Component {
           .then(() => this.setState({is_following: !is_following}))
           .catch();
     }
-
-    settings(){
-        alert('my settings')
-    }
     componentDidMount(){
         let apiRoute = ''
         let { data, login } = this.state
@@ -87,7 +84,7 @@ class Profile extends Component {
         this.loadUserData(apiRoute)
     }
     render() {
-        let { myProfile, userData, is_following} = this.state
+        let { myProfile, userData, is_following, settingModalVisable} = this.state
 
         return (
             <View>
@@ -104,7 +101,7 @@ class Profile extends Component {
                                 <Text style={styles.name}> {userData.first_name + ' ' + userData.last_name}</Text>
                                 {myProfile ? 
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
-                                    <TouchableOpacity onPress={() => this.settings()}>
+                                    <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
                                         <Icon name={'settings'} color={'gray'} size={20}/>
                                     </TouchableOpacity>
                                 </View>
@@ -168,9 +165,17 @@ class Profile extends Component {
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 }
-
                 {/* End of profile view, start of stats view */}
                 <UserStatView />
+
+                {/* Settigs Modal */}
+                {(myProfile && settingModalVisable) && 
+                    <Settings 
+                        modalVisable={settingModalVisable} 
+                        close={() => this.setState({settingModalVisable: false})} 
+                        data={userData}
+                    />
+                }
             </View>
         );
     }
