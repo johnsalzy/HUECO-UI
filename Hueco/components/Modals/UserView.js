@@ -8,13 +8,11 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     Modal,
-    Image,
     Dimensions,
 } from "react-native";
 import {connect} from 'react-redux';
-import { Tooltip } from 'react-native-elements';
 
-import Icon from '../Ionicon';
+
 import Profile from '../User/Profile';
 
 const windowWidth = Dimensions.get('window').width;
@@ -37,13 +35,6 @@ class UserViewModal extends Component {
             myProfile: false,
             
         };
-    }
-    followUser(id){
-        alert('unfollow/follow')
-        // POST: http://3.133.123.120:8000/api/v1/social/follow/?id=id
-    }
-    settings(){
-        alert('my settings')
     }
     componentDidMount() {
         let { data, login } = this.state
