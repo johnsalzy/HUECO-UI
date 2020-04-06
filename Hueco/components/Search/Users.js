@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import {connect} from 'react-redux';
 
 // Import
 import {app_styles} from '../../assets/styles/universal'
@@ -7,6 +8,11 @@ import {search_results} from '../../assets/styles/styles'
 import UserModal from '../Modals/UserView';
 
 
+const mapStateToProps = state => (
+    {
+      login: state.login,
+    }
+)
 
 class Users extends React.Component {
     constructor(props){
@@ -14,17 +20,17 @@ class Users extends React.Component {
         this.state = {
             data: this.props.data,
             modalVisable: false,
+            dataLoaded: null,
             index: null,
         };
 
     }
-
     render(){
-        let { data, index, modalVisable } = this.state
+        let { index, modalVisable, data } = this.state
+
         return (
-            
               <View style={app_styles.background}>
-                  {data.count > 0 ?
+                  {(data.count > 0) ?
                       data.results.map((data, index) => (
                         <View key={index}>
                           <TouchableOpacity  onPress={() => this.setState({index: index, modalVisable: true })}>
@@ -36,6 +42,7 @@ class Users extends React.Component {
                                               <Image style={styles.avatar}
                                                   source={{uri: data.profile.thumbnail}}
                                               />
+
                                             </View>
                                             <View style={{paddingLeft: 10, width: '70%'}}>
                                               <Text style={styles.name}>{data.first_name + ' ' + data.last_name}</Text>
@@ -63,8 +70,7 @@ class Users extends React.Component {
         );
     }
 }
-export default Users
-
+export default connect(mapStateToProps)(Users)
 
 
 const styles = StyleSheet.create({

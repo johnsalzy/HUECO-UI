@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 import WrapComp from '../components/Search/Wrap'
 import {app_styles} from '../assets/styles/universal'
-
+import { updateSearchData } from '../redux/actions'
 const mapStateToProps = state => (
   {
     login: state.login,
@@ -33,7 +33,7 @@ class SearchScreen extends React.Component {
         this.updateIndex = this.updateIndex.bind(this)
     }
     
-    async loadUserData(apiPath){
+    async loadUserData(apiPath, type){
         let {access_token} = this.state
         this.setState({dataFetched: false, prevData: false, nextData: false})
         try {
@@ -46,6 +46,7 @@ class SearchScreen extends React.Component {
           .then((response) => response.json())
           .then((responseData) => {
               this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next})
+              this.props.dispatch(updateSearchData(responseData, type))
           })
           .done();
         } catch(err) {
@@ -56,16 +57,21 @@ class SearchScreen extends React.Component {
     searchItem = () => {
         let {search, searchCat, baseAPI} = this.state
         let apiRoute = baseAPI
+        let type= ''
         if(searchCat == "Users"){
             apiRoute = apiRoute + 'users/?search=' + search
+            type = 'Users'
         }else if(searchCat == "Areas"){
             apiRoute = apiRoute + 'areas/?name=' + search
+            type = 'Areas'
         }else if(searchCat == "Walls"){
             apiRoute = apiRoute + 'walls/?name=' + search
+            type = 'Walls'
         } else{
             apiRoute = apiRoute + 'routes/?name=' + search
+            type = 'Routes'
         }
-        this.loadUserData(apiRoute)
+        this.loadUserData(apiRoute, type)
 
     };
     updateSearch = search => {
