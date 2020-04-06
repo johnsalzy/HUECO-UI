@@ -40,15 +40,15 @@ class Users extends React.Component {
                                           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                             <View style={{width: '30%'}}>
                                               <Image style={styles.avatar}
-                                                  source={{uri: data.profile.thumbnail}}
+                                                  source={{uri: data.thumbnail}}
                                               />
 
                                             </View>
                                             <View style={{paddingLeft: 10, width: '70%'}}>
-                                              <Text style={styles.name}>{data.first_name + ' ' + data.last_name}</Text>
-                                              <Text style={styles.userInfo}>Following: {data.profile.following} </Text>
-                                              <Text style={styles.userInfo}>Followers: {data.profile.followers} </Text>
-                                              <Text style={styles.userInfo}>Sends: {data.profile.sends} </Text>
+                                              <Text style={styles.name}>{data.full_name}</Text>
+                                              <Text style={styles.userInfo}>Following: {data.following} </Text>
+                                              <Text style={styles.userInfo}>Followers: {data.followers} </Text>
+                                              <Text style={styles.userInfo}>Sends: {data.sends} </Text>
                                             </View>
                                           </View>
                                       </View>
