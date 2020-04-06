@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import { Tooltip } from 'react-native-elements';
 
 import Icon from '../Ionicon';
+import UserStatView from '../UserStatView';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -30,7 +31,6 @@ class Profile extends Component {
         this.state = {
             login: this.props.login,
             data: this.props.data,
-            id: this.props.data.id,
             myProfile: false,
             baseAPI: 'http://3.133.123.120:8000/api/v1/',
             userData: null,
@@ -39,10 +39,10 @@ class Profile extends Component {
             
         };
     }
-    loadUserData(){
-        let {id, login, baseAPI} = this.state;
+    loadUserData(apiRoute){
+        let {login, baseAPI} = this.state;
         try {
-          fetch(baseAPI + "users/" + id, {
+          fetch(baseAPI + "users/" + apiRoute, {
             headers: {
                 'Authorization': 'Bearer ' + login.access_token,
             }
@@ -75,13 +75,16 @@ class Profile extends Component {
         alert('my settings')
     }
     componentDidMount(){
-        this.loadUserData()
+        let apiRoute = ''
         let { data, login } = this.state
         // Check if is me
-        let my_username = login.username
-        if(my_username == data.username){
+        if(login.username == data.username){
             this.setState({myProfile: true})
-        }   
+            apiRoute = 'me'
+        }else {
+            apiRoute = data.id
+        }
+        this.loadUserData(apiRoute)
     }
     render() {
         let { myProfile, userData, is_following} = this.state
@@ -165,6 +168,9 @@ class Profile extends Component {
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 }
+
+                {/* End of profile view, start of stats view */}
+                <UserStatView />
             </View>
         );
     }
