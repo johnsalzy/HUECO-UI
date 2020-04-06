@@ -46,7 +46,7 @@ class SearchScreen extends React.Component {
           .then((response) => response.json())
           .then((responseData) => {
               this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next})
-              this.props.dispatch(updateSearchData(responseData, type))
+            //   this.props.dispatch(updateSearchData(responseData, type))
           })
           .done();
         } catch(err) {
