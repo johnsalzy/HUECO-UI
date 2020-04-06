@@ -15,3 +15,7 @@ export const DELETE_USER_DATA = 'DELETE_USER_DATA'
 
 // Stat data
 export const UPDATE_USER_STATS = 'UPDATE_USER_STATS'
+
+//Post Data
+export const UPDATE_POST_DATA = 'UPDATE_POST_DATA'
+export const UPDATE_SEARCH_DATA = 'UPDATE_SEARCH_DATA'

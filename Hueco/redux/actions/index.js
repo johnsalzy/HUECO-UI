@@ -1,4 +1,5 @@
-import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA, UPDATE_USER_STATS} from './actionTypes'
+import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA, UPDATE_USER_STATS, } from './actionTypes'
+import {UPDATE_SEARCH_DATA, UPDATE_MEDIA_INDEX} from './actionTypes' // For updating media
 
 let nextId = 0
 export const addTodo = (text) => ({
@@ -54,4 +55,16 @@ export const updateUserStats = (data) => ({
     toprope: {},
     boulder: {},
     alltime: {}
+})
+
+
+// Media Options
+export const updateSearchData = (data, type_search) => ({
+    type: UPDATE_SEARCH_DATA,
+    data: data,
+    type_search: type_search,
+})
+export const updateMediaIndex = (index) => ({
+    type: UPDATE_MEDIA_INDEX,
+    index: index
 })
