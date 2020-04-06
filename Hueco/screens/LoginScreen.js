@@ -14,7 +14,7 @@ const windowHeight = Dimensions.get('window').height;
 
 //Import Screens/Components/Styles
 import {view_style, text_input, buttons} from '../assets/styles/styles';
-import Register from '../components/Modals/register'
+import Register from '../components/Modals/Register'
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -42,10 +42,10 @@ class Login extends Component {
     }
     componentDidUpdate(){
         // alert('Comp Updated: ' + JSON.stringify(this.state))
-        let {username, password} = this.state;
+        let {username} = this.state;
         if(this.state.loginDataLoaded){
             this.setState({loginDataLoaded: false})
-            this.login_username(username, password)
+            this.login_username(username)
         }
     }
 
@@ -72,7 +72,7 @@ class Login extends Component {
         
     }
 
-    login_username = (user, pass) => {
+    login_username = (user) => {
         // Clear slate
         this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
         let response = this.state.response;
@@ -94,14 +94,28 @@ class Login extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
-                    <Text style={{color:'#F4DF73', paddingBottom: '0%', marginTop: '-2%', fontSize:60, textAlign: 'center', fontWeight: 'bold'}}>
-                      Rock
+
+
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-10%', marginBottom: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---
                     </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '0%', fontSize:40, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
-                      & 
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginBottom: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---    ---
                     </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-5%', textAlign: 'center', fontWeight: 'bold'}}>
-                      Rope
+                    <Text style={{color:'#F4DF73', fontSize:60, marginBottom: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---            ---
+                    </Text>
+                    <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
+                    |    HUECO    |
+                    </Text>
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---            ---
+                    </Text>
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---    ---
+                    </Text>
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    ---
                     </Text>
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
@@ -149,7 +163,11 @@ class Login extends Component {
                 </View>
                 {modalVisible ? 
                     <View style={styles.viewModalIn}>
-                        <Register closeModal={() => this.closeModal()} modalVisible={modalVisible}/>
+                        <Register 
+                            closeModal={() => this.closeModal()} 
+                            userRegistered={(u, p) => this.setState({username: u, password: p})} 
+                            modalVisible={modalVisible}
+                        />
                     </View>
                 : null
                 }
