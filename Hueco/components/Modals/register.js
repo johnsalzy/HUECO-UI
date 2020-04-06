@@ -4,133 +4,172 @@ import {
     View,
     ScrollView,
     Text,
+    TextInput,
     StyleSheet,
     TouchableOpacity,
     TouchableWithoutFeedback,
     Modal,
     Dimensions,
     Button,
+    ActivityIndicator
 } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 //Import Screens/Components/Styles
-// import {view_style, text_input, buttons} from '../assets/styles/styles';
+import { text_input} from '../../assets/styles/styles';
 
 //Redux imports
 import {connect} from 'react-redux';
-// import { loginUserNormal } from '../redux/actions'
-
-// All for forms
-import t from 'tcomb-form-native';
-const Form = t.form.Form;
-const Email = t.refinement(t.String, email => {
-    const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; //or any other regexp
-    return reg.test(email);
-});
-const User = t.struct({
-  email: Email,
-  firstName: t.String,
-  lastName: t.String,
-  username: t.String,
-  location: t.String,
-  password: t.String,
-//   private: t.Boolean,
-  terms: t.Boolean
-});
-const formStyles = {
-    ...Form.stylesheet,
-    formGroup: {
-      normal: {
-        marginBottom: 10
-      },
-    },
-    controlLabel: {
-      normal: {
-        color: 'blue',
-        fontSize: 18,
-        marginBottom: 7,
-        fontWeight: '600'
-      },
-      // the style applied when a validation error occours
-      error: {
-        color: 'red',
-        fontSize: 18,
-        marginBottom: 7,
-        fontWeight: '600'
-      }
-    }
-}
-const options = {
-    fields: {
-      email: {
-        error: 'Enter Email'
-      },
-      firstName: {
-          label: "First Name"
-      },
-      lastName: {
-        label: "Last Name"
-    },
-      terms: {
-        label: 'Agree to Terms',
-      },
-    },
-    stylesheet: formStyles,
-};
-
-const mapStateToProps = state => (
-    {
-    login: state.login
-    }
-)
+// import { registerUserNormal } from '../redux/actions'
 
 
 class Register extends Component {
     constructor(props){
         super(props);
         this.state = {
+            baseAPI: 'http://3.133.123.120:8000/api/v1/',
             modalVisible: this.props.modalVisible,
-            login: this.props.login,
+            errorPresent: false,
+            registeringUser: false,
+            errorText: '',
+            response_register: null,
+            first_name: '',
+            last_name: '',
+            password: '',
+            email: '',
+            username: '',
         };
     }
+    register_user = () => {
+        this.setState({errorPresent: false, errorText: ""})
+        let { baseAPI, username, email, first_name, last_name, password } = this.state;
+        if(username == ""){
+            this.setState({errorPresent: true, errorText: "Must Enter Username"})
+            return
+        }
+        if(email == ""){
+            this.setState({errorPresent: true, errorText: "Must Enter email"})
+            return
+        }
+        if(first_name == ""){
+            this.setState({errorPresent: true, errorText: "Must Enter First Name"})
+            return
+        }
+        if(last_name == ""){
+            this.setState({errorPresent: true, errorText: "Must Enter Last Name"})
+            return
+        }
+        if(password == ""){
+            this.setState({errorPresent: true, errorText: "Must Enter Password"})
+            return
+        }else if (password.length < 8){
+            this.setState({errorPresent: true, errorText: "Password Must Be At Least 8 Characters"})
+            return
+        }
+        this.setState({registeringUser: true})
+        fetch(baseAPI + 'users/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                // email: email,
+                first_name: first_name,
+                last_name: last_name,
+                password: password,
+            })
+        })
+        .then()
+        .then(response => response.json())
+        .then((response) => this.setState({response_register: response}))
+        .catch();
 
-    closeModal = () => {
-        this.props.closeModal()
-    }
-    handleSubmit = () => {
-        const value = this._form.getValue();
-        alert('value: '+ JSON.stringify(value));
+
+
     }
     render() {
-        let { modalVisible } = this.state;
+        let { modalVisible, errorPresent, errorText, response_register, registeringUser } = this.state;
+        if(response_register){
+            if(response_register.status == "User Created"){
+                alert('User registered')
+                this.props.userRegistered(this.state.username, this.state.password)
+                this.setState({response_register: null, registeringUser: false, password: ''})
+                this.props.closeModal()
+            } else {
+                alert('Register Failed Because' + JSON.stringify(response_register))
+                this.setState({errorText: "Register Failed", errorPresent: true ,response_register: null, registeringUser: false})
+            }
+        }
         return (
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
                 >
-                    <TouchableOpacity onPress={() => this.closeModal() } >
+                    <TouchableOpacity onPress={() => this.props.closeModal() } >
                         <TouchableWithoutFeedback>
                             <View style={styles.container}>
                                 <ScrollView>
-                                    <TouchableOpacity onPress={() => this.closeModal() }>
+                                    <TouchableOpacity onPress={() => this.props.closeModal() }>
                                         <Text style={styles.modalLeave}>X</Text>
                                     </TouchableOpacity>
                                     <View style={styles.containerForm}>
                                         <View>
-                                            <Form 
-                                            ref={c => this._form = c}
-                                            type={User} 
-                                            options={options}
+                                            <Text style={{paddingBottom: 5}}>Username</Text>
+                                            <TextInput 
+                                                style={text_input.register}
+                                                onChangeText = {(username) => this.setState({username})}
+                                                value = {this.state.username}
+                                                autoCapitalize = {"none"}
                                             />
-                                            <Button
-                                            title="Sign Up!"
-                                            onPress={() => this.handleSubmit()}
+
+                                            <Text style={{paddingBottom: 5, paddingTop: 10}}>First Name</Text>
+                                            <TextInput 
+                                                style={text_input.register}
+                                                onChangeText = {(first_name) => this.setState({first_name})}
+                                                value = {this.state.first_name}
                                             />
+                                            <Text style={{paddingBottom: 5, paddingTop: 10}}>Last Name</Text>
+                                            <TextInput 
+                                                style={text_input.register}
+                                                onChangeText = {(last_name) => this.setState({last_name})}
+                                                value = {this.state.last_name}
+                                            />
+                                            <Text style={{paddingBottom: 5, paddingTop: 10}}>Email</Text>
+                                            <TextInput 
+                                                style={text_input.register}
+                                                onChangeText = {(email) => this.setState({email})}
+                                                value = {this.state.email}
+                                                autoCapitalize = {"none"}
+                                            />
+
+
+                                            <Text style={{paddingBottom: 5, paddingTop: 10}}>Password</Text>
+                                            <TextInput 
+                                                style={text_input.register}
+                                                onChangeText = {(password) => this.setState({password})}
+                                                value = {this.state.password}
+                                                secureTextEntry={true}
+                                                autoCapitalize = {"none"}
+                                            />
+
+                                            {errorPresent && <Text style={{color: 'firebrick', paddingTop: 10, textAlign: 'center'}}>Error: {errorText}</Text>}
+                                            
+                                            <View style={{paddingTop: 10, alignItems: 'center', alignContent: 'center'}}>
+                                                { !registeringUser ? 
+                                                    <Button
+                                                        title="Sign Up!"
+                                                        onPress={() => this.register_user()}
+                                                    />
+                                                :
+                                                    <ActivityIndicator size="large" color="#0000ff" />
+                                                }
+                                            </View>
                                         </View>
                                     </View>
                                 </ScrollView>
-                                
                             </View>
                         </TouchableWithoutFeedback>
                     </TouchableOpacity>
@@ -139,7 +178,7 @@ class Register extends Component {
         );
     }
 }
-export default connect(mapStateToProps)(Register);
+export default connect()(Register);
 
 
 const styles = StyleSheet.create({
