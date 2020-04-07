@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { ButtonGroup } from 'react-native-elements'
-import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
 
 // Import needed componenets
 import TabIcon from './TabIcon';
 import StatView from './Stats'
-import Posts from './Posts'
+import Posts from './Posts/Posts'
 
 
 const mapStateToProps = state => (
@@ -24,8 +23,7 @@ class UserStatView extends Component {
     super(props);
     this.state= {
         selectedIndex: 0,
-        userInfo: this.props.user,
-        loginInfo: this.props.login,
+        idUser: this.props.idUser,
     }
     this.updateIndex = this.updateIndex.bind(this)
   }
@@ -36,24 +34,22 @@ class UserStatView extends Component {
   
   render(){
     const buttons = [<TabIcon focused={true} name='md-camera'/>, <TabIcon name='md-stats'/>]
-    const { selectedIndex } = this.state
+    const { selectedIndex, idUser } = this.state
     // alert('this.state render' + JSON.stringify(this.state))
     return (
-        <ScrollView style={{marginBottom: 40}}>
+        <View style={{width: '90%'}}>
             <View style={{alignItems: 'center'}}>
                 <ButtonGroup
                     onPress={this.updateIndex}
                     selectedIndex={selectedIndex}
                     buttons={buttons}
-                    containerStyle={{height: 50, width: '95%'}}
+                    containerStyle={{height: 50, width: '100%'}}
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatView />: <Posts /> }
+                { selectedIndex ? <StatView idUser={idUser} />: <Posts idUser={idUser}/> }
             </View>
-        </ScrollView>
-
-
+        </View>
     );
   }
 }
