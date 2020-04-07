@@ -17,7 +17,6 @@ const buttons = StyleSheet.create({
         alignItems: 'center',
         textAlignVertical: 'center',
         alignContent: 'center'
-
     },
     closeText: {
         paddingTop: 5,
@@ -89,4 +88,8 @@ const dividers = StyleSheet.create({
     standard: { margin: 5, backgroundColor: 'black', height: 2 }
 })
 
-export { view_style, text_input, buttons, search_results, dividers }
+const loaders = StyleSheet.create({
+    standard: {color:"#0000ff"}
+})
+
+export { view_style, text_input, buttons, search_results, dividers, loaders }
