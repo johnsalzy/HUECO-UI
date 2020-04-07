@@ -46,11 +46,9 @@ class Stats extends Component {
 
   render(){
     // alert('this.state render ' + JSON.stringify(this.state.data))
-    const chartWidth = windowWidth * .92;
+    const chartWidth = windowWidth*.9;
     return (
         <View style={styles.container}>
-            
-            <Text style={{fontSize: 20}}>Selected is stat Page</Text>
             <View style={styles.chart}>
                 <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center', marginLeft: 'auto', paddingRight: 10}}>
                     <Text>Boulder</Text>
@@ -88,9 +86,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         alignContent: 'center',
+        width: '100%'
     },
     chart: {
-      flex: 1,
+      width: '90%',
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: "#f5fcff",
