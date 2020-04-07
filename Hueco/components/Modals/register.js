@@ -93,7 +93,6 @@ class Register extends Component {
         let { modalVisible, errorPresent, errorText, response_register, registeringUser } = this.state;
         if(response_register){
             if(response_register.status == "User Created"){
-                alert('User registered')
                 this.props.userRegistered(this.state.username, this.state.password)
                 this.setState({response_register: null, registeringUser: false, password: ''})
                 this.props.closeModal()

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions, ActivityIndicator } from 'react-native';
 import { SearchBar, ButtonGroup, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
 import WrapComp from '../components/Search/Wrap'
 import {app_styles} from '../assets/styles/universal'
-import { updateSearchData } from '../redux/actions'
+// import { updateSearchData } from '../redux/actions'
 const mapStateToProps = state => (
   {
     login: state.login,
@@ -29,13 +29,14 @@ class SearchScreen extends React.Component {
             dataFetched: false,
             nextData: false,
             prevData: false,
+            loading: false,
         };
         this.updateIndex = this.updateIndex.bind(this)
     }
     
     async loadUserData(apiPath, type){
         let {access_token} = this.state
-        this.setState({dataFetched: false, prevData: false, nextData: false})
+        this.setState({dataFetched: false, loading: true, prevData: false, nextData: false})
         try {
           //Assign the promise unresolved first then get the data using the json method.
           await fetch(apiPath, {
@@ -45,7 +46,7 @@ class SearchScreen extends React.Component {
           })
           .then((response) => response.json())
           .then((responseData) => {
-              this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next})
+              this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next, loading: false})
             //   this.props.dispatch(updateSearchData(responseData, type))
           })
           .done();
@@ -106,8 +107,7 @@ class SearchScreen extends React.Component {
         this.loadUserData(apiPath)
     }
     render(){
-        let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData } = this.state;
-        // alert('render: '  + JSON.stringify(this.state.access_token))
+        let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData, loading } = this.state;
         
         const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
@@ -140,6 +140,15 @@ class SearchScreen extends React.Component {
                         </View>
                     </View>
                     <View style={{width: '90%', paddingBottom: 20}}>
+                        {loading && 
+                            <View style={{paddingTop: 20}}>
+                                <ActivityIndicator 
+                                    style={{justifyContent: "center", alignItems: 'center'}}
+                                    size="large" color="#0000ff"
+                                />
+                            </View>
+                            
+                        }
                         {dataFetched ? 
                             <View>
                                 <WrapComp searchCat={searchCat} data={fetchData} />

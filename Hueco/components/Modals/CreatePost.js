@@ -9,7 +9,8 @@ import {
     Modal,
     Button,
     TextInput,
-    Platform
+    Platform,
+    ActivityIndicator
 } from "react-native";
 import { Divider } from 'react-native-elements';
 
@@ -23,7 +24,7 @@ import TagRoute from '../Tags/tagRoute';
 
 //Redux imports
 import {connect} from 'react-redux';
-// import { loginUserNormal } from '../redux/actions'
+
 
 
 const mapStateToProps = state => (
@@ -42,17 +43,18 @@ class CreatePost extends Component {
             title: '',
             tagFriend: false,
             taggedFriends: [],
-            taggedRoute: 510,
+            taggedRoute: null,
             imagePosted: null,
             tagRoute: false,
             caption: null,
             baseAPI: "http://3.133.123.120:8000/api/v1/",
             response: null,
-            postingMedia: null
+            postingMedia: false
         };
     }
     handleSubmit = () => {
         let {login, media, title, taggedFriends, taggedRoute, baseAPI} = this.state
+        this.setState({response: null, postingMedia: true})
         if (title == ""){
             alert('Please enter a title')
             return
@@ -79,23 +81,21 @@ class CreatePost extends Component {
         if(media){
             let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
             formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
+            formdata.append("media.media_type", media.type);
         }
-        this.setState({response: null, postingMedia: true})
         fetch(baseAPI + 'post/', requestOptions)
         .then(result => this.setState({response: result}))
         .catch(error => console.log('error ' + error));
     }
 
     render() {
-        let { tagFriend, tagRoute, response, taggedFriends } = this.state;
+        let { tagFriend, tagRoute, response, taggedFriends, postingMedia } = this.state;
         if (response!= null){
-            this.setState({postingMedia: false})
             if(response.status == 201){
-                alert('post worked')
-                this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null})
+                this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null, postingMedia: false})
                 this.props.closeModal()
             } else {
-                this.setState({response: null})
+                this.setState({response: null, postingMedia: false})
                 alert('Post failed: '+ JSON.stringify(response.status))
             }
             
@@ -144,13 +144,21 @@ class CreatePost extends Component {
                                     propSetImage={(media) => this.setState({media})}
                                     deleteMedia={() => this.setState({media: null, caption: null})}
                                 />
-                                
-                                <View style={{paddingTop: 10}}>
-                                    <Button
-                                        title="Post!"
-                                        onPress={() => this.handleSubmit()}
-                                    />
-                                </View>
+                                {postingMedia ? 
+                                    <View style={{paddingTop: 20}}>
+                                        <ActivityIndicator 
+                                            style={{justifyContent: "center", alignItems: 'center'}}
+                                            size="large" color="#0000ff"
+                                        />
+                                    </View>
+                                :
+                                    <View style={{paddingTop: 10}}>
+                                        <Button
+                                            title="Post!"
+                                            onPress={() => this.handleSubmit()}
+                                        />
+                                    </View>
+                                }
                             </View>
                         </ScrollView>
                     </View>
