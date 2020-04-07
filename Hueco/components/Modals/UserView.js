@@ -14,6 +14,7 @@ import {connect} from 'react-redux';
 
 
 import Profile from '../User/Profile';
+import Icon from '../Ionicon';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -58,11 +59,15 @@ class UserViewModal extends Component {
                                 <ScrollView>
                                     <TouchableWithoutFeedback style={styles.containerModal}>
                                         <View>
-                                            <Profile data={data}/> 
-                                            {/* <Text>{JSON.stringify(data)}</Text> */}
-                                            <TouchableOpacity onPress={() => this.props.closeModal()}>
-                                                <Text style={styles.optionDismiss}>Dismiss</Text>
-                                            </TouchableOpacity>
+                                            <View>
+                                                <Profile data={data}/> 
+                                                <TouchableOpacity 
+                                                    onPress={() => this.props.closeModal()}
+                                                    style={{marginRight: 'auto', position: 'absolute'}}
+                                                >
+                                                    <Icon name={'arrow-back'} size={50} color={'firebrick'}/>
+                                                </TouchableOpacity>
+                                            </View>
                                             
                                         </View>
                                     </TouchableWithoutFeedback>
