@@ -15,6 +15,7 @@ import { Tooltip } from 'react-native-elements';
 import Icon from '../Ionicon';
 import UserStatView from '../UserStatView';
 import Settings from './Settings'
+import ImageWithLoader from '../ImageWithLoader';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -38,6 +39,7 @@ class Profile extends Component {
             is_following: null,
             profileDataLoaded: false,
             settingModalVisable: false,
+            profile_pic_loaded: false
         };
     }
     loadUserData(apiRoute){
@@ -84,16 +86,28 @@ class Profile extends Component {
         this.loadUserData(apiRoute)
     }
     render() {
-        let { myProfile, userData, is_following, settingModalVisable} = this.state
+        let { myProfile, userData, is_following, settingModalVisable, profile_pic_loaded} = this.state
 
         return (
             <View>
                 {userData ? 
                     <View>
-                        <View style={{alignItems: 'center', justifyContent: 'center', borderBottomWidth: 2, borderBottomColor: 'black'}}>
+                        <View style={styles.profile_pic}>
+                            {! profile_pic_loaded &&
+                                <View style={{position: 'absolute', top: windowHeight*.35}}>
+                                    <ActivityIndicator size="large" color="#0000ff"/>
+                                </View>
+                            }
                             <Image 
-                                style={styles.profile_pic}
+                                style={{
+                                    width: '100%', 
+                                    height: '100%', 
+                                    borderTopLeftRadius: 10,
+                                    borderTopRightRadius: 10,
+                                }}
                                 source={{uri: userData.profile.profile_picture}}
+                                onLoad={() => this.setState({profile_pic_loaded: true})}
+                                onError={() => this.setState({profile_pic_loaded: true})}
                             />
                         </View>
                         <View style={{paddingTop: 5, alignItems: 'center',}}>
@@ -158,6 +172,9 @@ class Profile extends Component {
                                 <Icon name='timeline' /><Text style={styles.userInfo}> {userData.profile.sends} </Text>
                                 </View>
                             </Tooltip>
+                            
+                            {/* End of profile view, start of stats view */}
+                            <UserStatView idUser={userData.id}/>
                         </View>
                     </View>
                 :
@@ -165,8 +182,7 @@ class Profile extends Component {
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 }
-                {/* End of profile view, start of stats view */}
-                <UserStatView />
+                
 
                 {/* Settigs Modal */}
                 {(myProfile && settingModalVisable) && 
@@ -189,6 +205,10 @@ const styles = StyleSheet.create({
         height: windowHeight*.7,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        borderBottomWidth: 2, 
+        borderBottomColor: 'black'
     },
     name:{
         fontSize:22,
