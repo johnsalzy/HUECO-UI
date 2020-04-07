@@ -29,8 +29,8 @@ const mapStateToProps = state => (
 
 class Login extends Component {
     state = {
-        username: 'John',
-        password: 'Gruffalo',
+        username: '',
+        password: '',
         loggedIn: false,
         errorPresent: false,
         error_text: '',
@@ -105,9 +105,19 @@ class Login extends Component {
                     <Text style={{color:'#F4DF73', fontSize:60, marginBottom: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
                     ---            ---
                     </Text>
-                    <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
-                    |    HUECO    |
-                    </Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
+                        {'\t'}{'\t'}{'\t'}{'\t'}{'\t'}|{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}
+                        </Text>
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{color:'#F4DF73', fontSize:47, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlign: 'center'}}>
+                            HUECO
+                            </Text>
+                        </View>
+                        <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
+                        {'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}|
+                        </Text>
+                    </View>
                     <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
                     ---            ---
                     </Text>

@@ -1,8 +1,6 @@
 import React from "react";
 import { Image, View, ActivityIndicator, Text } from 'react-native';
 
-import { loaders } from '../assets/styles/styles';
-
 class ImageWithLoader extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +31,7 @@ class ImageWithLoader extends React.Component {
                     <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
                 }
                 <Image 
-                    source={{'uri': data.media.thumbnail}}
+                    source={{'uri': data.media.media}}
                     onLoad={() => this.setState({loading: false})}
                     onError={() => this.setState({loading: false, error: true})}
                     style={{
