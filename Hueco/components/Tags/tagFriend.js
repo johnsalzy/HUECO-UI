@@ -69,7 +69,7 @@ class TagFriend extends Component {
         let username = data.username
         let currentlyTagged = this.props.currentlyTagged;
         let currentlyTaggedCount = currentlyTagged.length;
-        let user = {id: data.id, name: data.first_name + ' ' + data.last_name, profile_pic: data.profile_pic}
+        let user = {id: data.id, name: data.full_name, profile_pic: data.thumbnail}
         let newTagged = currentlyTagged
         if(type == 'add'){
             let { login } = this.state;
@@ -129,9 +129,9 @@ class TagFriend extends Component {
                             <View key={index} style={styles.resContainer}>
                                 <View style={styles.flexRow}>
                                     <Image style={styles.avatar}
-                                        source={{uri: data.profile.thumbnail}}
+                                        source={{uri: data.thumbnail}}
                                     />
-                                    <Text style={styles.userInfo}>{data.first_name + ' ' + data.last_name}</Text>
+                                    <Text style={styles.userInfo}>{data.full_name}</Text>
                                     <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'add')}>
                                         <Icon size={40} color='green' name='add'/>
                                     </TouchableOpacity>
@@ -143,6 +143,14 @@ class TagFriend extends Component {
                 </View>
                 <View>
                     {currentlyTaggedCount > 0 &&
+                        <View style={{paddingTop:10}}>
+                            <Text>Currently Tagged Users Below</Text>
+                            <Divider style={dividers.standard}/>
+                        </View>
+                    }
+                    {currentlyTaggedCount > 0 &&
+                        
+
                         currentlyTagged.map((data, index) => (
                             <View key={index} style={styles.resContainer}>
                                 <View style={styles.flexRow}>
