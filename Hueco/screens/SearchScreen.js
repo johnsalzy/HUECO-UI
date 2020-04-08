@@ -79,7 +79,6 @@ class SearchScreen extends React.Component {
         this.setState({ search });
     };
     clearSearch = () => {
-        alert('caancel')
         this.setState({ search: '' });
     };
     updateIndex (selectedIndex) {

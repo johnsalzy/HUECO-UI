@@ -7,7 +7,7 @@ const buttons = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         borderColor: '#F4DF73',
-        color: 'black',
+        color: 'white',
         borderRadius: 20,
         borderWidth: 3, 
         width: '80%',

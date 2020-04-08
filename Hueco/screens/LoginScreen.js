@@ -29,8 +29,8 @@ const mapStateToProps = state => (
 
 class Login extends Component {
     state = {
-        username: '',
-        password: '',
+        username: 'John',
+        password: 'Gruffalo',
         loggedIn: false,
         errorPresent: false,
         error_text: '',

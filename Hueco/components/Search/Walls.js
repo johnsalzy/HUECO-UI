@@ -33,7 +33,7 @@ class WallView extends React.Component {
                             </View>
                         </View>
                     ))
-                    : <Text>No Areas Found :(</Text> }
+                    : <Text>No Walls Found :(</Text> }
                 {/* <Text>data: {JSON.stringify(data)}</Text> */}
             </View>
 
