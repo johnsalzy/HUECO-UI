@@ -55,7 +55,8 @@ class Stats extends Component {
                     <Switch onValueChange = {() => this.toggleSwitchAllTime()} value = {this.state.switch1Value}/>
                     <Text>Top Rope</Text>
                 </View>
-                <VictoryChart domainPadding={15} width={chartWidth} theme={VictoryTheme.material}>
+
+                <VictoryChart domainPadding={15} width={chartWidth}>
                     <VictoryLabel text={"All Time " + this.state.data.type + " Sends"} x={chartWidth/2} y={10} textAnchor="middle"/>
                     <VictoryAxis
                         // Needed to have x axis present
