@@ -73,16 +73,16 @@ class CreatePost extends Component {
         if(taggedRoute){
             formdata.append("route", taggedRoute);
         }
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-        };
         if(media){
             let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
             formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
             formdata.append("media.media_type", media.type);
         }
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+        };
         fetch(baseAPI + 'post/', requestOptions)
         .then(result => this.setState({response: result}))
         .catch(error => console.log('error ' + error));
