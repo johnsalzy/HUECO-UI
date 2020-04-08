@@ -51,13 +51,13 @@ class Profile extends Component {
         })
         .then((response) => response.json())
         .then((responseData) => {
-            alert('resposne' + JSON.stringify(responseData))
             this.setState({profileDataLoaded: true, userData: responseData, is_following: responseData.profile.is_following})
         })
         .catch((err) => alert('error in fetch' + err))
         .done();
-        
-      }
+    }
+
+
     followUser(id){
         let { login, baseAPI, is_following } = this.state;
         fetch(baseAPI + 'social/follow/?id=' + id, {
