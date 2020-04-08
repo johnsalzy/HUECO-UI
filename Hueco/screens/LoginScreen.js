@@ -105,20 +105,12 @@ class Login extends Component {
                     <Text style={{color:'#F4DF73', fontSize:60, marginBottom: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
                     ---            ---
                     </Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
-                        {'\t'}{'\t'}{'\t'}{'\t'}{'\t'}|{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}
-                        </Text>
-                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color:'#F4DF73', fontSize:47, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlign: 'center'}}>
-                            HUECO
-                            </Text>
-                        </View>
-                        <Text style={{color:'#F4DF73', fontSize:60, textAlign: 'center', fontWeight: 'bold', paddingTop: 30, textAlignVertical: 'center'}}>
-                        {'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}|
+                    <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
+                        <Text style={{color:'#F4DF73', fontSize:47, textAlign: 'center', fontWeight: 'bold', paddingTop: 35, textAlign: 'center'}}>
+                        |      HUECO      |
                         </Text>
                     </View>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
+                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 35}}>
                     ---            ---
                     </Text>
                     <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
@@ -130,11 +122,13 @@ class Login extends Component {
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
                             placeholder='Username'
+                            placeholderTextColor="black"
                             onChangeText = {(username) => this.setState({username})}
                             value = {this.state.username}
                         />
                         <TextInput style={text_input.default} 
                             placeholder='Password'
+                            placeholderTextColor="black"
                             onChangeText = {(password) => this.setState({password})}
                             value = {this.state.password}
                             secureTextEntry={true}

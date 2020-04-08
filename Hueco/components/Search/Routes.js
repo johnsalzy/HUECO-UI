@@ -29,7 +29,7 @@ export default class RouteView extends React.Component {
                                           source={{uri: data.img_url}}
                                       />
                                     </View>
-                                    <View style={{width: '68%', justifyContent: 'center'}}>
+                                    <View style={{paddingLeft: 10, width: '60%', justifyContent: 'center'}}>
                                       <Text style={styles.name}>{data.name}</Text>
                                       <Text style={styles.userInfo}>Grade: {data.rating}</Text>
                                       <Text style={styles.userInfo}>Type: {data.route_type} </Text>

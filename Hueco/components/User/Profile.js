@@ -42,23 +42,21 @@ class Profile extends Component {
             profile_pic_loaded: false
         };
     }
-    loadUserData(apiRoute){
+    async loadUserData(apiRoute){
         let {login, baseAPI} = this.state;
-        try {
-          fetch(baseAPI + "users/" + apiRoute, {
-            headers: {
-                'Authorization': 'Bearer ' + login.access_token,
-            }
-          })
-          .then((response) => response.json())
-          .then((responseData) => {
-              this.setState({profileDataLoaded: true, userData: responseData, is_following: responseData.profile.is_following})
-          })
-          .done();
-          
-        } catch(err) {
-            alert("Error with data -----------" + err);
+        await fetch(baseAPI + "users/" + apiRoute, {
+        headers: {
+            'Authorization': 'Bearer ' + login.access_token,
         }
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            alert('resposne' + JSON.stringify(responseData))
+            this.setState({profileDataLoaded: true, userData: responseData, is_following: responseData.profile.is_following})
+        })
+        .catch((err) => alert('error in fetch' + err))
+        .done();
+        
       }
     followUser(id){
         let { login, baseAPI, is_following } = this.state;
@@ -79,7 +77,7 @@ class Profile extends Component {
         // Check if is me
         if(login.username == data.username){
             this.setState({myProfile: true})
-            apiRoute = 'me'
+            apiRoute = 'me/'
         }else {
             apiRoute = data.id
         }
