@@ -36,6 +36,8 @@ class TagFriend extends Component {
             friend_name: '',
             friendResults: null,
             taggedFriends: [],
+            nextData: null,
+            prevData: null
         };
     }
 
@@ -57,11 +59,6 @@ class TagFriend extends Component {
         } catch(err) {
             alert("Error with data -----------" + err);
         }
-    }
-
-    searchFriends = () => {
-        let { friend_name } = this.state;
-        this.loadFriendData(this.state.baseAPI + 'users/?search=' + friend_name)
     }
 
 
@@ -100,30 +97,60 @@ class TagFriend extends Component {
     }
 
     render() {
-        let {friendResults} = this.state
+        let {friendResults, prevData, nextData, baseAPI, friend_name} = this.state
         let currentlyTagged = this.props.currentlyTagged;
         let currentlyTaggedCount = currentlyTagged.length;
         return (
             <View>
                 <Divider style={dividers.standard}/>
-                <Text>Tag Friends</Text>
                 <View style={styles.flexRow}>
                     <View style={{width: '80%'}}>
                         <TextInput style={styles.text_input} 
-                            placeholder='Search a name/username'
+                            placeholder='Search a Name or Username'
                             placeholderTextColor="darkblue"
                             onChangeText = {(friend_name) => this.setState({friend_name})}
                             value = {this.state.friend_name}
                         />
                     </View>
                     <View style={{paddingLeft: 2, width: '20%'}}>
-                        <TouchableOpacity onPress={() => this.searchFriends()}>
+                        <TouchableOpacity onPress={() => this.loadFriendData(baseAPI + 'users/?search=' + friend_name)}>
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
                 <View>
+                    {/* Show currently tagged users */}
+                    {currentlyTaggedCount > 0 &&
+                        <View style={{paddingTop:10}}>
+                            <Text>Currently Tagged Users Below</Text>
+                            <Divider style={dividers.standard}/>
+                        </View>
+                    }
+                    {currentlyTaggedCount > 0 &&
+                        currentlyTagged.map((data, index) => (
+                            <View key={index} style={styles.resContainer}>
+                                <View style={styles.flexRow}>
+                                    <Image style={styles.avatar}
+                                        source={{uri: data.profile_pic}}
+                                    />
+                                    <Text style={styles.userInfo}>{data.name}</Text>
+                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'remove')}>
+                                        <Icon size={40} color='firebrick' name='remove'/>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        ))
+                    }
+
+                    {/* Show currently search for users */}
+                    {/* Show currently tagged users */}
+                    {friendResults &&
+                        <View style={{paddingTop:10}}>
+                            <Text>Users You Can Tag Below</Text>
+                            <Divider style={dividers.standard}/>
+                        </View>
+                    }
                     {friendResults && 
                         friendResults.results.map((data, index) => (
                             <View key={index} style={styles.resContainer}>
@@ -140,36 +167,30 @@ class TagFriend extends Component {
                             </View>
                         ))
                     }
-                </View>
-                <View>
-                    {currentlyTaggedCount > 0 &&
-                        <View style={{paddingTop:10}}>
-                            <Text>Currently Tagged Users Below</Text>
-                            <Divider style={dividers.standard}/>
+            
+                    {/* Show next/previous page */}
+                    {friendResults && 
+                        <View>
+                            <View style={{flexDirection: 'row', padding: 10}}>
+                                {prevData && 
+                                    <TouchableOpacity onPress={() => this.loadFriendData(prevData)} style={{alignItems: 'center',}}>
+                                        <Text style={styles.loadNextData}>Load Previous</Text>
+                                    </TouchableOpacity> 
+                                }
+                                {nextData &&
+                                    <TouchableOpacity onPress={() => this.loadFriendData(nextData)} style={{alignItems: 'center', marginLeft: 'auto'}}>
+                                        <Text style={styles.loadNextData}>Load Next</Text>
+                                    </TouchableOpacity> 
+                                }
+                            </View>
                         </View>
                     }
-                    {currentlyTaggedCount > 0 &&
-                        
 
-                        currentlyTagged.map((data, index) => (
-                            <View key={index} style={styles.resContainer}>
-                                <View style={styles.flexRow}>
-                                    <Image style={styles.avatar}
-                                        source={{uri: data.profile_pic}}
-                                    />
-                                    <Text style={styles.userInfo}>{data.name}</Text>
-                                    <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'remove')}>
-                                        <Icon size={40} color='firebrick' name='remove'/>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        ))
-                    }
+
 
                 </View>
-
                 <TouchableOpacity onPress={() => this.props.closeFriends()}>
-                    <Text style={buttons.closeText}>Close</Text>
+                    <Text style={buttons.closeText}>Close Friends Tab</Text>
                 </TouchableOpacity>
                 <Divider style={dividers.standard}/>
             </View>
@@ -193,8 +214,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     avatar: {
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         borderRadius: 63,
         borderWidth: 2,
         borderColor: "black",
@@ -222,5 +243,10 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 4,
         paddingLeft: 10,
+    },
+    loadNextData: {
+        color: 'dodgerblue', 
+        fontWeight: 'bold', 
+        fontSize: 20
     }
 });

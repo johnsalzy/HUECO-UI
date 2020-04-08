@@ -54,11 +54,11 @@ class CreatePost extends Component {
     }
     handleSubmit = () => {
         let {login, media, title, taggedFriends, taggedRoute, baseAPI} = this.state
-        this.setState({response: null, postingMedia: true})
         if (title == ""){
             alert('Please enter a title')
             return
         }
+        this.setState({response: null, postingMedia: true})
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json")
         myHeaders.append("Authorization", "Bearer " + login.access_token);
@@ -89,7 +89,7 @@ class CreatePost extends Component {
     }
 
     render() {
-        let { tagFriend, tagRoute, response, taggedFriends, postingMedia } = this.state;
+        let { tagFriend, tagRoute, response, taggedFriends, taggedRoute, postingMedia } = this.state;
         if (response!= null){
             if(response.status == 201){
                 this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null, postingMedia: false})
@@ -111,9 +111,8 @@ class CreatePost extends Component {
                             <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.props.closeModal() }>
                                 <Icon size={40} color='firebrick' name='arrow-back'/>
                             </TouchableOpacity>
-                            <Divider style={{ marginTop: 5, backgroundColor: 'black', height: 2 }} />
-                            <View style={{padding: 10}}>
-                                <Text>Title</Text>
+                            <View>
+                                <Text style={styles.text}>Title</Text>
                                 <TextInput style={styles.text_input} 
                                     placeholder='Sent this sick v5 today...'
                                     placeholderTextColor="darkblue"
@@ -137,13 +136,21 @@ class CreatePost extends Component {
                                     updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
                                     closeFriends={() => this.setState({tagFriend: false})}/>
                                 }
-                                {tagRoute && <TagRoute closeRoute={() => this.setState({tagRoute: false})}/>}
+                                {tagRoute && 
+                                    <TagRoute 
+                                        currentlyTagged={taggedRoute}
+                                        updateTaggedRoute={(tag) => this.setState({taggedRoute: tag})}
+                                        closeRoute={() => this.setState({tagRoute: false})}
+                                    />
+                                }
+                                
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
                                 <MediaPicker 
                                     setCaption= {(caption) => this.setState({caption})} 
                                     propSetImage={(media) => this.setState({media})}
                                     deleteMedia={() => this.setState({media: null, caption: null})}
                                 />
+
                                 {postingMedia ? 
                                     <View style={{paddingTop: 20}}>
                                         <ActivityIndicator 
@@ -180,8 +187,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     text: {
-        paddingTop: 5,
-        fontSize: 16,
+        paddingTop: 15,
+        fontSize: 20,
+        fontWeight: 'bold'
     },
     flexRow: {
         flexDirection: 'row',
