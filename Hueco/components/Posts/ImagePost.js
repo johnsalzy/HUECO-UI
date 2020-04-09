@@ -23,7 +23,9 @@ class PostsImage extends Component {
                         /> 
                     }
                     {error && 
-                        <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
+                        <View style={{justifyContent: 'center',height: '100%',backgroundColor: 'cornflowerblue'}}>
+                            <Text style={{textAlign: 'center', justifyContent: 'center', fontSize: 20, fontWeight:'bold', color: 'white'}}>Could Not Load Image :(</Text>
+                        </View>
                     }
                     <Image 
                         source={{'uri': image_uri}}
@@ -53,7 +55,8 @@ const styles = StyleSheet.create({
         borderColor: 'black', 
         borderWidth: 1, 
         borderRadius: 2,
-        width: '100%'
+        width: '100%',
+        height: '100%',
     },
 
 });
