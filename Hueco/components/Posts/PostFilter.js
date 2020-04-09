@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, TextInput } from 'react-native';
 import {connect} from 'react-redux';
+import { Divider } from 'react-native-elements';
 
 import { fetchGet } from '../../functions/requests'
 import Icon from '../Ionicon';
 import TextPost from './TextPost'
 import ImagePost from './ImagePost';
-  
+import { dividers} from '../../assets/styles/styles'  
+import UserView from '../Modals/UserView'
+
 const mapStateToProps = state => (
   {
     login: state.login,
@@ -18,24 +21,22 @@ class MediaFilter extends Component {
     constructor(props){
         super(props);
         this.state= {
+            userModal: false,
             login: this.props.login,
-            id: this.props.id,
-            data: null,
+            data: this.props.data,
+            modalData: {id: '', username: ''},
             baseAPI: "http://3.133.123.120:8000/api/v1/",
-            dataLoaded: false
+            viewPostDetails: false,
+            comment_to_add: ''
 
         }
     }
-    componentDidMount(){
-        this.fetchPostData()
+    openUserPage = (id,username) => {
+        let data = {id: id, username: username}
+        this.setState({modalData: data, userModal: true })
+        
     }
-    async fetchPostData(){
-        let {id, login, baseAPI} = this.state;
-        let apiRoute = baseAPI + 'post/' + id + '/';
-        let access_token = login.access_token;
-        let response = await fetchGet(apiRoute, access_token)
-        this.setState({data: response, dataLoaded: true})
-    }
+
     likePhoto = () => {
         // Hit API to like photo
         // let {id, login, baseAPI} = this.state;
@@ -55,71 +56,178 @@ class MediaFilter extends Component {
         this.setState({data})
     }
     commentPhoto = () => {
-        alert('Comment photo for: ' + id)
-    }
-    seeUser = (id) => {
-        alert('see user: ' + id)
+        let {comment_to_add, login} = this.state;
+        let data = {...this.state.data}
+        if(comment_to_add == ""){
+            return
+        } else {
+            data.comment_count += 1
+            data.comments.push({username: login.username, comment: comment_to_add})
+            alert('Comment photo for: ' + data.id + ' ' + comment_to_add)
+            // Call API route to add comments
+
+            this.setState({data: data, comment_to_add: ""})
+        }
+        
     }
 
     render(){
-        let {id, data, dataLoaded} = this.state
+        let {data, viewPostDetails, userModal} = this.state
         return (
             <View style={styles.container}>
-                {(dataLoaded && data.media ) &&
-                    <View style={{height: windowWidth*.95, width: windowWidth*.95}}>
+                {userModal && <UserView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
+                {( data.media ) &&
+                    <View style={{height: windowWidth*.95, width: windowWidth*.94}}>
                         <ImagePost uri={data.media.media_large}/>
-                        <Text style={{color: 'red'}}>This is test</Text>
                     </View>
                 }
-                { (dataLoaded && data.user) && 
-                <View style={{
-                    backgroundColor: 'white',
-                    borderRadius: 2,
-                    borderWidth: 1,
-                    borderColor: 'black',
-                    padding: 3,
+                { ( data.user) && 
+                <View 
+                    style={{
+                        backgroundColor: 'white',
+                        borderRadius: 2,
+                        borderWidth: 1,
+                        borderColor: 'black',
+                        padding: 3,
                     }}
                 >
-                    <View style={{flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}>
-                        {/* Profile picture and name */}
-                        <View style={{justifyContent: 'center', width: '30%',}}>
-                            <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row'}} onPress={() => this.seeUser(data.id)}>
-                                <Image 
-                                    source={{'uri': data.user.thumbnail}}  
-                                    style={styles.userThumbnail} 
-                                />
-                                <View style={{paddingLeft: 4}}>
-                                    <Text style={{textAlign: 'center', fontWeight: 'bold'}}>{data.user.full_name.split(' ')[0]}</Text>
-                                    <Text style={{textAlign: 'center', fontWeight: 'bold'}}>{data.user.full_name.split(' ')[1]}</Text>
+                    <View style={{flexWrap: 'wrap', flexDirection: 'row', width: windowWidth*.94, height: 80, overflow: 'hidden'}}>
+                        {/* Profile picture and name  & post actions*/}
+                        <View style={{width: '30%', justifyContent: 'center'}}>
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{justifyContent: 'center'}}>
+                                    <TouchableOpacity style={{alignItems: 'center'}} onPress={() => this.openUserPage(data.user.id, data.user.username)}>
+                                        <Image 
+                                            source={{'uri': data.user.thumbnail}}  
+                                            style={styles.userThumbnail} 
+                                        />
+                                    </TouchableOpacity>
                                 </View>
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* Post Title */}
-                        <View style= {{alignItems: 'center', justifyContent: 'center', width: '50%'}}>
-                            <Text style={{fontWeight: 'bold', fontSize: 15, textAlign: 'center',}}>{data.text}</Text>
-                        </View>
-                        
-                        {/* Post Actions */}
-                        <View style={{marginLeft: 'auto', width: '20%', justifyContent: 'center'}}>
-                            <View style={{marginLeft: 'auto'}}>
-                                <TouchableOpacity onPress={() => this.commentPhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                    <Text style={{paddingRight: 5, color: 'cornflowerblue', fontSize: 15}}>{data.comment_count}</Text><Icon color='cornflowerblue' name={'comment'}/>
+                                {/* Post Actions */}
+                                <View style={{ justifyContent: 'center'}}>
+                                    <View >
+                                        <TouchableOpacity onPress={() => this.setState({viewPostDetails: true})} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 5}}>
+                                            <Icon color='cornflowerblue' name={'comment'}/><Text style={{paddingLeft: 5, color: 'cornflowerblue', fontSize: 15}}>{data.comment_count}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View >
+                                        {data.liked ?
+                                            <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 5}}>
+                                                <Icon color='red' name={'favorite'}/><Text style={{ paddingLeft: 5, color: 'red', fontSize: 15}}>{data.likes}</Text>
+                                            </TouchableOpacity>
+                                        :
+                                            <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 5}}>
+                                                <Icon color='red' name={'favorite-border'}/><Text style={{ paddingLeft: 5, color: 'red', fontSize: 15}}>{data.likes}</Text>
+                                            </TouchableOpacity>
+                                        }
+                                    </View>
+                                </View>
+                            </View>
+                            <View>
+                                <TouchableOpacity onPress={() => this.openUserPage(data.user.id, data.user.username)}>
+                                    <Text style={{fontWeight: 'bold'}}>@{data.user.username}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{marginLeft: 'auto'}}>
-                                {data.liked ?
-                                    <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                        <Text style={{ paddingRight: 5, color: 'red', fontSize: 15}}>{data.likes}</Text><Icon color='red' name={'favorite'}/>
-                                    </TouchableOpacity>
-                                :
-                                    <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                        <Text style={{ paddingRight: 5, color: 'red', fontSize: 15}}>{data.likes}</Text><Icon color='red' name={'favorite-border'}/>
-                                    </TouchableOpacity>
-                                }
-                            </View>
                         </View>
+                        {/* Post Title */}
+                        <TouchableOpacity
+                            style={{width: '70%', height: '100%'}}
+                            onPress={() => this.setState({viewPostDetails: !viewPostDetails})}
+                        >
+                            <View style= {{justifyContent: 'center', width: '100%', height: '100%', overflow: 'hidden', flexDirection: 'row'}}>
+                                {data.text.length < 30 ?
+                                    <Text style={{ fontSize: 18, width: '90%', paddingLeft: 10, alignSelf: 'center', justifyContent: 'center'}}>{data.text}</Text>
+                                :
+                                    <Text style={{ fontSize: 18, width: '90%'}}>{data.text}</Text>
+                                }
+                                
+
+                                <View style={{width: '10%', justifyContent: 'center'}}>
+                                    {viewPostDetails ? 
+                                        <Icon name={'unfold-less'} size={20}/>
+                                        :
+                                        <Icon name={'unfold-more'} size={20}/>
+                                    }
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
+
+                    {viewPostDetails &&
+                        <View style={{width: '100%', height: 200, paddingLeft: 5, paddingRight: 5}}>
+                            <Divider style={dividers.standard}/>
+                            <ScrollView nestedScrollEnabled={true}>
+                                <View style={styles.flexRow}>
+                                    <Text style={styles.postDetails}>Posted: </Text>
+                                    <Text>{data.created_at} ago</Text>
+                                </View>
+                                {data.tagged_users.length > 0 && 
+                                    <View style={{marginTop: 5}}>
+                                        <Text style={styles.postDetails}>Tagged Users</Text>
+                                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                                            {
+                                            data.tagged_users.map((data, index) => (
+                                                <TouchableOpacity
+                                                    onPress={() => this.openUserPage(data.id, data.username)}
+                                                    key={index}
+                                                >
+                                                    <Text>@{data.username} </Text>
+                                                </TouchableOpacity>
+                                            ))
+                                            }
+                                        </View>
+                                    </View>
+                                }
+                                {data.route && 
+                                    <View>
+                                        <Text style={styles.postDetails}>Tagged Route</Text>
+                                        <TouchableOpacity
+                                            onPress={() => alert('Viewing route: ' +data.route.id)}
+                                        >
+                                            <Text>{data.route.name} - {data.route.rating}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                }
+                                <View style={{marginTop: 5}}>
+                                    <Text style={styles.postDetails}>{data.user.full_name} </Text>
+                                    <Text>{data.text}</Text>
+                                </View>
+
+
+                                {/* Section to add a comment */}
+                                <View style={{flexDirection: 'row', marginTop: 5, width: '100%', height: 30}}>
+                                    <TextInput 
+                                        placeholder={'Add your comment'}
+                                        style={{padding: 4, borderColor: 'black', borderWidth: 1, borderRadius: 5, width: '65%', paddingRight: 10, height: '100%'}}
+                                        onChangeText = {(comment_to_add) => this.setState({comment_to_add})}
+                                        value = {this.state.comment_to_add}
+                                    />
+                                    <TouchableOpacity
+                                        style={{
+                                            width: '35%', borderColor: 'black', borderWidth: 1, borderRadius: 5, 
+                                            backgroundColor: 'cornflowerblue', textAlignVertical: 'center', 
+                                            justifyContent: 'center', height: '100%'
+                                        }}
+                                        onPress={() => this.commentPhoto()}
+                                    >
+
+                                        <Text style={{color: 'white', padding: 4, width: '100%', textAlignVertical:'center', textAlign: 'center', justifyContent: 'center'}}>Add Comment</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+
+                                {/* Section to display comments */}
+                                {data.comment_count > 0 && 
+                                    data.comments.map((data, index) => (
+                                    <View key={index} style={{marginTop: 5}}>
+                                        <Text style={styles.postDetails}>{data.username} </Text>
+                                        <Text>{data.comment}</Text>
+                                    </View>
+                                    ))
+                                }
+                            </ScrollView>
+                        </View>
+                    }
                 </View>
                 }
             </View>
@@ -133,12 +241,19 @@ const styles = StyleSheet.create({
     userThumbnail: {    
         height: 50,
         width: 50,
-        borderRadius: 50,
+        borderRadius: 10,
         borderColor: 'black',
         borderWidth: 1,
     },
     container: {
         marginBottom: 25,
-        width: windowWidth*.95,
+        width: windowWidth*.94,
+    },
+    flexRow: {
+        flexDirection: 'row',
+        marginTop: 5,
+    },
+    postDetails: {
+        fontWeight: 'bold'
     }
 });
