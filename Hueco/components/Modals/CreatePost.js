@@ -12,7 +12,6 @@ import {
     Platform,
     ActivityIndicator
 } from "react-native";
-import { Divider } from 'react-native-elements';
 
 
 //Import Screens/Components/Styles
