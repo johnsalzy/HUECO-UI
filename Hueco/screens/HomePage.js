@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView } from 'react-native';
-// import { ScrollView } from 'react-native-gesture-handler';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { connect } from 'react-redux';
 
 //Import files/componenets
 import SocialMedia from '../components/SocialMedia';
@@ -8,22 +8,35 @@ import Ionicon from '../components/Ionicon';
 import AddOptionModal from '../components/Modals/AddOptions';
 import AddPostModal from '../components/Modals/CreatePost';
 import {app_styles} from '../assets/styles/universal';
-import MediaFilter from '../components/Posts/PostFilter';
+// import UserView from '../components/Modals/UserView';
+// import MediaFilter from '../components/Posts/PostFilter';
 import PostFilter from '../components/Posts/PostFilter';
+import { fetchGet } from '../functions/requests'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const mapStateToProps = state => (
+  {
+    login: state.login,
+  }
+);
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
+        login: this.props.login,
         modalAddVisable: false,
         modalAddTick: false,
         modalAddPost: false,
-        recommended_posts: [90, 89, 88, 85, 86, 87, 91, 92, 93, 94],
-        // recommended_posts: [85, 86],
+        data: null,
+        nextData: null,
+        dataLoaded: false,
         refreshingPosts: false,
+        loading: false,
+        userModal: false,
+        initialLoad: true,
+        baseAPI: "http://3.133.123.120:8000/api/v1/",
 
     };
   }
@@ -47,44 +60,78 @@ export default class HomeScreen extends Component {
   }
   refreshPosts(){
     this.setState({refreshingPosts: true})
-
-
-    this.setState({recommended_posts: [90, 89, 88, 84, 85, 86, 87], refreshingPosts: false})
+    this.fetchPostData()
   }
-  loadMorePosts(){
-    // alert('loading more postst')
-    let { recommended_posts } = this.state
-    // this.setState({recommended_posts: [...recommended_posts, ...[88, 89, 67, 82, 81]] })
+  async loadMorePosts(){
+    this.setState({loading: true})
+    let {login, nextData} = this.state;
+    let data = {...this.state.data}
+    if(nextData && data){
+      let apiRoute = nextData;
+      let access_token = login.access_token;
+      let response = await fetchGet(apiRoute, access_token)
+      let temp = data.results
+      let temp2 = response.results
+      data.results = temp.concat(temp2)
+      this.setState({data: data, nextData: response.next, dataLoaded: true, loading: false})
+    }
   }
 
+  renderFooter = () => {
+    let {loading, nextData} = this.state
+    if (nextData==null){
+      return(
+        <View style={{paddingVertical: 10, alignItems:'center'}}>
+            <Text style={{fontSize: 20, color: 'cornflowerblue'}}>No More Posts ):</Text>
+        </View>
+      )
+    }else if (!loading){
+      return null;
+    } else {
+      return (<View style={{paddingVertical: 10}}><ActivityIndicator animating size="large" /></View>)
+    }
+  }
+
+  componentDidMount(){
+    this.fetchPostData()
+  }
+  async fetchPostData(){
+      let {id, login, baseAPI} = this.state;
+      let apiRoute = baseAPI + 'post/';
+      let access_token = login.access_token;
+      let response = await fetchGet(apiRoute, access_token)
+      this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
+  }
   render(){
-    let {modalAddVisable, modalAddPost, modalAddTick, recommended_posts, refreshingPosts} = this.state
+    let {modalAddVisable, modalAddPost, modalAddTick, refreshingPosts, data, initialLoad} = this.state
     return (
         <View style={app_styles.screen}>
-              <View style={{alignItems: 'center'}}>
-                <Text style={styles.textHeader}>New Routes Near You</Text>
-                <View style={styles.headerRow} >
-                  <Text> Setter   |    Type      |            Name            | Grade </Text>
-                  <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                  <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                  <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                  <Text>  Matt  | Top Rope  | Matt's First Route |   5.9</Text>
-                </View>
-              </View>
-              <View style={{alignItems: 'center', height: '100%'}}>
-                  <Text style={styles.textHeader}>Recommended Feed</Text>
+            <View style={{alignItems: 'center', height: '100%'}}>
+                {/* <Text style={styles.textHeader}>Recommended Feed</Text> */}
+                {data ? 
                   <FlatList 
-                    data={recommended_posts}
+                    data={data.results}
                     renderItem={({ item }) => 
-                      <PostFilter id={item}/>
+                      <PostFilter data={item} />
                     }
                     onEndReached={() => this.loadMorePosts()}
-                    onEndReachedThreshold={.2}
+                    onEndReachedThreshold={.1}
                     refreshing={refreshingPosts}
                     onRefresh={() => this.refreshPosts()}
-                    keyExtractor={item => item}
+                    keyExtractor={item => item.id.toString(8)}
+                    ListFooterComponent={this.renderFooter}
                   />
-              </View>
+                : 
+                    <View>
+                      {initialLoad ? 
+                        <ActivityIndicator animating size="large"/>
+                      :
+                        <Text>Can't load any posts ):</Text>
+                      }
+                      
+                    </View>
+                }
+            </View>
 
               
 
@@ -115,8 +162,9 @@ export default class HomeScreen extends Component {
         </View>
 
     );
+  }
 }
-}
+export default connect(mapStateToProps)(HomeScreen)
 
 const styles = StyleSheet.create({
   textHeader: {
