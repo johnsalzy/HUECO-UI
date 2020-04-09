@@ -6,7 +6,8 @@ export async function fetchGet(apiRoute, access_token){
         })
         .then((response) => response.json())
         .catch((err) => alert('error in FetchGet' + err))
-        .done();
+        // .done();
+        // alert('request.js' + JSON.stringify(response))
     return response
 }
 
