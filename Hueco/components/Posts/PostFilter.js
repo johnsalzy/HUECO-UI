@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView
 import {connect} from 'react-redux';
 import { Divider } from 'react-native-elements';
 
-import { fetchGet } from '../../functions/requests'
+import { fetchGet, fetchPost } from '../../functions/requests'
 import Icon from '../Ionicon';
 import TextPost from './TextPost'
 import ImagePost from './ImagePost';
@@ -13,6 +13,7 @@ import UserView from '../Modals/UserView'
 const mapStateToProps = state => (
   {
     login: state.login,
+    api: state.api,
   }
 )
 const windowWidth = Dimensions.get('window').width;
@@ -23,9 +24,9 @@ class MediaFilter extends Component {
         this.state= {
             userModal: false,
             login: this.props.login,
+            baseAPI: this.props.api.baseAPI,
             data: this.props.data,
             modalData: {id: '', username: ''},
-            baseAPI: "http://3.133.123.120:8000/api/v1/",
             viewPostDetails: false,
             comment_to_add: ''
 
@@ -37,12 +38,20 @@ class MediaFilter extends Component {
         
     }
 
-    likePhoto = () => {
+    async likePhoto(post_id){
         // Hit API to like photo
-        // let {id, login, baseAPI} = this.state;
-        // let apiRoute = baseAPI + 'post/' + id + '/';
+        let {login, baseAPI} = this.state;
+        let apiRoute = baseAPI + 'social/like/';
         // let access_token = login.access_token;
         // fetchGet(apiRoute, access_token)
+        let headers = {
+          'Authorization': 'Bearer ' + login.access_token,
+          'Content-Type': 'application/json',
+        }
+        let body = {
+            post: post_id
+        }
+        let response = await fetchPost(apiRoute, headers, body) 
 
         // Flip state
         let data = {...this.state.data}
@@ -55,18 +64,27 @@ class MediaFilter extends Component {
         
         this.setState({data})
     }
-    commentPhoto = () => {
-        let {comment_to_add, login} = this.state;
+    async commentPhoto(post_id, user_posted_id){
         let data = {...this.state.data}
+        let { baseAPI, comment_to_add, login } = this.state;
         if(comment_to_add == ""){
             return
         } else {
             data.comment_count += 1
-            data.comments.push({username: login.username, comment: comment_to_add})
-            alert('Comment photo for: ' + data.id + ' ' + comment_to_add)
+            let temp = {text: comment_to_add, user: {username: login.username, id: user_posted_id}}
+            data.comments.push(temp)
             // Call API route to add comments
-
-            this.setState({data: data, comment_to_add: ""})
+            let apiRoute = baseAPI + 'social/comment/';
+            let headers = {
+                'Authorization': 'Bearer ' + login.access_token,
+                'Content-Type': 'application/json',
+            }
+            let body = {
+                post: post_id,
+                text: comment_to_add
+            }
+            let response = await fetchPost(apiRoute, headers, body)  // Waiting for api to be updated
+            this.setState({data: data, comment_to_add: ""}) // Updates/clears state
         }
         
     }
@@ -77,7 +95,7 @@ class MediaFilter extends Component {
             <View style={styles.container}>
                 {userModal && <UserView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
                 {( data.media ) &&
-                    <View style={{height: windowWidth*.95, width: windowWidth*.94}}>
+                    <View style={{height: windowWidth*.95, width: '100%'}}>
                         <ImagePost uri={data.media.media_large}/>
                     </View>
                 }
@@ -91,7 +109,7 @@ class MediaFilter extends Component {
                         padding: 3,
                     }}
                 >
-                    <View style={{flexWrap: 'wrap', flexDirection: 'row', width: windowWidth*.94, height: 80, overflow: 'hidden'}}>
+                    <View style={{flexWrap: 'wrap', flexDirection: 'row', width: '100%', height: 80, overflow: 'hidden'}}>
                         {/* Profile picture and name  & post actions*/}
                         <View style={{width: '30%', justifyContent: 'center'}}>
                             <View style={{flexDirection: 'row'}}>
@@ -154,13 +172,16 @@ class MediaFilter extends Component {
                     </View>
 
                     {viewPostDetails &&
-                        <View style={{width: '100%', height: 200, paddingLeft: 5, paddingRight: 5}}>
+                        <View style={{width: '100%', height: 220, paddingLeft: 5, paddingRight: 5}}>
                             <Divider style={dividers.standard}/>
                             <ScrollView nestedScrollEnabled={true}>
+                                {/* Show when posted */}
                                 <View style={styles.flexRow}>
                                     <Text style={styles.postDetails}>Posted: </Text>
                                     <Text>{data.created_at} ago</Text>
                                 </View>
+
+                                {/* Show tagged users */}
                                 {data.tagged_users.length > 0 && 
                                     <View style={{marginTop: 5}}>
                                         <Text style={styles.postDetails}>Tagged Users</Text>
@@ -188,44 +209,47 @@ class MediaFilter extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 }
-                                <View style={{marginTop: 5}}>
-                                    <Text style={styles.postDetails}>{data.user.full_name} </Text>
+
+                                {/* Section to display comments/title */}
+                                <View style={{marginTop: 5, marginBottom: 30}}>
+                                    <Text style={styles.postDetails}>Comments</Text>
+                                    <Text style={styles.postDetails}>@{data.user.username} </Text> 
                                     <Text>{data.text}</Text>
+                                
+                                    {data.comment_count > 0 && 
+                                        data.comments.map((data, index) => (
+                                        <View key={index} style={{marginTop: 5}}>
+                                            <TouchableOpacity 
+                                                onPress={() => this.openUserPage(data.user.id, data.user.username)}
+                                            >
+                                                <Text style={styles.postDetails}>@{data.user.username} </Text>
+                                            </TouchableOpacity>
+                                            <Text>{data.text}</Text>
+                                        </View>
+                                        ))
+                                    }
                                 </View>
-
-
-                                {/* Section to add a comment */}
-                                <View style={{flexDirection: 'row', marginTop: 5, width: '100%', height: 30}}>
+                            </ScrollView>
+                            {/* Section to add a comment */}
+                            <View style={{flexDirection: 'row', width: '100%', height: 30, position: 'absolute', bottom: 0, backgroundColor: 'white'}}>
                                     <TextInput 
                                         placeholder={'Add your comment'}
-                                        style={{padding: 4, borderColor: 'black', borderWidth: 1, borderRadius: 5, width: '65%', paddingRight: 10, height: '100%'}}
+                                        style={{padding: 4, borderColor: 'black', borderWidth: 1, borderRadius: 5, width: '75%', paddingRight: 10, height: '100%'}}
                                         onChangeText = {(comment_to_add) => this.setState({comment_to_add})}
                                         value = {this.state.comment_to_add}
                                     />
                                     <TouchableOpacity
                                         style={{
-                                            width: '35%', borderColor: 'black', borderWidth: 1, borderRadius: 5, 
+                                            width: '25%', borderColor: 'black', borderWidth: 1, borderRadius: 5, 
                                             backgroundColor: 'cornflowerblue', textAlignVertical: 'center', 
                                             justifyContent: 'center', height: '100%'
                                         }}
-                                        onPress={() => this.commentPhoto()}
+                                        onPress={() => this.commentPhoto(data.id, null)}
                                     >
 
-                                        <Text style={{color: 'white', padding: 4, width: '100%', textAlignVertical:'center', textAlign: 'center', justifyContent: 'center'}}>Add Comment</Text>
+                                        <Text style={{color: 'white', padding: 4, width: '100%', textAlignVertical:'center', textAlign: 'center', justifyContent: 'center'}}>Post</Text>
                                     </TouchableOpacity>
                                 </View>
-
-
-                                {/* Section to display comments */}
-                                {data.comment_count > 0 && 
-                                    data.comments.map((data, index) => (
-                                    <View key={index} style={{marginTop: 5}}>
-                                        <Text style={styles.postDetails}>{data.username} </Text>
-                                        <Text>{data.comment}</Text>
-                                    </View>
-                                    ))
-                                }
-                            </ScrollView>
                         </View>
                     }
                 </View>
@@ -247,7 +271,7 @@ const styles = StyleSheet.create({
     },
     container: {
         marginBottom: 25,
-        width: windowWidth*.94,
+        width: '100%',
     },
     flexRow: {
         flexDirection: 'row',
