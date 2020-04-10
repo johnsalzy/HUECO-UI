@@ -1,4 +1,4 @@
-const areas = (state = {area_data: {}}, action) => {
+const areas = (state = {area_data: []}, action) => {
     switch (action.type) {
         case 'UPDATE_AREA_DATA':
             return {
