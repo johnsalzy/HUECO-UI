@@ -11,7 +11,13 @@ export async function fetchGet(apiRoute, access_token){
     return response
 }
 
-export function fetchPost(){
-
-    
+export async function fetchPost(apiRoute, headers, body){
+    let response = await fetch(apiRoute, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .catch((err) => alert('error in fetchPost' + err));
+    return response
 }
