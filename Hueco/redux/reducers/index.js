@@ -7,6 +7,7 @@ import user from './user';
 import stats from './stats';
 import media from './media';
 import api from './api'
+import areas from './areas'
 
 export default combineReducers({
     todos,
@@ -15,4 +16,5 @@ export default combineReducers({
     stats,
     media,
     api,
+    areas,
 })

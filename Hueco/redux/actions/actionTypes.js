@@ -19,3 +19,7 @@ export const UPDATE_USER_STATS = 'UPDATE_USER_STATS'
 //Post Data
 export const UPDATE_POST_DATA = 'UPDATE_POST_DATA'
 export const UPDATE_SEARCH_DATA = 'UPDATE_SEARCH_DATA'
+
+
+// Area
+export const UPDATE_AREA_DATA = 'UPDATE_AREA_DATA'
