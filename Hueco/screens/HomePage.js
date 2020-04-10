@@ -12,6 +12,8 @@ import {app_styles} from '../assets/styles/universal';
 // import MediaFilter from '../components/Posts/PostFilter';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/requests'
+import { updateAreaData } from '../redux/actions'
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -94,7 +96,18 @@ class HomeScreen extends Component {
 
   componentDidMount(){
     this.fetchPostData()
+    // Get user area info
+    this.fetchUserAreaInfo()
   }
+  async fetchUserAreaInfo(){
+    let {login, baseAPI} = this.state;
+    let apiRoute = baseAPI + 'user-areas/me';
+    let access_token = login.access_token;
+    let response = await fetchGet(apiRoute, access_token)
+    this.props.dispatch(updateAreaData(response))
+  }
+
+
   async fetchPostData(){
       let {id, login, baseAPI} = this.state;
       let apiRoute = baseAPI + 'post/';
