@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, ActivityIn
 import {connect} from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
-import ImagePost from '../Posts/ImagePost';
+import ViewPost from '../Modals/ViewPost';
 import Icon from '../Ionicon';
 import ImageLoader from '../ImageWithLoader';
   
@@ -30,6 +30,8 @@ class Posts extends Component {
             fetchData: {count: 0, results: []},
             prevData: false, 
             nextData: false,
+            modal_view_post: false,
+            post_id: null
         }
     }
     async componentDidMount(){
@@ -57,16 +59,7 @@ class Posts extends Component {
             alert("Error with data -----------" + err);
         }
     }
-    
-    viewPhoto = (id) => {
-        alert('Viewing photo details photo: ' + id)
-    }
-    likePhoto = (id) => {
-        alert('Liking photo for: ' + id)
-    }
-    visitProfile = (id) => {
-        alert('Visiting profile for: ' + id)
-    }
+
     viewNextResults = (apiPath) => {
         this.loadPostData(apiPath)
     }
@@ -74,10 +67,18 @@ class Posts extends Component {
         this.loadPostData(apiPath)
     }
     render(){
-        let { fetchData, prevData, nextData, dataFetched } = this.state;
+        let { fetchData, prevData, nextData, dataFetched, modal_view_post, post_id } = this.state;
         // alert('fetchdata' + JSON.stringify(fetchData))
         return (
             <View>
+                {modal_view_post && 
+                    <ViewPost 
+                        modalVisable={modal_view_post} 
+                        closeModal={() => this.setState({modal_view_post: false,})}
+                        post_id={post_id} 
+                    />
+                
+                }
                 <View style={styles.container}>
                     {fetchData.count == 0 ? 
                         <View style={{alignContent: 'center', alignSelf: 'center', alignItems: 'center'}}>
@@ -94,7 +95,7 @@ class Posts extends Component {
                             style={{overflow: 'hidden'}}
                             key={index}
                         >
-                            <TouchableOpacity onPress={() => alert('viewing image/text: ' + data.id)}>
+                            <TouchableOpacity onPress={() => this.setState({post_id: data.id, modal_view_post: true})}>
                                 {data.media ? 
                                     <View style={styles.postThumbnail}>
                                         <ImageLoader 
@@ -107,71 +108,6 @@ class Posts extends Component {
                                     </View>
                                 }
                             </TouchableOpacity>
-                            
-
-
-                            {/* <View
-                                style={{
-                                borderColor: 'black', borderWidth: 3, 
-                                marginTop: 10, 
-                                marginBottom: 10,
-                                borderRadius: 5,
-                                width: '100%'
-                            }} 
-                            >
-                                <Text>Posts page</Text>
-                            </View> */}
-                            
-                            
-                            {/* {data.media && 
-                                <Image 
-                                    source={{'uri': data.media.media}}  
-                                    style={{
-                                        alignSelf: 'center',
-                                        height: 300,
-                                        width: '100%',
-                                    }} 
-                                />
-                            } */}
-                            {/* <View style={{
-                                backgroundColor: '#bfbcb2',
-                                padding: 3,
-                                }}>
-                                    <View style={{flexWrap: 'wrap', flexDirection: 'row', width: '100%'}}>
-                                        <View style={{justifyContent: 'center', paddingLeft: 5, paddingRight: 5}}>
-                                            <TouchableOpacity  onPress={() => this.visitProfile(data.id)}>
-                                                <Image 
-                                                    source={{'uri': data.user.thumbnail}}  
-                                                    style={{    
-                                                        height: 50,
-                                                        width: 50,
-                                                        borderRadius: 50,
-                                                        borderColor: 'black',
-                                                        borderWidth: 1,
-                                                    }} 
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        
-                                        <View style= {{alignItems: 'center', justifyContent: 'center', width: '55%'}}>
-                                            <Text style={{fontWeight: 'bold', fontSize: 15, textAlign: 'center',}}>{data.text}</Text>
-                                        </View>
-
-                                        
-                                        <View style={{marginLeft: 'auto'}}>
-                                            <TouchableOpacity onPress={() => this.likePhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                                <TabBarIcon color='red' name={'md-heart'}/><Text style={{ paddingLeft: 5, color: 'red', fontSize: 15}}>{data.likes}</Text>
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity onPress={() => this.viewPhoto(data.id)} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 10}}>
-                                                <TabBarIcon color='#b863c7' name={'ios-text'}/>
-                                                <Text style={{paddingLeft: 5, color: '#b863c7', fontSize: 15}}>{data.comment_count}</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                            </View> */}
-
-
                         </View>
                         ))
                     }
