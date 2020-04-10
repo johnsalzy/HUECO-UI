@@ -14,13 +14,15 @@ import { buttons, dividers } from '../../assets/styles/styles'
 
 //Redux imports
 import {connect} from 'react-redux';
+import { fetchGet } from '../../functions/requests'
 // import { loginUserNormal } from '../redux/actions'
 
 
 const mapStateToProps = state => (
     {
     login: state.login,
-    area : state.areas
+    areas : state.areas,
+    api: state.api,
     }
 )
 
@@ -30,43 +32,53 @@ class TagRoute extends Component {
         super(props);
         this.state = {
             login: this.props.login,
-            area: this.props.area,
-            baseAPI: "http://3.133.123.120:8000/api/v1/",
+            areas: this.props.areas,
+            baseAPI: this.props.api.baseAPI,
             route_name: '',
             currentlyTagged: this.props.currentlyTagged,
             routeResults: null,
             taggedRoute: null,
+            data: null,
             nextData: null,
-            prevData: null
+            prevData: null,
+            selected_area: null
         };
     }
 
-    async loadRouteData(apiPath){
-        let { login } = this.state
-        this.setState({dataFetched: false, prevData: false, nextData: false})
-        try {
-          //Assign the promise unresolved first then get the data using the json method.
-          await fetch(apiPath, {
-            headers: {
-                'Authorization': 'Bearer ' + login.access_token,
+    componentDidMount(){
+        let { areas } = this.state;
+        for (const area of areas.area_data){
+            if(area.selected){
+                this.setState({selected_area: area})
+                break
             }
-          })
-          .then((response) => response.json())
-          .then((responseData) => {
-              this.setState({friendResults: responseData, prevData: responseData.previous, nextData: responseData.next})
-          })
-          .done();
-        } catch(err) {
-            alert("Error with data -----------" + err);
         }
     }
 
+    async loadData(apiPath){
+        let { login } = this.state
+        this.setState({dataFetched: false, prevData: false, nextData: false})
+        let responseData = await fetchGet(apiPath, login.access_token)
+        this.setState({data: responseData, prevData: responseData.previous, nextData: responseData.next})
+    }
+
     render() {
-        let {currentlyTagged, baseAPI, route_name, taggedRoute, prevData, nextData, routeResults} = this.state
+        let {currentlyTagged, baseAPI, route_name, taggedRoute, prevData, nextData, routeResults, selected_area, data} = this.state
+        alert(JSON.stringify(selected_area))
         return (
             <View>
                 <Divider style={dividers.standard}/>
-                <Text>Searching In Your Currently Selected Area: {"I am the area name"}</Text>
+                {selected_area && 
+                    <View style={{flexDirection: 'row', paddingBottom: 5}}>
+                        <Text>Searching In Your Currently Selected Area: {selected_area.area.name}</Text>
+                        <TouchableOpacity
+                            onPress={() => alert('Changing area')}
+                        >
+                            <Text style={{paddingLeft: 5, color: 'red'}}>Change</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+                
                 <View style={styles.flexRow}>
                     <View style={{width: '80%'}}>
                         <TextInput style={styles.text_input} 
@@ -77,10 +89,18 @@ class TagRoute extends Component {
                         />
                     </View>
                     <View style={{paddingLeft: 2, width: '20%'}}>
-                        <TouchableOpacity onPress={() => this.loadRouteData(baseAPI + 'routes/?search=' + route_name)}>
+                        <TouchableOpacity 
+                            onPress={() => this.loadData(baseAPI + 'routes/?name=' + route_name + '&areas=selected_area.area.id')}
+                        >
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
                     </View>
+                    <View>
+                        {data &&
+                            <Text>{JSON.stringify(data)}</Text>
+                        }
+                    </View>
+
                 </View>
 
                 <TouchableOpacity onPress={() => this.props.closeRoute()}>
