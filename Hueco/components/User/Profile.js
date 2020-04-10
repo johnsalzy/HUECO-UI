@@ -15,7 +15,6 @@ import { Tooltip } from 'react-native-elements';
 import Icon from '../Ionicon';
 import UserStatView from '../UserStatView';
 import Settings from './Settings'
-import ImageWithLoader from '../ImageWithLoader';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -39,7 +38,7 @@ class Profile extends Component {
             is_following: null,
             profileDataLoaded: false,
             settingModalVisable: false,
-            profile_pic_loaded: false
+            profile_pic_loaded: false,
         };
     }
     async loadUserData(apiRoute){

@@ -3,14 +3,13 @@ import React, { Component } from "react";
 import {
     View,
     ScrollView,
-    Text,
     StyleSheet,
     TouchableOpacity,
     TouchableWithoutFeedback,
     Modal,
+    Text,
     Dimensions,
 } from "react-native";
-import {connect} from 'react-redux';
 
 
 import Profile from '../User/Profile';
@@ -20,33 +19,16 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
 
 
-const mapStateToProps = state => (
-    {
-      login: state.login,
-    }
-)
-
-class UserViewModal extends Component {
+class UserPostModal extends Component {
     constructor(props){
         super(props);
         this.state = {
-            // modalVisible = false,
-            login: this.props.login,
-            data: this.props.data,
-            myProfile: false,
-            
+            data_user: this.props.data,
         };
     }
-    componentDidMount() {
-        let { data, login } = this.state
-        // Check if is me
-        let my_username = login.username
-        if(my_username == data.username){
-            this.setState({myProfile: true})
-        }   
-    }
+
     render() {
-        let { data, myProfile} = this.state
+        let { data_user } = this.state
         return (
             <Modal
             animationType="slide"
@@ -60,7 +42,7 @@ class UserViewModal extends Component {
                                     <TouchableWithoutFeedback style={styles.containerModal}>
                                         <View>
                                             <View>
-                                                <Profile data={data}/> 
+                                                <Profile data={data_user}/> 
                                                 <TouchableOpacity 
                                                     onPress={() => this.props.closeModal()}
                                                     style={{marginRight: 'auto', position: 'absolute'}}
@@ -79,8 +61,7 @@ class UserViewModal extends Component {
         );
     }
 }
-export default connect(mapStateToProps)(UserViewModal);
-// export default UserViewModal;
+export default UserPostModal;
 
 const styles = StyleSheet.create({
     container: { 
@@ -97,63 +78,4 @@ const styles = StyleSheet.create({
         top: windowHeight*.025,
         left: windowWidth*.075,
     },
-    modalLeave: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 'auto',
-        color: 'red',
-    },
-      optionStyle: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        justifyContent: 'center',
-        textAlign: 'center',
-        color: 'cornflowerblue',
-        padding: 2,
-      },
-      optionDismiss: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        color: 'crimson',
-        justifyContent: 'center',
-        textAlign: 'center',
-        padding: 2,
-      }, 
-      profile_pic: {
-          width: '100%',
-          height: windowHeight*.7,
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
-      },
-      name:{
-        fontSize:22,
-        color:"#000000",
-        fontWeight:'600',
-      },
-      userInfo:{
-        fontSize:16,
-        color:"#778899",
-        fontWeight:'600',
-      },
-      flexInRow: {
-        flexDirection: 'row',
-        paddingTop: '1%',
-        paddingBottom: '1%',
-      },
-      unFollowButton: {
-        color: 'red',
-        padding: 5,
-        backgroundColor: 'dodgerblue',
-        borderRadius: 5,
-        fontWeight: 'bold',
-        fontSize: 12,
-      },
-      followButton: {
-        color: 'green',
-        padding: 5,
-        backgroundColor: 'dodgerblue',
-        borderRadius: 5,
-        fontWeight: 'bold',
-        fontSize: 12,
-      }
 });
