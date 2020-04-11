@@ -12,7 +12,7 @@ import { Divider } from 'react-native-elements';
 
 
 //Import Screens/Components/Styles
-import { buttons, dividers} from '../../assets/styles/styles'
+import { buttons, dividers, avatars, containers, info, text_input} from '../../assets/styles/styles'
 import Icon from '../Ionicon'
 ;
 //Redux imports
@@ -105,7 +105,7 @@ class TagFriend extends Component {
                 <Divider style={dividers.standard}/>
                 <View style={styles.flexRow}>
                     <View style={{width: '80%'}}>
-                        <TextInput style={styles.text_input} 
+                        <TextInput style={text_input.search} 
                             placeholder='Search a Name or Username'
                             placeholderTextColor="darkblue"
                             onChangeText = {(friend_name) => this.setState({friend_name})}
@@ -129,12 +129,12 @@ class TagFriend extends Component {
                     }
                     {currentlyTaggedCount > 0 &&
                         currentlyTagged.map((data, index) => (
-                            <View key={index} style={styles.resContainer}>
+                            <View key={index} style={containers.small_search_result}>
                                 <View style={styles.flexRow}>
-                                    <Image style={styles.avatar}
+                                    <Image style={avatars.small}
                                         source={{uri: data.profile_pic}}
                                     />
-                                    <Text style={styles.userInfo}>{data.name}</Text>
+                                    <Text style={info.user_search_info}>{data.name}</Text>
                                     <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'remove')}>
                                         <Icon size={40} color='firebrick' name='remove'/>
                                     </TouchableOpacity>
@@ -153,12 +153,12 @@ class TagFriend extends Component {
                     }
                     {friendResults && 
                         friendResults.results.map((data, index) => (
-                            <View key={index} style={styles.resContainer}>
+                            <View key={index} style={containers.small_search_result}>
                                 <View style={styles.flexRow}>
-                                    <Image style={styles.avatar}
+                                    <Image style={avatars.small}
                                         source={{uri: data.thumbnail}}
                                     />
-                                    <Text style={styles.userInfo}>{data.full_name}</Text>
+                                    <Text style={info.user_search_info}>{data.full_name}</Text>
                                     <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tagUser(data, 'add')}>
                                         <Icon size={40} color='green' name='add'/>
                                     </TouchableOpacity>
@@ -174,12 +174,12 @@ class TagFriend extends Component {
                             <View style={{flexDirection: 'row', padding: 10}}>
                                 {prevData && 
                                     <TouchableOpacity onPress={() => this.loadFriendData(prevData)} style={{alignItems: 'center',}}>
-                                        <Text style={styles.loadNextData}>Load Previous</Text>
+                                        <Icon size={30} name={'keyboard-arrow-left'} color={'cornflowerblue'}/>
                                     </TouchableOpacity> 
                                 }
                                 {nextData &&
                                     <TouchableOpacity onPress={() => this.loadFriendData(nextData)} style={{alignItems: 'center', marginLeft: 'auto'}}>
-                                        <Text style={styles.loadNextData}>Load Next</Text>
+                                        <Icon size={30} name={'keyboard-arrow-right'} color={'cornflowerblue'}/>
                                     </TouchableOpacity> 
                                 }
                             </View>
@@ -213,40 +213,4 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
     },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 63,
-        borderWidth: 2,
-        borderColor: "black",
-        justifyContent: 'center',
-    },
-    userInfo: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlignVertical: 'center'
-    },
-    resContainer: {
-        backgroundColor: 'lightgray',
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: 'black',
-        padding: 5,
-        marginBottom: 2,
-        marginTop: 2,
-    },
-    text_input: {
-        borderWidth: 2,
-        backgroundColor: 'lightskyblue',
-        borderColor: 'black',
-        borderRadius: 4,
-        paddingLeft: 10,
-    },
-    loadNextData: {
-        color: 'dodgerblue', 
-        fontWeight: 'bold', 
-        fontSize: 20
-    }
 });

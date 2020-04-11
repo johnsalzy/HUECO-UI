@@ -64,7 +64,14 @@ const text_input = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 2, 
         color: 'black',
-    }
+    },
+    search:{
+        borderWidth: 2,
+        backgroundColor: 'lightskyblue',
+        borderColor: 'black',
+        borderRadius: 4,
+        paddingLeft: 10,
+    },
 })
 
 const view_style = StyleSheet.create({
@@ -88,7 +95,37 @@ const dividers = StyleSheet.create({
 })
 
 const loaders = StyleSheet.create({
-    standard: {color:"#0000ff"}
+    standard: {color:"#0000ff"},
 })
+const avatars = StyleSheet.create({
+    small: {        
+        width: 40,
+        height: 40,
+        borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "black",
+        justifyContent: 'center',}
+})
+const containers = StyleSheet.create({
+    small_search_result: {
+        backgroundColor: 'lightgray',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: 'black',
+        padding: 5,
+        marginBottom: 2,
+        marginTop: 2,
+    },
 
-export { view_style, text_input, buttons, search_results, dividers, loaders }
+})
+const info = StyleSheet.create({
+    user_search_info: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlignVertical: 'center'
+    },
+
+})
+export { view_style, text_input, buttons, search_results, dividers, loaders, avatars, containers, info }

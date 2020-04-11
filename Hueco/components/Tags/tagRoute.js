@@ -11,7 +11,7 @@ import {
 import { Divider } from 'react-native-elements';
 
 //Import Screens/Components/Styles
-import { buttons, dividers, avatars, containers, info } from '../../assets/styles/styles';
+import { buttons, dividers, avatars, containers, info, text_input } from '../../assets/styles/styles';
 import Icon from '../Ionicon';
 import Activity from '../ActivityIndicator';
 
@@ -104,7 +104,7 @@ class TagRoute extends Component {
                 {/* Search for route */}
                 <View style={styles.flexRow}>
                     <View style={{width: '80%'}}>
-                        <TextInput style={styles.text_input} 
+                        <TextInput style={text_input.search} 
                             placeholder={placeholder}
                             placeholderTextColor="darkblue"
                             onChangeText = {(route_name) => this.setState({route_name})}
@@ -208,11 +208,4 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
     },
-    text_input: {
-        borderWidth: 2,
-        backgroundColor: 'lightskyblue',
-        borderColor: 'black',
-        borderRadius: 4,
-        paddingLeft: 10,
-    }
 });
