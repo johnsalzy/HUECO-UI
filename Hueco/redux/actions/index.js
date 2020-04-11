@@ -17,12 +17,14 @@ export const toggleTodo = (id) => ({
 
 
 // Login Actions
-export const loginUserNormal = (user, access_token, refresh_token, loggedInStat) => ({
+export const loginUserNormal = (email, response) => ({
     type: LOGIN_USER_NORMAL,
-    username: user,
-    loggedIn: loggedInStat,
-    access_token: access_token, 
-    refresh_token: refresh_token
+    email: email,
+    access_token: response.access_token, 
+    refresh_token: response.refresh_token,
+    username: response.username,
+    full_name: response.user_full_name,
+    id: response.user_id,
 })
 
 

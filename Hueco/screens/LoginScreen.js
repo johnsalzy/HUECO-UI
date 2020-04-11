@@ -42,7 +42,6 @@ class Login extends Component {
         modalVisible: false,
     }
     componentDidUpdate(){
-        // alert('Comp Updated: ' + JSON.stringify(this.state))
         let {email} = this.state;
         if(this.state.loginDataLoaded){
             this.setState({loginDataLoaded: false})
@@ -53,7 +52,7 @@ class Login extends Component {
     getLoginDetails = (email, pass) => {
         // alert('Comp Updated: ' + JSON.stringify(this.state))
         this.setState({loginSuccess: false})
-        fetch("http://3.133.123.120:8000/auth/token", {
+        fetch("http://3.133.123.120:8000/auth/token/wuser", {
           method: 'POST',
           headers: {
               'Accept': 'application/json',

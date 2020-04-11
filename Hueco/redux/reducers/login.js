@@ -1,21 +1,24 @@
-const login = (state = {response: {}, username: '', status: false, access_token: ''}, action) => {
+const login = (state = {username: '', status: false, access_token: ''}, action) => {
     switch (action.type) {
         case 'LOGIN_USER_NORMAL':
             return {
                     ...state,
-                    status: action.loggedIn,
-                    username: action.username,
+                    status: true,
                     access_token: action.access_token,
                     refresh_token: action.refresh_token,
+                    username: action.username,
+                    full_name: action.full_name,
+                    id: action.id,
                 }
 
         case 'LOGOUT_USER_NORMAL':
             return {
                 ...state,
-                status: action.loggedIn,
+                status: false,
                 access_token: '',
                 refresh_token: '',
-                username: '',
+                username: null,
+                id: null,
             }
         default:
             return state
