@@ -5,8 +5,8 @@ import { Divider } from 'react-native-elements';
 
 import { fetchGet, fetchPost } from '../../functions/requests'
 import Icon from '../Ionicon';
-import TextPost from './TextPost'
-import ImagePost from './ImagePost';
+import TextPost from './TextPost';
+import MediaPost from './MediaPost';
 import { dividers} from '../../assets/styles/styles'  
 import UserView from '../Modals/UserView'
 
@@ -94,9 +94,11 @@ class MediaFilter extends Component {
         return (
             <View style={styles.container}>
                 {userModal && <UserView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
-                {( data.media ) &&
+                {data.media &&
                     <View style={{height: windowWidth*.95, width: '100%'}}>
-                        <ImagePost uri={data.media.media_large}/>
+                        <MediaPost type={data.media.media_type} uri={data.media.media_large}/>
+
+                        
                     </View>
                 }
                 { ( data.user) && 
