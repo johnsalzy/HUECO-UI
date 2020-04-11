@@ -74,9 +74,9 @@ class Profile extends Component {
         let apiRoute = ''
         let { data, login } = this.state
         // Check if is me
-        if(login.username == data.username){
+        if(login.id == data.id){
             this.setState({myProfile: true})
-            apiRoute = 'me/'
+            apiRoute = login.id + '/'
         }else {
             apiRoute = data.id
         }
@@ -87,7 +87,7 @@ class Profile extends Component {
 
         return (
             <View>
-                {userData ? 
+                {userData && 
                     <View>
                         <View style={styles.profile_pic}>
                             {! profile_pic_loaded &&
@@ -107,6 +107,9 @@ class Profile extends Component {
                                 onError={() => this.setState({profile_pic_loaded: true})}
                             />
                         </View>
+                    </View>
+                }
+                {userData ? 
                         <View style={{paddingTop: 5, alignItems: 'center',}}>
                             <View style={{flexDirection: 'row'}}>
                                 <Text style={styles.name}> {userData.first_name + ' ' + userData.last_name}</Text>
@@ -173,10 +176,16 @@ class Profile extends Component {
                             {/* End of profile view, start of stats view */}
                             <UserStatView idUser={userData.id}/>
                         </View>
-                    </View>
                 :
                     <View style={{paddingTop: 20, paddingBottom: 20}}>
                         <ActivityIndicator size="large" color="#0000ff" />
+                        {myProfile && 
+                            <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
+                                <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
+                                    <Icon name={'settings'} color={'gray'} size={20}/>
+                                </TouchableOpacity>
+                            </View>
+                        }
                     </View>
                 }
                 
