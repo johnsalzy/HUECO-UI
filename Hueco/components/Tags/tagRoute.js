@@ -6,11 +6,14 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    Image,
 } from "react-native";
 import { Divider } from 'react-native-elements';
 
 //Import Screens/Components/Styles
-import { buttons, dividers } from '../../assets/styles/styles'
+import { buttons, dividers, avatars, containers, info } from '../../assets/styles/styles';
+import Icon from '../Ionicon';
+import Activity from '../ActivityIndicator';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -35,9 +38,10 @@ class TagRoute extends Component {
             areas: this.props.areas,
             baseAPI: this.props.api.baseAPI,
             route_name: '',
-            currentlyTagged: this.props.currentlyTagged,
+            currentlyTagged: null,
             routeResults: null,
             taggedRoute: null,
+            dataFetched: true,
             data: null,
             nextData: null,
             prevData: null,
@@ -59,12 +63,30 @@ class TagRoute extends Component {
         let { login } = this.state
         this.setState({dataFetched: false, prevData: false, nextData: false})
         let responseData = await fetchGet(apiPath, login.access_token)
-        this.setState({data: responseData, prevData: responseData.previous, nextData: responseData.next})
+        this.setState({data: responseData, prevData: responseData.previous, nextData: responseData.next, dataFetched: true})
+        
     }
-
+    tag = (data, type) => {
+        let currentlyTagged  = this.props.currentlyTagged;
+        if(type == 'add'){
+            if(currentlyTagged != null){
+                alert('You cannot tag more than one route')
+                return
+            } else {
+                this.props.updateRouteTag({id: data.id, name: data.name, img_url: data.img_url})
+            }
+        } else {
+            this.props.updateRouteTag(null)
+        }
+    }
     render() {
-        let {currentlyTagged, baseAPI, route_name, taggedRoute, prevData, nextData, routeResults, selected_area, data} = this.state
-        alert(JSON.stringify(selected_area))
+        let {baseAPI, route_name, prevData, nextData, selected_area, data, dataFetched} = this.state
+        let placeholder = ""
+        if(selected_area != null){
+            placeholder = 'Search Routes In ' + selected_area.area.name
+        } else {
+            placeholder = 'Search Routes By Name '
+        }
         return (
             <View>
                 <Divider style={dividers.standard}/>
@@ -78,11 +100,12 @@ class TagRoute extends Component {
                         </TouchableOpacity>
                     </View>
                 }
-                
+
+                {/* Search for route */}
                 <View style={styles.flexRow}>
                     <View style={{width: '80%'}}>
                         <TextInput style={styles.text_input} 
-                            placeholder='Search a Route Name'
+                            placeholder={placeholder}
                             placeholderTextColor="darkblue"
                             onChangeText = {(route_name) => this.setState({route_name})}
                             value = {this.state.route_name}
@@ -95,14 +118,72 @@ class TagRoute extends Component {
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
                     </View>
-                    <View>
-                        {data &&
-                            <Text>{JSON.stringify(data)}</Text>
-                        }
-                    </View>
-
                 </View>
+                <Activity dataFetched={dataFetched}/>
+                {/* Show currently tagged route */}
+                {this.props.currentlyTagged &&
+                    <View style={{paddingTop:10}}>
+                        <Text>Currently Tagged Route Below</Text>
+                        <Divider style={dividers.standard}/>
+                        <View style={containers.small_search_result}>
+                            <View style={styles.flexRow}>
+                                <Image style={avatars.small}
+                                    source={{uri: this.props.currentlyTagged.img_url}}
+                                />
+                                <Text style={info.user_search_info}>{this.props.currentlyTagged.name}</Text>
+                                <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tag(null, 'remove')}>
+                                    <Icon size={40} color='firebrick' name='remove'/>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                }
 
+                {data &&
+                    <View>
+                        <View style={{paddingTop:10}}>
+                            <Text>Routes You Can Tag Below</Text>
+                            <Divider style={dividers.standard}/>
+                        </View>
+                            {
+                            data.results.map((data, index) => (
+                                <View key={index} style={containers.small_search_result}>
+                                    <View style={styles.flexRow}>
+                                        <Image style={avatars.small}
+                                            source={{uri: data.img_url}}
+                                        />
+                                        <Text style={info.user_search_info}>{data.name}</Text>
+                                        <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tag(data, 'add')}>
+                                            <Icon size={40} color='green' name='add'/>
+                                        </TouchableOpacity>
+                                        {/* <Text>ID: {data.id}</Text> */}
+                                    </View>
+                                </View>
+                            ))
+                            }
+                    </View>
+                }
+            
+                    {/* Show next/previous page */}
+                    {data && 
+                        <View>
+                            <View style={{flexDirection: 'row', padding: 10}}>
+                                {prevData && 
+                                    <TouchableOpacity onPress={() => this.loadData(prevData)} style={{alignItems: 'center',}}>
+                                        <Icon size={30} name={'keyboard-arrow-left'} color={'cornflowerblue'}/>
+                                    </TouchableOpacity> 
+                                }
+                                {nextData &&
+                                    <TouchableOpacity onPress={() => this.loadData(nextData)} style={{alignItems: 'center', marginLeft: 'auto'}}>
+                                        <Icon size={30} name={'keyboard-arrow-right'} color={'cornflowerblue'}/>
+                                    </TouchableOpacity> 
+                                }
+                            </View>
+                        </View>
+                    }
+                            
+    
+                    
                 <TouchableOpacity onPress={() => this.props.closeRoute()}>
                     <Text style={buttons.closeText}>Close Route Tab</Text>
                 </TouchableOpacity>

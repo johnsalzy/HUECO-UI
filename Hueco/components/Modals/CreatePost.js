@@ -70,7 +70,7 @@ class CreatePost extends Component {
             formdata.append("tagged_users", taggedFriends[i].id);
         }
         if(taggedRoute){
-            formdata.append("route", taggedRoute);
+            formdata.append("route", taggedRoute.id);
         }
         if(media){
             let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
@@ -138,7 +138,7 @@ class CreatePost extends Component {
                                 {tagRoute && 
                                     <TagRoute 
                                         currentlyTagged={taggedRoute}
-                                        updateTaggedRoute={(tag) => this.setState({taggedRoute: tag})}
+                                        updateRouteTag={(id) => this.setState({taggedRoute: id})}
                                         closeRoute={() => this.setState({tagRoute: false})}
                                     />
                                 }
