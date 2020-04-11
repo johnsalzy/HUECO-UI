@@ -6,7 +6,8 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    Dimensions
+    Dimensions,
+    ActivityIndicator,
 } from "react-native";
 
 const windowWidth = Dimensions.get('window').width;
@@ -14,7 +15,7 @@ const windowHeight = Dimensions.get('window').height;
 
 //Import Screens/Components/Styles
 import {view_style, text_input, buttons} from '../assets/styles/styles';
-import Register from '../components/Modals/Register'
+import Register from '../components/Modals/Register';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -29,12 +30,12 @@ const mapStateToProps = state => (
 
 class Login extends Component {
     state = {
-        username: 'John',
+        email: 'salzmajm@mail.uc.edu',
         password: 'Gruffalo',
         loggedIn: false,
         errorPresent: false,
         error_text: '',
-        loginSuccess: false,
+        loginSuccess: true,
         registerUser: false,
         response: {},
         loginDataLoaded: false,
@@ -42,15 +43,16 @@ class Login extends Component {
     }
     componentDidUpdate(){
         // alert('Comp Updated: ' + JSON.stringify(this.state))
-        let {username} = this.state;
+        let {email} = this.state;
         if(this.state.loginDataLoaded){
             this.setState({loginDataLoaded: false})
-            this.login_username(username)
+            this.login_email(email)
         }
     }
 
-    getLoginDetails = (user, pass) => {
+    getLoginDetails = (email, pass) => {
         // alert('Comp Updated: ' + JSON.stringify(this.state))
+        this.setState({loginSuccess: false})
         fetch("http://3.133.123.120:8000/auth/token", {
           method: 'POST',
           headers: {
@@ -60,27 +62,27 @@ class Login extends Component {
           body: JSON.stringify({
             client_id: 'NTMtzF7gzZPU9Ka35UFsDHvpR8e4D1Fy4OPRsurx',
             grant_type: 'password', 
-            username: user, 
+            username: email, 
             password: pass, 
           })
         })
         .then((response) => response.json())
         .then((responseData) => {
-            this.setState({response: responseData, loginDataLoaded: true})
+            this.setState({response: responseData, loginDataLoaded: true, loginSuccess: true})
         })
         .done();
         
     }
 
-    login_username = (user) => {
+    login_email = (email) => {
         // Clear slate
-        this.setState({loginSuccess: false, errorPresent: false, error_text: ""})
+        this.setState({loginSuccess: true, errorPresent: false, error_text: ""})
         let response = this.state.response;
         if(response.error){
-            this.setState({loginSuccess: false, errorPresent: true, error_text: response.error_description})
+            this.setState({loginSuccess: true, errorPresent: true, error_text: response.error_description})
             return
         }
-        this.props.dispatch(loginUserNormal(user, response.access_token, response.refresh_token, true))
+        this.props.dispatch(loginUserNormal(email, response))
         return
 
         
@@ -90,7 +92,7 @@ class Login extends Component {
     }
 
     render() {
-        let {modalVisible} = this.state
+        let { modalVisible, loginSuccess} = this.state
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
@@ -121,10 +123,10 @@ class Login extends Component {
                     </Text>
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
-                            placeholder='Username'
+                            placeholder='E-mail'
                             placeholderTextColor="black"
-                            onChangeText = {(username) => this.setState({username})}
-                            value = {this.state.username}
+                            onChangeText = {(email) => this.setState({email})}
+                            value = {this.state.email}
                         />
                         <TextInput style={text_input.default} 
                             placeholder='Password'
@@ -146,11 +148,19 @@ class Login extends Component {
                         {this.state.errorPresent ? this.state.error_text: ""}
                     </Text>
 
-                    <TouchableOpacity style={view_style.center } onPress={() => this.getLoginDetails(this.state.username, this.state.password)}>
-                        <Text style={buttons.primary}>
-                            Login
-                        </Text>
-                    </TouchableOpacity>
+                    {loginSuccess ? 
+                        <TouchableOpacity style={view_style.center } onPress={() => this.getLoginDetails(this.state.email, this.state.password)}>
+                            <Text style={buttons.primary}>
+                                Login
+                            </Text>
+                        </TouchableOpacity>
+                    :
+                        <ActivityIndicator animating size='large'/>
+                
+                    }
+                    
+
+
                     {/* <TouchableOpacity style={ view_style.center} onPress={() => alert('Logging In with FB/Google')}>
                         <Text style={buttons.primary}
                         >
@@ -169,7 +179,7 @@ class Login extends Component {
                     <View style={styles.viewModalIn}>
                         <Register 
                             closeModal={() => this.closeModal()} 
-                            userRegistered={(u, p) => this.setState({username: u, password: p})} 
+                            userRegistered={(u, p) => this.setState({email: u, password: p})} 
                             modalVisible={modalVisible}
                         />
                     </View>
