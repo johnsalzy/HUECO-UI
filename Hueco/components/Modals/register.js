@@ -51,10 +51,14 @@ class Register extends Component {
         if(email == ""){
             this.setState({errorPresent: true, errorText: "Must Enter email"})
             return
+        } else {
+            email = email.toLowerCase()
         }
         if(first_name == ""){
             this.setState({errorPresent: true, errorText: "Must Enter First Name"})
             return
+        } else {
+            first_name = first_name.toLowerCase()
         }
         if(last_name == ""){
             this.setState({errorPresent: true, errorText: "Must Enter Last Name"})
@@ -75,7 +79,7 @@ class Register extends Component {
             },
             body: JSON.stringify({
                 username: username,
-                // email: email,
+                email: email,
                 first_name: first_name,
                 last_name: last_name,
                 password: password,
@@ -93,7 +97,7 @@ class Register extends Component {
         let { modalVisible, errorPresent, errorText, response_register, registeringUser } = this.state;
         if(response_register){
             if(response_register.status == "User Created"){
-                this.props.userRegistered(this.state.username, this.state.password)
+                this.props.userRegistered(this.state.email, this.state.password)
                 this.setState({response_register: null, registeringUser: false, password: ''})
                 this.props.closeModal()
             } else {
