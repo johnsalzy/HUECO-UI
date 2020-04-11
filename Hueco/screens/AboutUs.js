@@ -4,6 +4,7 @@ import { Divider } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { app_styles } from '../assets/styles/universal';
+import SocialMedia from '../components/SocialMedia'
 
 export default function HomeScreen() {
   return (
@@ -37,6 +38,7 @@ export default function HomeScreen() {
         <Text>{'\u2022'} See what routes are/arent being climbed</Text>
         <Text>{'\u2022'} Display to users new routes that your gym has</Text>
 
+        <SocialMedia />
       </ScrollView>
     </View>
 
