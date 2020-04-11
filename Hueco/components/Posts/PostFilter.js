@@ -64,14 +64,14 @@ class MediaFilter extends Component {
         
         this.setState({data})
     }
-    async commentPhoto(post_id, user_posted_id){
+    async commentPhoto(post_id){
         let data = {...this.state.data}
         let { baseAPI, comment_to_add, login } = this.state;
         if(comment_to_add == ""){
             return
         } else {
             data.comment_count += 1
-            let temp = {text: comment_to_add, user: {username: login.username, id: user_posted_id}}
+            let temp = {text: comment_to_add, user: {username: login.username, id: login.id}}
             data.comments.push(temp)
             // Call API route to add comments
             let apiRoute = baseAPI + 'social/comment/';
@@ -215,7 +215,11 @@ class MediaFilter extends Component {
                                 {/* Section to display comments/title */}
                                 <View style={{marginTop: 5, marginBottom: 30}}>
                                     <Text style={styles.postDetails}>Comments</Text>
-                                    <Text style={styles.postDetails}>@{data.user.username} </Text> 
+                                    <TouchableOpacity 
+                                        onPress={() => this.openUserPage(data.user.id, data.user.username)}
+                                    >
+                                        <Text style={styles.postDetails}>@{data.user.username} </Text> 
+                                    </TouchableOpacity>
                                     <Text>{data.text}</Text>
                                 
                                     {data.comment_count > 0 && 
@@ -246,7 +250,7 @@ class MediaFilter extends Component {
                                             backgroundColor: 'cornflowerblue', textAlignVertical: 'center', 
                                             justifyContent: 'center', height: '100%'
                                         }}
-                                        onPress={() => this.commentPhoto(data.id, null)}
+                                        onPress={() => this.commentPhoto(data.id)}
                                     >
 
                                         <Text style={{color: 'white', padding: 4, width: '100%', textAlignVertical:'center', textAlign: 'center', justifyContent: 'center'}}>Post</Text>
