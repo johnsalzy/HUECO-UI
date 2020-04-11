@@ -36,7 +36,8 @@ export default class MediaPickerComp extends React.Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      quality: .1,  // 0-1(max)
+      aspect: [4, 4],
+      quality: 1,  // 0-1(max)
       base64: true,
     });
     if (!result.cancelled) {

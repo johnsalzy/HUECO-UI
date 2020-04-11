@@ -18,12 +18,12 @@ class ProfileScreen extends Component {
   constructor(props){
     super(props);
     this.state= {
-      username: this.props.login.username,
+      id: this.props.login.id,
     }
   }
 
   render(){
-    let data = {username: this.state.username}
+    let data = {id: this.state.id}
     return (
         <ScrollView>
             <View>
