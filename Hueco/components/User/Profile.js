@@ -14,7 +14,7 @@ import { Tooltip } from 'react-native-elements';
 
 import Icon from '../Ionicon';
 import UserStatView from '../UserStatView';
-import Settings from './Settings'
+import Settings from './Settings/Settings'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
