@@ -33,6 +33,7 @@ class Settings extends Component {
         this.state = {
             login: this.props.login,
             data: this.props.data, // Should contain current user data
+            profile_pic: this.props.data.profile.profile_picture,
             loading: true,
             error: false,
             changes: false,
@@ -51,7 +52,7 @@ class Settings extends Component {
         alert('saving changes')
     }
     render() {
-        let { data, loading, error } = this.state
+        let { data, loading, error, profile_pic } = this.state
         return (
             <Modal
                 animationType="slide"
@@ -62,6 +63,7 @@ class Settings extends Component {
                     <TouchableOpacity style={{padding: 5, marginRight: 'auto'}} onPress={() => this.props.close() }>
                         <Icon size={40} color='firebrick' name='arrow-back'/>
                     </TouchableOpacity>
+                    {data && 
                     <View style={{width: '90%'}}>
                         <Text style={styles.headerText}>Edit Account Information</Text>
                         {/* Profile picture */}
@@ -86,7 +88,7 @@ class Settings extends Component {
                                     <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
                                 }
                                 <Image 
-                                    source={{'uri': data.profile.thumbnail}}
+                                    source={{'uri': profile_pic}}
                                     onLoad={() => this.setState({loading: false})}
                                     onError={() => this.setState({loading: false, error: true})}
                                     style={{
@@ -171,11 +173,13 @@ class Settings extends Component {
                                 <Text style={{fontWeight: 'bold', fontSize: 15, color: 'green'}}>Save Changes</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={()=> this.logoutUser()} style={{paddingTop: 20}}>
-                                <Text style={{fontWeight: 'bold', fontSize: 15, color: 'red'}}>Logout</Text>
-                            </TouchableOpacity>
+                            
                         </View>
                     </View>
+                    }          
+                    <TouchableOpacity onPress={()=> this.logoutUser()} style={{paddingVertical: 20}}>
+                        <Text style={{fontWeight: 'bold', fontSize: 15, color: 'red'}}>Logout</Text>
+                    </TouchableOpacity>      
                 </View>
                 </ScrollView>
             </Modal>

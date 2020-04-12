@@ -76,10 +76,8 @@ class Profile extends Component {
         // Check if is me
         if(login.id == data.id){
             this.setState({myProfile: true})
-            apiRoute = login.id + '/'
-        }else {
-            apiRoute = data.id
         }
+        apiRoute = data.id + '/'
         this.loadUserData(apiRoute)
     }
     render() {

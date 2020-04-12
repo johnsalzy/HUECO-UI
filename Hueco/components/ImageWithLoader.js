@@ -31,7 +31,7 @@ class ImageWithLoader extends React.Component {
                     <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
                 }
                 <Image 
-                    source={{'uri': data.media.media_small}}
+                    source={{'uri': data.media.thumbnail}}
                     onLoad={() => this.setState({loading: false})}
                     onError={() => this.setState({loading: false, error: true})}
                     style={{

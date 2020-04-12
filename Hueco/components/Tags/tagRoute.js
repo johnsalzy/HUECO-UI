@@ -60,6 +60,7 @@ class TagRoute extends Component {
     }
 
     async loadData(apiPath){
+        console.log('api route' + apiPath)
         let { login } = this.state
         this.setState({dataFetched: false, prevData: false, nextData: false})
         let responseData = await fetchGet(apiPath, login.access_token)
@@ -91,12 +92,14 @@ class TagRoute extends Component {
             <View>
                 <Divider style={dividers.standard}/>
                 {selected_area && 
-                    <View style={{flexDirection: 'row', paddingBottom: 5}}>
-                        <Text>Searching In Your Currently Selected Area: {selected_area.area.name}</Text>
+                    <View style={{paddingBottom: 5}}>
+                        <Text>Searching In Your Currently Selected Area: </Text>
                         <TouchableOpacity
+                            style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}
                             onPress={() => alert('Changing area')}
                         >
-                            <Text style={{paddingLeft: 5, color: 'red'}}>Change</Text>
+                            <Text>{selected_area.area.name}</Text>
+                            <Text style={{paddingLeft: 5, color: 'red'}}>Change Area</Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -113,7 +116,7 @@ class TagRoute extends Component {
                     </View>
                     <View style={{paddingLeft: 2, width: '20%'}}>
                         <TouchableOpacity 
-                            onPress={() => this.loadData(baseAPI + 'routes/?name=' + route_name + '&areas=selected_area.area.id')}
+                            onPress={() => this.loadData(baseAPI + 'routes/?name=' + route_name + '&area='+ selected_area.area.id)}
                         >
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
