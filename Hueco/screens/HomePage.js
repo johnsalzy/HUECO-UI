@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
 //Import files/componenets
-import SocialMedia from '../components/SocialMedia';
 import Ionicon from '../components/Ionicon';
 import AddOptionModal from '../components/Modals/AddOptions';
 import AddPostModal from '../components/Modals/CreatePost';
 import {app_styles} from '../assets/styles/universal';
-// import UserView from '../components/Modals/UserView';
-// import MediaFilter from '../components/Posts/PostFilter';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/requests'
 import { updateAreaData } from '../redux/actions'
@@ -20,6 +17,7 @@ const windowHeight = Dimensions.get('window').height;
 const mapStateToProps = state => (
   {
     login: state.login,
+    api: state.api,
   }
 );
 
@@ -38,7 +36,7 @@ class HomeScreen extends Component {
         loading: false,
         userModal: false,
         initialLoad: true,
-        baseAPI: "http://3.133.123.120:8000/api/v1/",
+        baseAPI: this.props.api.baseAPI,
 
     };
   }
