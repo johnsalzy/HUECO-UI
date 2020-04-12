@@ -7,7 +7,7 @@ import { Tooltip } from 'react-native-elements';
 import {app_styles} from '../../assets/styles/universal'
 import { buttons } from '../../assets/styles/styles';
 import {search_results} from '../../assets/styles/styles'
-import {fetchGet, fetchPost, fetchDelete} from '../../functions/requests'
+import {fetchDelete, fetchPost} from '../../functions/api'
 import Icon from '../Ionicon';
 
 const mapStateToProps = state => (
@@ -25,6 +25,7 @@ class DisplayArea extends React.Component {
         data: this.props.data,
         subscribed: this.props.subscribed,
         selected: this.props.selected,
+        response: null,
     };
   }
   render(){
@@ -41,7 +42,7 @@ class DisplayArea extends React.Component {
                         <Text style={styles.name}>{data.name}</Text>
                         {this.props.selected && 
                           <Tooltip popover={<Text>Pinned As Main Area</Text>}>
-                            <Icon name={'place'} size={20} color={'cornflowerblue'}/>
+                            <Icon name={'place'} size={30} color={'cornflowerblue'}/>
                           </Tooltip>
                         }
                       </View>
@@ -53,14 +54,17 @@ class DisplayArea extends React.Component {
                                 style={buttons.delete}
                                 onPress={() => this.props.subscribe(data, 'leave')}
                             >
-                              <Text style={{color: 'white', fontWeight: 'bold',}}>Remove Pin</Text>
+                              <Text style={styles.textButton}>Remove Pin</Text>
                             </TouchableOpacity>
                             {! this.props.selected && 
-                              <TouchableOpacity
-                                onPress={() => this.props.setMain(data.id)}
-                              >
-                                <Text>Pin as Main Area</Text>
-                              </TouchableOpacity>
+                              <View style={{paddingTop: 5}}>
+                                <TouchableOpacity
+                                  style={buttons.add}
+                                  onPress={() => this.props.setMain(data.id)}
+                                >
+                                  <Text style={styles.textButton}>Pin as Main Area</Text>
+                                </TouchableOpacity>
+                              </View>
                             }
                             
                           </View>
@@ -70,7 +74,7 @@ class DisplayArea extends React.Component {
                                     style={buttons.add}
                                     onPress={() => this.props.subscribe(data, 'join')}
                                 >
-                                  <Text style={{color: 'white', fontWeight: 'bold',}}> Pin Area </Text>
+                                  <Text style={styles.textButton}> Pin Area </Text>
                                 </TouchableOpacity>
                             </View>
                         }
@@ -85,8 +89,6 @@ class DisplayArea extends React.Component {
                     {data.description && 
                       <Text style={styles.userInfo}>Description: {data.description} </Text>
                     }
-                    
-                    <Text>{JSON.stringify(data)}</Text>
                 </View>
             </View>
         </View>
@@ -103,14 +105,12 @@ class AreaView extends React.Component {
         this.state = {
             data: this.props.data,
             areas: this.props.areas,
-            access_token: this.props.login.access_token,
-            baseAPI: this.props.api.baseAPI,
         };
 
     }
     async setMainArea(id){
       //Update props, state
-      let { areas, baseAPI, access_token } = this.state;
+      let { areas } = this.state;
       for (var i=0; i < areas.area_data.length; i++) {
 
         if(areas.area_data[i].area.id == id){
@@ -120,21 +120,17 @@ class AreaView extends React.Component {
         }
       }
       // API call 
-      let apiRoute = baseAPI + 'user-areas/'
-      let headers = {
-        'Authorization': 'Bearer ' + access_token,
-        'Content-Type': 'application/json',
-      }
+      let apiRoute = 'user-areas/'
       let body = {selected: true, area: id}
-      let response = await fetchPost(apiRoute, headers, body)
-      alert('res' + JSON.stringify(response))
-      this.setState({areas})
+      let response = await fetchPost(apiRoute, body)
+      this.setState({areas, response: response})
 
     }
 
     async subscribeToArea(data, type){
-      let { areas, baseAPI, access_token } = this.state;
-      let apiRoute = baseAPI;
+      let { areas } = this.state;
+      let apiRoute = "";
+      let selected = false;
 
       if(type == 'join'){
         //Check if already subscribed to area
@@ -146,24 +142,20 @@ class AreaView extends React.Component {
             return
           }
         }
-        let newData = {selected: false, area: data}
+        
         
         if(area_count == 0){
-          newData.selected = true
+          selected = true
         } else if (area_count >= 10) {
           alert("You can't have more than 10 areas!")
           return
         }
-        areas.area_data.push(newData)
+        areas.area_data.push({selected: selected, area: data})
         // call api to subscribe
-        let apiRoute = baseAPI + 'user-areas/'
-        let headers = {
-          'Authorization': 'Bearer ' + access_token,
-          'Content-Type': 'application/json',
-        }
-        let response = await fetchPost(apiRoute, headers, newData)
-        alert('res' + JSON.stringify(response))
-
+        let apiRoute = 'user-areas/'
+        let newData = {selected: selected, area: data.id}
+        let response = await fetchPost(apiRoute, newData)
+        this.setState({areas, response: response})
         // Update props
 
       } else {
@@ -172,15 +164,13 @@ class AreaView extends React.Component {
           if(areas.area_data[i].area.id == data.id){
             areas.area_data.splice(i, 1)
             // Remove selected area call
-            apiRoute = apiRoute + 'user-areas/' + '2' + '/'
-            console.log('api route ' + apiRoute)
-            let response = await fetchDelete(apiRoute, access_token)
-            alert('res' + JSON.stringify(response))
+            apiRoute = 'user-areas/unsub/?area=' + data.id
+            let response = await fetchDelete(apiRoute)
+            this.setState({areas, response: response})
             break
           }
         }
       }
-      this.setState({areas})
       // Push update to props
 
 
@@ -192,7 +182,7 @@ class AreaView extends React.Component {
             <View style={{alignItems: 'center'}, app_styles.background}>
                 {data.count > 0 ?
                   <View>
-                      <Text style={styles.dividerInfo}>Areas You Can Add</Text>
+                      <Text style={styles.dividerInfo}>All Areas</Text>
                       {data.results.map((data, index) => (
                         <View key={index}>
                           <DisplayArea data={data} 
@@ -211,7 +201,7 @@ class AreaView extends React.Component {
                 {/* View users current areas */}
                 {areas.area_data.length > 0 &&
                   <View>
-                    <Text style={styles.dividerInfo}>Your Current Areas</Text>
+                    <Text style={styles.dividerInfo}>Your Areas</Text>
                     {areas.area_data.map((data, index) => (
                       <View key={index}>
                         <DisplayArea 
@@ -226,7 +216,6 @@ class AreaView extends React.Component {
                     ))}
                   </View>
                 }
-                <Text>{JSON.stringify(areas)}</Text>
             </View>
         );
     }
@@ -265,5 +254,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingTop: 5,
         color: 'cornflowerblue',
+      },
+      textButton: {
+        color: 'white', 
+        fontWeight: 'bold'
       }
     });
