@@ -13,12 +13,17 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default class MediaPickerComp extends React.Component {
-  state = {
-    image: null,
-    result: {type: null},
-    caption: null,
-  };
-
+  constructor(props){
+    super(props);
+    this.state = {
+      image: null,
+      displayMedia: this.props.display,
+      type: this.props.type,
+      caption: this.props.caption,
+      result: {type: null},
+      caption: null,
+    };
+}
   componentDidMount() {
     this.getPermissionAsync();
   }
@@ -33,14 +38,25 @@ export default class MediaPickerComp extends React.Component {
   }
 
   _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,  // 0-1(max)
-      base64: true,
-    });
+    let { type, result } = this.state
+    if(type == 'image'){
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,  // 0-1(max)
+        base64: true,
+      });
+    }
+    else {  
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 1,  // 0-1(max)
+        base64: true,
+      });
+    }
     if (!result.cancelled) {
-      this.setState({ result: result, image: result.uri });
+      this.setState({result: result, image: result.uri });
       this.props.propSetImage(result)
     }
   };
@@ -51,56 +67,67 @@ export default class MediaPickerComp extends React.Component {
   }
 
   render() {
-    let { image, result } = this.state;
+    let { image, result, caption, displayMedia } = this.state;
     // alert(JSON.stringify(this.state))
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {/* Display if type is image */}
-        {result.type == 'image' &&
-            <View>
-                <View style={styles.image}>
-                    <Image source={{ uri: image }} style={{ width: windowWidth*.7, height: windowHeight*.6 }} />
+        {true && 
+          <View>
+            {result.type == 'image' &&
+                <View>
+                    <View style={styles.image}>
+                        <Image source={{ uri: image }} style={{ width: windowWidth*.7, height: windowHeight*.6 }} />
+                    </View>
+                    {caption && 
+                      <TextInput style={styles.mediaDescription} 
+                          placeholder='Media Caption(Optional)'
+                          onChangeText = {(caption) => this.props.setCaption(caption)}
+                          value = {this.props.caption}
+                      />
+                    }
                 </View>
-                <TextInput style={styles.mediaDescription} 
+            }
+            {/* Display if type is video */}
+            {result.type == 'video' && 
+              <View>
+                  <View style={styles.image}>
+                    <Video
+                      source={{ uri: result.uri}}
+                      rate={1.0}
+                      volume={1.0}
+                      isMuted={false}
+                      resizeMode="cover"
+                      useNativeControls
+                      isLooping
+                      style={{ width: windowWidth*.7, height: windowHeight*.6 }}
+                    />
+                  </View>
+                  <TextInput style={styles.mediaDescription} 
                     placeholder='Media Caption(Optional)'
                     onChangeText = {(caption) => this.props.setCaption(caption)}
                     value = {this.props.caption}
-                />
-            </View>
-        }
-        {/* Display if type is video */}
-        {result.type == 'video' && 
-          <View >
-            <View style={styles.image}>
-              <Video
-                //'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
-                source={{ uri: result.uri}}
-                rate={1.0}
-                volume={1.0}
-                isMuted={false}
-                resizeMode="cover"
-                useNativeControls
-                isLooping
-                style={{ width: windowWidth*.7, height: windowHeight*.6 }}
-              />
-            </View>
-            <TextInput style={styles.mediaDescription} 
-              placeholder='Media Caption(Optional)'
-              onChangeText = {(caption) => this.props.setCaption(caption)}
-              value = {this.props.caption}
-            />
+                  />
+                </View>
+              }
           </View>
         }
+
         {/* Display add/remove button */}
-        {image ?             
-          <TouchableOpacity onPress={() => this.removeImage()}>
-              <Text style={{color: 'red', fontSize: 20, textAlign: 'center'}}>Remove Media</Text>
-          </TouchableOpacity>
+        {image ? 
+          <View>
+            {true && 
+              <TouchableOpacity onPress={() => this.removeImage()}>
+                  <Text style={{color: 'red', fontSize: 20, textAlign: 'center'}}>Remove Media</Text>
+              </TouchableOpacity>
+            } 
+          </View>
         :
           <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this._pickImage()}>
             <Icon size={30} color='black' name='add-a-photo'/>
           </TouchableOpacity>
         }
+
       </View>
     );
   }

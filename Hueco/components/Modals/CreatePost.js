@@ -145,6 +145,9 @@ class CreatePost extends Component {
                                 
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
                                 <MediaPicker 
+                                    type={'all'}
+                                    caption={true}
+                                    display={true}
                                     setCaption= {(caption) => this.setState({caption})} 
                                     propSetImage={(media) => this.setState({media})}
                                     deleteMedia={() => this.setState({media: null, caption: null})}
