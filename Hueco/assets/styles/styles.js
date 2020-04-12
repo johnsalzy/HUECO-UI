@@ -33,6 +33,24 @@ const buttons = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 15,
+    },
+    add: {
+        padding: 2,
+        borderRadius: 3,
+        borderWidth: 1,
+        borderColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'green',
+    },
+    delete: {
+        padding: 2,
+        borderRadius: 3,
+        borderWidth: 1,
+        borderColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'red',
     }
 })
 const text_input = StyleSheet.create({
