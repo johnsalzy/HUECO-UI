@@ -1,16 +1,20 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity, Divider } from 'react-native';
 import {connect} from 'react-redux';
-
+import { Tooltip } from 'react-native-elements';
 
 // Import
 import {app_styles} from '../../assets/styles/universal'
+import { buttons } from '../../assets/styles/styles';
 import {search_results} from '../../assets/styles/styles'
+import {fetchGet, fetchPost, fetchDelete} from '../../functions/requests'
+import Icon from '../Ionicon';
 
 const mapStateToProps = state => (
   {
     login: state.login,
     areas : state.areas,
+    api: state.api,
   }
 )
 
@@ -19,9 +23,9 @@ class DisplayArea extends React.Component {
     super(props);
     this.state = {
         data: this.props.data,
-        subscribed: this.props.subscribed
+        subscribed: this.props.subscribed,
+        selected: this.props.selected,
     };
-
   }
   render(){
     let { data, subscribed} = this.state;
@@ -33,27 +37,55 @@ class DisplayArea extends React.Component {
             <View style={search_results.resultContainer}>
                 <View style={styles.headerContent}>
                     <View>
-                      <Text style={styles.name}>{data.name}</Text>
+                      <View style={{flexDirection: 'row', width: '100%',}}>
+                        <Text style={styles.name}>{data.name}</Text>
+                        {this.props.selected && 
+                          <Tooltip popover={<Text>Pinned As Main Area</Text>}>
+                            <Icon name={'place'} size={20} color={'cornflowerblue'}/>
+                          </Tooltip>
+                        }
+                      </View>
+                      
                       <View style={{alignItems: 'center', alignSelf: 'center'}}>
                         {subscribed ? 
-                          <TouchableOpacity
-                            onPress={() => this.props.subscribe(data, 'leave')}
-                          >
-                            <Text>Unsubscribe</Text>
-                          </TouchableOpacity>
+                          <View>
+                            <TouchableOpacity
+                                style={buttons.delete}
+                                onPress={() => this.props.subscribe(data, 'leave')}
+                            >
+                              <Text style={{color: 'white', fontWeight: 'bold',}}>Remove Pin</Text>
+                            </TouchableOpacity>
+                            {! this.props.selected && 
+                              <TouchableOpacity
+                                onPress={() => this.props.setMain(data.id)}
+                              >
+                                <Text>Pin as Main Area</Text>
+                              </TouchableOpacity>
+                            }
+                            
+                          </View>
                         :
-                        <TouchableOpacity
-                          onPress={() => this.props.subscribe(data, 'join')}
-                        >
-                          <Text>Subscribe</Text>
-                        </TouchableOpacity>
+                            <View>
+                                <TouchableOpacity
+                                    style={buttons.add}
+                                    onPress={() => this.props.subscribe(data, 'join')}
+                                >
+                                  <Text style={{color: 'white', fontWeight: 'bold',}}> Pin Area </Text>
+                                </TouchableOpacity>
+                            </View>
                         }
                       </View>
                     </View>
-                    <Text style={styles.userInfo}>Location: needed</Text>
+
+                    {data.location ? 
+                      <Text style={styles.userInfo}>Location: {data.location} </Text>
+                    :
+                    <Text style={styles.userInfo}>Location: Unknown</Text>
+                    }
                     {data.description && 
                       <Text style={styles.userInfo}>Description: {data.description} </Text>
                     }
+                    
                     <Text>{JSON.stringify(data)}</Text>
                 </View>
             </View>
@@ -71,20 +103,86 @@ class AreaView extends React.Component {
         this.state = {
             data: this.props.data,
             areas: this.props.areas,
+            access_token: this.props.login.access_token,
+            baseAPI: this.props.api.baseAPI,
         };
 
     }
-    setMainArea(){
+    async setMainArea(id){
       //Update props, state
+      let { areas, baseAPI, access_token } = this.state;
+      for (var i=0; i < areas.area_data.length; i++) {
+
+        if(areas.area_data[i].area.id == id){
+          areas.area_data[i].selected = true
+        } else {
+          areas.area_data[i].selected = false
+        }
+      }
+      // API call 
+      let apiRoute = baseAPI + 'user-areas/'
+      let headers = {
+        'Authorization': 'Bearer ' + access_token,
+        'Content-Type': 'application/json',
+      }
+      let body = {selected: true, area: id}
+      let response = await fetchPost(apiRoute, headers, body)
+      alert('res' + JSON.stringify(response))
+      this.setState({areas})
 
     }
 
-    subscribeToArea(data, type){
+    async subscribeToArea(data, type){
+      let { areas, baseAPI, access_token } = this.state;
+      let apiRoute = baseAPI;
+
       if(type == 'join'){
-        alert('subscribing to area' + data.id)
+        //Check if already subscribed to area
+        let area_count = areas.area_data.length;
+        for (var i=0; i < area_count; i++) 
+        {
+          if(areas.area_data[i].area.id == data.id){
+            alert('You are already subscribed to this area!')
+            return
+          }
+        }
+        let newData = {selected: false, area: data}
+        
+        if(area_count == 0){
+          newData.selected = true
+        } else if (area_count >= 10) {
+          alert("You can't have more than 10 areas!")
+          return
+        }
+        areas.area_data.push(newData)
+        // call api to subscribe
+        let apiRoute = baseAPI + 'user-areas/'
+        let headers = {
+          'Authorization': 'Bearer ' + access_token,
+          'Content-Type': 'application/json',
+        }
+        let response = await fetchPost(apiRoute, headers, newData)
+        alert('res' + JSON.stringify(response))
+
+        // Update props
+
       } else {
-        alert('unsubscribing to area' + data.id)
+        // TO LEAVE AN AREA
+        for (var i=0; i < areas.area_data.length; i++) {
+          if(areas.area_data[i].area.id == data.id){
+            areas.area_data.splice(i, 1)
+            // Remove selected area call
+            apiRoute = apiRoute + 'user-areas/' + '2' + '/'
+            console.log('api route ' + apiRoute)
+            let response = await fetchDelete(apiRoute, access_token)
+            alert('res' + JSON.stringify(response))
+            break
+          }
+        }
       }
+      this.setState({areas})
+      // Push update to props
+
 
     }
 
@@ -97,7 +195,10 @@ class AreaView extends React.Component {
                       <Text style={styles.dividerInfo}>Areas You Can Add</Text>
                       {data.results.map((data, index) => (
                         <View key={index}>
-                          <DisplayArea data={data} subscribed={false} subscribe={(data, type) => this.subscribeToArea(data, type)}/>
+                          <DisplayArea data={data} 
+                            subscribed={false} 
+                            selected={null}
+                            subscribe={(data, type) => this.subscribeToArea(data, type)}/>
                         </View>
                       ))}
                   </View>
@@ -109,12 +210,21 @@ class AreaView extends React.Component {
 
                 {/* View users current areas */}
                 {areas.area_data.length > 0 &&
-                  areas.area_data.map((data, index) => (
-                    <View key={index}>
-                      <Text style={styles.dividerInfo}>Your Current Areas</Text>
-                      <DisplayArea data={data.area} subscribed={true} subscribe={(data, type) => this.subscribeToArea(data, type)}/>
-                    </View>
-                  ))
+                  <View>
+                    <Text style={styles.dividerInfo}>Your Current Areas</Text>
+                    {areas.area_data.map((data, index) => (
+                      <View key={index}>
+                        <DisplayArea 
+                          data={data.area} 
+                          subscribed={true} 
+                          selected={data.selected}
+                          setMain={(id) => this.setMainArea(id)}
+                          subscribe={(data, type) => this.subscribeToArea(data, type)}
+                        
+                        />
+                      </View>
+                    ))}
+                  </View>
                 }
                 <Text>{JSON.stringify(areas)}</Text>
             </View>
