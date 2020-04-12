@@ -21,3 +21,15 @@ export async function fetchPost(apiRoute, headers, body){
     .catch((err) => alert('error in fetchPost' + err));
     return response
 }
+
+export async function fetchDelete(apiRoute, access_token){
+    let response = await fetch(apiRoute, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+        },
+    })
+    .then(response => response.json())
+    .catch((err) => alert('error in fetchDelete' + err));
+    return response
+}
