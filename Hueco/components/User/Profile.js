@@ -15,6 +15,7 @@ import { Tooltip } from 'react-native-elements';
 import Icon from '../Ionicon';
 import UserStatView from '../UserStatView';
 import Settings from './Settings/Settings'
+import { fetchGet, fetchPost } from '../../functions/api'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -31,64 +32,53 @@ class Profile extends Component {
         super(props);
         this.state = {
             login: this.props.login,
-            data: this.props.data,
-            myProfile: false,
-            baseAPI: 'http://3.133.123.120:8000/api/v1/',
-            userData: null,
-            is_following: null,
-            profileDataLoaded: false,
+            propsData: this.props.data,
+            type: this.props.type,
+            data: null,
+            mine: false,
             settingModalVisable: false,
-            profile_pic_loaded: false,
+            pic_loaded: false,
         };
     }
-    async loadUserData(apiRoute){
-        let {login, baseAPI} = this.state;
-        await fetch(baseAPI + "users/" + apiRoute, {
-        headers: {
-            'Authorization': 'Bearer ' + login.access_token,
-        }
-        })
-        .then((response) => response.json())
-        .then((responseData) => {
-            this.setState({profileDataLoaded: true, userData: responseData, is_following: responseData.profile.is_following})
-        })
-        .catch((err) => alert('error in fetch' + err))
-        .done();
+    async loadData(apiRoute){
+        let response = await fetchGet(apiRoute)
+        this.setState({data: response})
     }
 
 
     followUser(id){
-        let { login, baseAPI, is_following } = this.state;
-        fetch(baseAPI + 'social/follow/?id=' + id, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              "Authorization": "Bearer " + login.access_token,
-              'Content-Type': 'application/json',
-            }
-          })
-          .then(() => this.setState({is_following: !is_following}))
-          .catch();
+        let { data } = this.state;
+        fetchPost('social/follow/?id=' + id)
+        //Flip following state
+        data.profile.is_following = !data.profile.is_following;
+        this.setState({data})
     }
     componentDidMount(){
+        
         let apiRoute = ''
-        let { data, login } = this.state
+        let { propsData, login, type } = this.state
         // Check if is me
-        if(login.id == data.id){
-            this.setState({myProfile: true})
+        if(type == 'user'){
+            if(login.id == propsData.id){
+                this.setState({mine: true})
+            }
+            apiRoute = propsData.id + '/'
+            this.loadData('users/' + apiRoute)
+        } else {
+            //Fetch route data
+
+            //Check if it is the users route
+
         }
-        apiRoute = data.id + '/'
-        this.loadUserData(apiRoute)
     }
     render() {
-        let { myProfile, userData, is_following, settingModalVisable, profile_pic_loaded} = this.state
-
+        let { mine, data, settingModalVisable, pic_loaded} = this.state
         return (
             <View>
-                {userData && 
+                {data && 
                     <View>
                         <View style={styles.profile_pic}>
-                            {! profile_pic_loaded &&
+                            {! pic_loaded &&
                                 <View style={{position: 'absolute', top: windowHeight*.35}}>
                                     <ActivityIndicator size="large" color="#0000ff"/>
                                 </View>
@@ -100,33 +90,33 @@ class Profile extends Component {
                                     borderTopLeftRadius: 10,
                                     borderTopRightRadius: 10,
                                 }}
-                                source={{uri: userData.profile.profile_picture}}
-                                onLoad={() => this.setState({profile_pic_loaded: true})}
-                                onError={() => this.setState({profile_pic_loaded: true})}
+                                source={{uri: data.profile.profile_picture}}
+                                onLoad={() => this.setState({pic_loaded: true})}
+                                onError={() => this.setState({pic_loaded: true})}
                             />
                         </View>
                     </View>
                 }
-                {userData ? 
+                {data ? 
                         <View style={{paddingTop: 5, alignItems: 'center',}}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={styles.name}> {userData.first_name + ' ' + userData.last_name}</Text>
-                                {myProfile ? 
+                                <Text style={styles.name}> {data.first_name + ' ' + data.last_name}</Text>
+                                {mine ? 
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
                                     <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
                                         <Icon name={'settings'} color={'gray'} size={20}/>
                                     </TouchableOpacity>
                                 </View>
                                 : 
-                                // Need to do only one, waiting on userData from API
+                                // Need to do only one, waiting on data from API
                                 
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5, flexDirection: 'row'}}>
-                                    {is_following ? 
-                                    <TouchableOpacity onPress={() => this.followUser(userData.id)}>
+                                    {data.profile.is_following ? 
+                                    <TouchableOpacity onPress={() => this.followUser(data.id)}>
                                         <Text style={styles.unFollowButton}>UnFollow</Text>
                                     </TouchableOpacity>
                                     : 
-                                    <TouchableOpacity onPress={() => this.followUser(userData.id)}>
+                                    <TouchableOpacity onPress={() => this.followUser(data.id)}>
                                         <Text style={styles.followButton}>Follow</Text>
                                     </TouchableOpacity> 
                                     }
@@ -135,49 +125,49 @@ class Profile extends Component {
                                 </View>
                                 }
                             </View>
-                            {userData.profile.description &&
+                            {data.profile.description &&
                                 <View style={styles.flexInRow}>
-                                    <Icon name='description' /><Text style={styles.userInfo}> {userData.profile.description}</Text>
+                                    <Icon name='description' /><Text style={styles.userInfo}> {data.profile.description}</Text>
                                 </View>
                             }
                             <View style={styles.flexInRow}>
                                 <Icon name='stars' /><Text style={styles.userInfo}> {'King Beta Sprayer'} </Text>
                             </View>
                             <View style={styles.flexInRow}>
-                                <Icon name='event' /><Text style={styles.userInfo}> {userData.date_joined.split('T')[0]} </Text>
+                                <Icon name='event' /><Text style={styles.userInfo}> {data.date_joined.split('T')[0]} </Text>
                             </View>
                             <View style={styles.flexInRow}>
                                 <Tooltip popover={<Text>Followers</Text>}>
                                     <View style={styles.flexInRow}>
-                                        <Icon name='people' /><Text style={styles.userInfo}> {userData.profile.followers} </Text>
+                                        <Icon name='people' /><Text style={styles.userInfo}> {data.profile.followers} </Text>
                                     </View>
                                 </Tooltip>
                                 <Text> </Text>
                                 <Tooltip popover={<Text>Following</Text>}>
                                     <View style={styles.flexInRow}>
-                                        <Icon name='search' /><Text style={styles.userInfo}> {userData.profile.following} </Text>
+                                        <Icon name='search' /><Text style={styles.userInfo}> {data.profile.following} </Text>
                                     </View>
                                 </Tooltip>
                             </View>
-                            {userData.profile.location &&
+                            {data.profile.location &&
                                 <View style={styles.flexInRow}>
-                                    <Icon name='place' /><Text style={styles.userInfo}> {userData.profile.location}</Text>
+                                    <Icon name='place' /><Text style={styles.userInfo}> {data.profile.location}</Text>
                                 </View>
                             }
                             
                             <Tooltip popover={<Text>Total Sends</Text>}>
                                 <View style={styles.flexInRow}>
-                                <Icon name='timeline' /><Text style={styles.userInfo}> {userData.profile.sends} </Text>
+                                <Icon name='timeline' /><Text style={styles.userInfo}> {data.profile.sends} </Text>
                                 </View>
                             </Tooltip>
                             
                             {/* End of profile view, start of stats view */}
-                            <UserStatView idUser={userData.id}/>
+                            <UserStatView idUser={data.id}/>
                         </View>
                 :
                     <View style={{paddingTop: 20, paddingBottom: 20}}>
                         <ActivityIndicator size="large" color="#0000ff" />
-                        {myProfile && 
+                        {mine && 
                             <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
                                 <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
                                     <Icon name={'settings'} color={'gray'} size={20}/>
@@ -189,11 +179,11 @@ class Profile extends Component {
                 
 
                 {/* Settigs Modal */}
-                {(myProfile && settingModalVisable) && 
+                {(mine && settingModalVisable) && 
                     <Settings 
                         modalVisable={settingModalVisable} 
                         close={() => this.setState({settingModalVisable: false})} 
-                        data={userData}
+                        data={data}
                     />
                 }
             </View>

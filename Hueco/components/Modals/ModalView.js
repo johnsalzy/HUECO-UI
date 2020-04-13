@@ -30,7 +30,6 @@ class ModalView extends Component {
 
     render() {
         let { data, type } = this.state
-        alert('type' + type + " " + JSON.stringify(data))
         return (
             <Modal
             animationType="slide"
@@ -44,7 +43,7 @@ class ModalView extends Component {
                                     <TouchableWithoutFeedback style={styles.containerModal}>
                                         <View>
                                             <View>
-                                                {type == 'user' && <Profile data={data}/>}
+                                                {type == 'user' && <Profile type={'user'} data={data}/>}
                                                 {type == 'route' && <Text>This is a test{JSON.stringify(data)}</Text>}
                                                 <TouchableOpacity 
                                                     onPress={() => this.props.closeModal()}

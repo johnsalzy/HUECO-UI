@@ -28,7 +28,7 @@ class ProfileScreen extends Component {
         <ScrollView>
             <View>
               <View style={styles.containerProfile}>
-                <ProfileView data={data} />
+                <ProfileView type={'user'} data={data} />
               </View>
             </View>
         </ScrollView>
