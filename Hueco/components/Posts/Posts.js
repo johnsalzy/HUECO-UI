@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import { Ionicons } from '@expo/vector-icons';
 
 import ViewPost from '../Modals/ViewPost';
 import Icon from '../Ionicon';

@@ -15,9 +15,7 @@ import AccountInfo from './AccountInfo';
 import Achievements from './Achievements';
 import Icon from '../../Ionicon';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').width;
-
+const sideBarIconColor = 'dodgerblue'
 
 const mapStateToProps = state => (
     {
@@ -96,27 +94,27 @@ class Settings extends Component {
                     <TouchableOpacity 
                         onPress={() => this.setState({target: 'account'})}
                     >
-                        <Icon size={30} name={'account-circle'} color={'blue'}/>
+                        <Icon size={30} name={'account-circle'} color={sideBarIconColor}/>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.setState({target: 'achievement'})}
                     >
-                        <Icon size={30} name={'stars'} color={'blue'}/>
+                        <Icon size={30} name={'stars'} color={sideBarIconColor}/>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.setState({target: 'world'})}
                     >
-                        <Icon size={30} name={'public'} color={'blue'}/>
+                        <Icon size={30} name={'public'} color={sideBarIconColor}/>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.setState({target: 'group'})}
                     >
-                        <Icon size={30} name={'group'} color={'blue'}/>
+                        <Icon size={30} name={'group'} color={sideBarIconColor}/>
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => this.setState({target: 'settings'})}
                     >
-                        <Icon size={30} name={'settings-applications'} color={'blue'}/>
+                        <Icon size={30} name={'settings-applications'} color={sideBarIconColor}/>
                     </TouchableOpacity>
                 </View>
                 {/* To close the modal */}
