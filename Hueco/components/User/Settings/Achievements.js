@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import {connect} from 'react-redux';
 
+import Icon from '../../Ionicon';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -38,11 +39,16 @@ class Achievements extends Component {
         return (
                 <View style={{paddingTop: 5, alignSelf: 'center', width: '80%'}}>
                     <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Achievements</Text>
-
-                    <Text style={styles.headerText}>Your Achievements</Text>
-                    <Text style={styles.accountInfo}>Wears a Beenie</Text>
-                    <Text style={styles.accountInfo}>Hold my Beer</Text>
-
+                    <View style={{alignSelf: 'center'}}>
+                        <View style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}}>
+                            <Text style={styles.has}>Wears a Beenie</Text>
+                            <Icon name={'place'} size={20} color={'dodgerblue'}/>
+                        </View>
+                        <Text style={styles.has}>Hold my Beer</Text>
+                        <Text style={styles.doesNotHave}>Who Needs a Job? </Text>
+                        <Text style={styles.has}>Since the beginning </Text>
+                        <Text style={styles.doesNotHave}>Rising Up The Ranks </Text>
+                    </View>
                 </View>
         );
     }
@@ -57,10 +63,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: 'darkgray'
     },
-    accountInfo: {
+    doesNotHave: {
         textAlignVertical: 'center',
         fontSize: 18,
         color: 'gray',
-        width: '40%'
+        textAlign: 'center'
+    },
+    has: {
+        textAlignVertical: 'center',
+        fontSize: 18,
+        color: 'blue',
+        textAlign: 'center'
     },
 });

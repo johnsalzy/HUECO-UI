@@ -8,7 +8,7 @@ import Icon from '../Ionicon';
 import TextPost from './TextPost';
 import MediaPost from './MediaPost';
 import { dividers} from '../../assets/styles/styles'  
-import UserView from '../Modals/UserView'
+import ModalView from '../Modals/ModalView'
 
 const mapStateToProps = state => (
   {
@@ -93,7 +93,7 @@ class MediaFilter extends Component {
         let {data, viewPostDetails, userModal} = this.state
         return (
             <View style={styles.container}>
-                {userModal && <UserView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
+                {userModal && <ModalView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
                 {data.media &&
                     <View style={{height: windowWidth*.95, width: '100%'}}>
                         <MediaPost type={data.media.media_type} uri={data.media.media_large}/>
