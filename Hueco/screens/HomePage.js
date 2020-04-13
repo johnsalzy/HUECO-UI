@@ -124,7 +124,10 @@ class HomeScreen extends Component {
                   <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 
-                      <PostFilter data={item} />
+                        <View style={{paddingBottom: 25}}>
+                          <PostFilter data={item} />
+                        </View>
+                      
                     }
                     onEndReached={() => this.loadMorePosts()}
                     onEndReachedThreshold={.1}

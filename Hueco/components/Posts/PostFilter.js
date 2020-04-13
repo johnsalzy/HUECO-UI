@@ -27,7 +27,7 @@ class MediaFilter extends Component {
             baseAPI: this.props.api.baseAPI,
             data: this.props.data,
             modalData: {id: '', username: ''},
-            viewPostDetails: false,
+            viewPostDetails: this.props.viewPostDetails,
             comment_to_add: ''
 
         }
@@ -126,7 +126,7 @@ class MediaFilter extends Component {
                                 {/* Post Actions */}
                                 <View style={{ justifyContent: 'center'}}>
                                     <View >
-                                        <TouchableOpacity onPress={() => this.setState({viewPostDetails: true})} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 5}}>
+                                        <TouchableOpacity onPress={() => this.setState({viewPostDetails: !viewPostDetails})} style={{flexDirection: 'row', padding: 1, alignItems: 'center', paddingLeft: 5}}>
                                             <Icon color='cornflowerblue' name={'comment'}/><Text style={{paddingLeft: 5, color: 'cornflowerblue', fontSize: 15}}>{data.comment_count}</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -174,7 +174,7 @@ class MediaFilter extends Component {
                     </View>
 
                     {viewPostDetails &&
-                        <View style={{width: '100%', height: 220, paddingLeft: 5, paddingRight: 5}}>
+                        <View style={{width: '100%', height: 260, paddingLeft: 5, paddingRight: 5}}>
                             <Divider style={dividers.standard}/>
                             <ScrollView nestedScrollEnabled={true}>
                                 {/* Show when posted */}
@@ -276,7 +276,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     container: {
-        marginBottom: 25,
         width: '100%',
     },
     flexRow: {

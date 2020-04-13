@@ -67,7 +67,7 @@ class ViewPost extends Component {
                                                 {!dataFetched ? 
                                                     <Activity dataFetched={dataFetched}/>
                                                 :
-                                                    <PostFilter data={data}/>
+                                                    <PostFilter viewPostDetails={true} data={data}/>
                                                 }
                                                 <TouchableOpacity 
                                                     onPress={() => this.props.closeModal()}
