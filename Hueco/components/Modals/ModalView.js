@@ -19,16 +19,18 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
 
 
-class UserPostModal extends Component {
+class ModalView extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data_user: this.props.data,
+            data: this.props.data,
+            type: this.props.type,
         };
     }
 
     render() {
-        let { data_user } = this.state
+        let { data, type } = this.state
+        alert('type' + type + " " + JSON.stringify(data))
         return (
             <Modal
             animationType="slide"
@@ -42,7 +44,8 @@ class UserPostModal extends Component {
                                     <TouchableWithoutFeedback style={styles.containerModal}>
                                         <View>
                                             <View>
-                                                <Profile data={data_user}/> 
+                                                {type == 'user' && <Profile data={data}/>}
+                                                {type == 'route' && <Text>This is a test{JSON.stringify(data)}</Text>}
                                                 <TouchableOpacity 
                                                     onPress={() => this.props.closeModal()}
                                                     style={{marginRight: 'auto', position: 'absolute'}}
@@ -61,7 +64,7 @@ class UserPostModal extends Component {
         );
     }
 }
-export default UserPostModal;
+export default ModalView;
 
 const styles = StyleSheet.create({
     container: { 

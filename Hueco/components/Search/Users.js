@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 // Import
 import {app_styles} from '../../assets/styles/universal'
 import {search_results} from '../../assets/styles/styles'
-import UserModal from '../Modals/UserView';
+import ModalView from '../Modals/ModalView';
 
 
 const mapStateToProps = state => (
@@ -59,7 +59,8 @@ class Users extends React.Component {
                       ))
                   : <Text>No Users Found :(</Text> }
                   {modalVisable && 
-                    <UserModal 
+                    <ModalView 
+                      type={'user'}
                       closeModal={() => this.setState({modalVisable: false})}
                       data={data.results[index]}
                       modalVisable={modalVisable} 

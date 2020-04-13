@@ -88,7 +88,6 @@ class ViewPost extends Component {
     }
 }
 export default connect(mapStateToProps)(ViewPost);
-// export default UserViewModal;
 
 const styles = StyleSheet.create({
     container: { 

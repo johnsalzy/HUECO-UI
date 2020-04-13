@@ -201,7 +201,6 @@ class Profile extends Component {
     }
 }
 export default connect(mapStateToProps)(Profile);
-// export default UserViewModal;
 
 const styles = StyleSheet.create({
     profile_pic: {

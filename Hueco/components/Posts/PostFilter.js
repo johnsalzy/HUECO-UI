@@ -93,7 +93,7 @@ class MediaFilter extends Component {
         let {data, viewPostDetails, userModal} = this.state
         return (
             <View style={styles.container}>
-                {userModal && <ModalView data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
+                {userModal && <ModalView type={'user'} data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
                 {data.media &&
                     <View style={{height: windowWidth*.95, width: '100%'}}>
                         <MediaPost type={data.media.media_type} uri={data.media.media_large}/>
