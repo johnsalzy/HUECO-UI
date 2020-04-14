@@ -40,10 +40,7 @@ class Profile extends Component {
             pic_loaded: false,
         };
     }
-    async loadData(apiRoute){
-        let response = await fetchGet(apiRoute)
-        this.setState({data: response})
-    }
+
 
 
     followUser(id){
@@ -53,7 +50,7 @@ class Profile extends Component {
         data.profile.is_following = !data.profile.is_following;
         this.setState({data})
     }
-    componentDidMount(){
+    async componentDidMount(){
         
         let apiRoute = ''
         let { propsData, login, type } = this.state
@@ -61,18 +58,26 @@ class Profile extends Component {
         if(type == 'user'){
             if(login.id == propsData.id){
                 this.setState({mine: true})
+                apiRoute = 'me/'
+            } else {
+                apiRoute = propsData.id + '/'
             }
-            apiRoute = propsData.id + '/'
-            this.loadData('users/' + apiRoute)
+            let response = await fetchGet('users/' + apiRoute)
+            this.setState({data: response})
         } else {
-            //Fetch route data
-
+            let response = await fetchGet('routes/' + propsData + '/')
+            console.log('res', response)
+            let data = {full_name: null, date_joined: null, profile: {profile_picture: null, description: null, sends: 10}}
+            data.profile.profile_picture = response.img_url;
+            data.full_name = response.name
+            data.date_joined = response.set_date
+            this.setState({data})
             //Check if it is the users route
 
         }
     }
     render() {
-        let { mine, data, settingModalVisable, pic_loaded} = this.state
+        let { mine, data, settingModalVisable, pic_loaded, type } = this.state
         return (
             <View>
                 {data && 
@@ -100,13 +105,13 @@ class Profile extends Component {
                 {data ? 
                         <View style={{paddingTop: 5, alignItems: 'center',}}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={styles.name}> {data.first_name + ' ' + data.last_name}</Text>
+                                <Text style={styles.name}> {data.full_name}</Text>
                                 {mine ? 
-                                <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
-                                    <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
-                                        <Icon name={'settings'} color={'black'} size={20}/>
-                                    </TouchableOpacity>
-                                </View>
+                                    <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
+                                        <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
+                                            <Icon name={'settings'} color={'black'} size={20}/>
+                                        </TouchableOpacity>
+                                    </View>
                                 : 
                
                                 
@@ -129,14 +134,19 @@ class Profile extends Component {
                                 {data.profile.description &&
                                     <View style={{flexDirection: 'row'}}>
                                         <Icon name='description' color={'cornflowerblue'}/>
-                                        <Text style={styles.userInfo}>{data.profile.description}</Text>
+                                        <Text style={styles.userInfo}> {data.profile.description}</Text>
+                                    </View>
+                                }
+                                {type == "user" && 
+                                    <View style={styles.flexInRow}>
+                                        <Icon name='stars' color={'cornflowerblue'}/>
+                                        <Tooltip popover={<Text>{data.profile.achievement.desc}</Text>}>
+                                            <Text style={styles.userInfo}> {data.profile.achievement.name} </Text>
+                                        </Tooltip>
                                     </View>
                                 }
                                 <View style={styles.flexInRow}>
-                                    <Icon name='stars' color={'cornflowerblue'}/><Text style={styles.userInfo}> {'King Beta Sprayer'} </Text>
-                                </View>
-                                <View style={styles.flexInRow}>
-                                    <Icon name='event' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.date_joined.split('T')[0]} </Text>
+                                    <Icon name='event' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.date_joined} </Text>
                                 </View>
                                 {data.profile.location &&
                                     <View style={styles.flexInRow}>
@@ -144,21 +154,23 @@ class Profile extends Component {
                                     </View>
                                 }
                                 {/* Followers/Following */}
-                                <View style={styles.flexInRow}>
-                                    <Tooltip popover={<Text>Followers</Text>}>
-                                        <View style={styles.flexInRow}>
-                                            <Icon color={'cornflowerblue'} name='people' />
-                                            <Text style={styles.userInfo}> {data.profile.followers} </Text>
-                                        </View>
-                                    </Tooltip>
-                                    <Text> </Text>
-                                    <Tooltip popover={<Text>Following</Text>}>
-                                        <View style={styles.flexInRow}>
-                                            <Icon color={'cornflowerblue'} name='search' />
-                                            <Text style={styles.userInfo}> {data.profile.following} </Text>
-                                        </View>
-                                    </Tooltip>
-                                </View>
+                                {type == 'user'  && 
+                                    <View style={styles.flexInRow}>
+                                        <Tooltip popover={<Text>Followers</Text>}>
+                                            <View style={styles.flexInRow}>
+                                                <Icon color={'cornflowerblue'} name='people' />
+                                                <Text style={styles.userInfo}> {data.profile.followers} </Text>
+                                            </View>
+                                        </Tooltip>
+                                        <Text> </Text>
+                                        <Tooltip popover={<Text>Following</Text>}>
+                                            <View style={styles.flexInRow}>
+                                                <Icon color={'cornflowerblue'} name='search' />
+                                                <Text style={styles.userInfo}> {data.profile.following} </Text>
+                                            </View>
+                                        </Tooltip>
+                                    </View>
+                                }
                                 {/* Sends count */}
                                 <Tooltip popover={<Text>Total Sends</Text>}>
                                     <View style={styles.flexInRow}>
@@ -167,7 +179,7 @@ class Profile extends Component {
                                 </Tooltip>
                             </View>
                             {/* End of profile view, start of stats view */}
-                            <UserStatView idUser={data.id}/>
+                            <UserStatView type={type} id={data.id}/>
                         </View>
                 :
                     <View style={{paddingTop: 20, paddingBottom: 20}}>
