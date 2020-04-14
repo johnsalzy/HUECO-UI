@@ -51,7 +51,7 @@ class Settings extends Component {
                         <AccountInfo data={data}/>
                     }
                     {target == 'achievement' &&
-                        <Achievements />
+                        <Achievements user_id={data.id}/>
                     }
                     {target == 'world' &&
                         <Text>Place?</Text>
@@ -78,7 +78,7 @@ class Settings extends Component {
                             onPress={() => this.logoutUser()}
                         >
                             <Text
-                                style={{color: 'red', fontSize: 20, textAlign: 'center'}}
+                                style={{color: 'red', fontSize: 20, textAlign: 'center', paddingVertical: 20}}
                             >
                                 Logout
                             </Text>

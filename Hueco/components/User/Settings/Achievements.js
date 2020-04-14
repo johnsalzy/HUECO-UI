@@ -5,10 +5,14 @@ import {
     Text,
     Dimensions,
     StyleSheet,
+    TouchableOpacity,
 } from "react-native";
 import {connect} from 'react-redux';
+import { Tooltip } from 'react-native-elements';
 
+// Imports of app libraries
 import Icon from '../../Ionicon';
+import { fetchGet, fetchPatchMedia } from '../../../functions/api'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -25,29 +29,49 @@ class Achievements extends Component {
         super(props);
         this.state = {
             changed: false,
+            id: this.props.user_id,
+            data: null,
             loading: false,
         };
     }
 
-    componentDidMount(){
-        //Fetch achievements
+    async componentDidMount(){
+        let { id } = this.state;
+        let response = await fetchGet('social/user-achievement/?user=' + id)
+        this.setState({data: response})
     }
 
 
     render() {
-
+        let {data} = this.state;
         return (
                 <View style={{paddingTop: 5, alignSelf: 'center', width: '80%'}}>
                     <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Achievements</Text>
                     <View style={{alignSelf: 'center'}}>
-                        <View style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}}>
-                            <Text style={styles.has}>Wears a Beenie</Text>
-                            <Icon name={'place'} size={20} color={'dodgerblue'}/>
-                        </View>
-                        <Text style={styles.has}>Hold my Beer</Text>
-                        <Text style={styles.doesNotHave}>Who Needs a Job? </Text>
-                        <Text style={styles.has}>Since the beginning </Text>
-                        <Text style={styles.doesNotHave}>Rising Up The Ranks </Text>
+                        {data && 
+                            <View style={{paddingTop: 20}}>
+                                {data.results.map((data, index) =>
+                                    <View key={index} style={{flexDirection: 'row', alignSelf: 'center'}}>
+                                        <Tooltip popover={<Text>{data.achievement.description}</Text>}>
+                                            <Text style={styles.has}>{data.achievement.name}</Text>
+                                        </Tooltip>
+                                        {data.selected ? 
+                                            <Icon name={'place'} size={20} color={'dodgerblue'}/>
+                                        :
+                                            <TouchableOpacity
+                                                onPress={() => alert('set as main' + data)}
+                                            >
+                                                <Text>PIN</Text>
+                                            </TouchableOpacity>
+                                        }
+                                    </View>
+                                
+                                )}
+                            </View>
+                        }
+
+                        {/* Back and forth arrows here */}
+                        <Text>Next           Prev</Text>
                     </View>
                 </View>
         );

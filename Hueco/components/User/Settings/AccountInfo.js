@@ -18,6 +18,7 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
 import { fetchGet, fetchPatchMedia } from '../../../functions/api'
+import ImageWithLoader from '../../ImageWithLoader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
 
@@ -34,9 +35,9 @@ class AccountInfo extends Component {
         this.state = {
             login: this.props.login,
             data: this.props.data, // Should contain current user data
-            loadingPage: true,
-            errorImage: false,
             changes: false,
+            error_change: false,
+            error_text: '',
             loadingChange: false,
             profile_pic: this.props.data.profile.profile_picture,
             first_name: '',
@@ -49,14 +50,15 @@ class AccountInfo extends Component {
         };
     }
     async saveUpdates(){
-        this.setState({loadingChange: true})
+        this.setState({loadingChange: true, error_change: false})
         let { data, media, first_name, last_name, email, location, description } = this.state;   // Get new data
         let {orig_first_name, orig_last_name, orig_description, orig_location, orig_email} = this.state; // Get originals to compare
 
         
         var formdata = new FormData();
         // ------------------ Validate all new data ------------------
-
+        // If there is a error...
+        // this.setState({error_change: 'true', error_text: 'Error...'})
         // Attach new first name
         if(first_name != '' && (first_name != orig_first_name)){
             formdata.append("first_name", first_name);
@@ -130,7 +132,7 @@ class AccountInfo extends Component {
 
 
     render() {
-        let { data, loadingPage, errorImage, profile_pic, changes, loadingChange } = this.state
+        let { data, profile_pic, error_change, changes, loadingChange } = this.state
         return (
             <View style={{alignSelf: 'center', width: '80%'}}>
                 {data && 
@@ -140,33 +142,16 @@ class AccountInfo extends Component {
                     <View style={styles.flexInRow}>
                         <View
                             style={{
-                                marginTop: 20,
-                                width: 150,
-                                height: 150,
+                                marginTop: 25,
+                                width: 160,
+                                height: 160,
                                 borderRadius: 1,
                                 borderColor: 'black',
                                 borderWidth: 1,
                                 overflow: "hidden"
                             }}
                         >
-                            {loadingPage && 
-                                <ActivityIndicator 
-                                    style={{width: '100%', height:'100%', justifyContent: "center", alignItems: 'center'}}
-                                    size="large" color="#0000ff"
-                                /> 
-                            }
-                            {errorImage && 
-                                <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
-                            }
-                            <Image 
-                                source={{'uri': profile_pic}}
-                                onLoad={() => this.setState({loadingPage: false})}
-                                onError={() => this.setState({loadingPage: false, errorImage: true})}
-                                style={{
-                                    height: '100%',
-                                    width: '100%',
-                                }}
-                            />
+                            <ImageWithLoader uri={profile_pic}/>
                         </View>
                         <View>
                         </View>
@@ -255,6 +240,7 @@ class AccountInfo extends Component {
                     </View>
                 </View>
                 }
+                {error_change && <Text style={{color: 'red', fontWeight: "bold", textAlign: 'center'}}></Text>}
                 {changes && 
                     <View>
                         { loadingChange ?
