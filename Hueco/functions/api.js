@@ -3,13 +3,24 @@ import store from '../redux/store';
 async function handleError(err){
   console.log('I will handle the error' + err)
 
-  return {status: false}
+  return null
+}
+
+function checkToken(experation){
+    const now = Date.now()/1000;
+    if(now >= experation){
+
+      alert('Token is expired!                                    ' + now + '                           ' + experation)
+    }
+
 }
 
 export async function fetchGet(apiRoute) {
+  console.log('route'+ apiRoute)
   const state = store.getState();     // grab current state
   const baseAPI = state.api.baseAPI
   const access_token = state.login.access_token;
+  checkToken(state.login.expires)
   let response = await fetch(baseAPI + apiRoute, {
     headers: {
         'Authorization': 'Bearer ' + access_token,
@@ -25,6 +36,7 @@ export async function fetchPost(apiRoute, body){
   const state = store.getState();
   const baseAPI = state.api.baseAPI
   const access_token = state.login.access_token;
+  checkToken(state.login.expires)
   let response = await fetch(baseAPI + apiRoute, {
       method: 'POST',
       headers: {
@@ -42,6 +54,7 @@ export async function fetchDelete(apiRoute){
   const state = store.getState();
   const baseAPI = state.api.baseAPI
   const access_token = state.login.access_token;
+  checkToken(state.login.expires)
   apiRoute = baseAPI + apiRoute
   let response = await fetch(apiRoute, {
       method: 'DELETE',
@@ -66,6 +79,7 @@ export async function fetchPatchMedia(apiRoute, body){
 
   apiRoute = baseAPI + apiRoute
   console.log(apiRoute, body)
+  checkToken(state.login.expires)
   let response = await fetch(apiRoute, {
       method: 'PATCH',
       headers: myHeaders,

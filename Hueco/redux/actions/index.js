@@ -22,6 +22,7 @@ export const loginUserNormal = (email, response) => ({
     email: email,
     access_token: response.access_token, 
     refresh_token: response.refresh_token,
+    expiration: response.expires_in,
     username: response.username,
     full_name: response.user_full_name,
     id: response.user_id,

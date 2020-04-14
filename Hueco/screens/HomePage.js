@@ -114,7 +114,6 @@ class HomeScreen extends Component {
       this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
   }
   render(){
-    // alert('login' + JSON.stringify(this.state.login))
     let {modalAddVisable, modalAddPost, modalAddTick, refreshingPosts, data, initialLoad} = this.state
     return (
         <View style={app_styles.screen}>
