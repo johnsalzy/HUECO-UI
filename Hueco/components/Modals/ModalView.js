@@ -43,8 +43,7 @@ class ModalView extends Component {
                                     <TouchableWithoutFeedback style={styles.containerModal}>
                                         <View>
                                             <View>
-                                                {type == 'user' && <Profile type={'user'} data={data}/>}
-                                                {type == 'route' && <Text>This is a test{JSON.stringify(data)}</Text>}
+                                                <Profile type={this.props.type} data={data}/>
                                                 <TouchableOpacity 
                                                     onPress={() => this.props.closeModal()}
                                                     style={{marginRight: 'auto', position: 'absolute'}}

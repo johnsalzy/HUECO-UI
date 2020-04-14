@@ -6,13 +6,12 @@ class ImageWithLoader extends React.Component {
     super(props);
     this.state = { 
         loading: true,
-        data: this.props.data,
         error: false,
     };
   }
 
   render() {
-      let { loading, data, error } = this.state
+      let { loading, error } = this.state
         return (
             <View
                 style={{
@@ -31,7 +30,7 @@ class ImageWithLoader extends React.Component {
                     <Text style={{textAlign: 'center'}}>Could Not Load Image.</Text>
                 }
                 <Image 
-                    source={{'uri': data.media.thumbnail}}
+                    source={{'uri': this.props.uri}}
                     onLoad={() => this.setState({loading: false})}
                     onError={() => this.setState({loading: false, error: true})}
                     style={{

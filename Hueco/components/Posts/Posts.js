@@ -22,7 +22,8 @@ class Posts extends Component {
             username: this.props.login.username,
             access_token: this.props.login.access_token,
             userData: this.props.user,
-            idUser: this.props.idUser,
+            id: this.props.id,
+            type: this.props.type,
             baseAPI: "http://3.133.123.120:8000/api/v1/",
             // For New API call
             dataFetched: false,
@@ -34,9 +35,9 @@ class Posts extends Component {
         }
     }
     async componentDidMount(){
-        let {baseAPI, idUser} = this.state;
-        // alert('id user: ' + idUser.toString(8))
-        this.loadPostData(baseAPI + 'post/?user=' + idUser)
+        let {baseAPI, id, type} = this.state;
+        if(type == 'user'){this.loadPostData(baseAPI + 'post/?user=' + id)}
+        else{alert('gettig route data')}
     }
 
     async loadPostData(apiPath){
@@ -98,7 +99,7 @@ class Posts extends Component {
                                 {data.media ? 
                                     <View style={styles.postThumbnail}>
                                         <ImageLoader 
-                                            data={data}  
+                                            uri={data.media.thumbnail}  
                                         />
                                     </View>
                                 : 
