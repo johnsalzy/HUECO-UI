@@ -22,7 +22,8 @@ class MediaFilter extends Component {
     constructor(props){
         super(props);
         this.state= {
-            userModal: false,
+            modalView: false,
+            type: 'user',
             login: this.props.login,
             baseAPI: this.props.api.baseAPI,
             data: this.props.data,
@@ -32,9 +33,9 @@ class MediaFilter extends Component {
 
         }
     }
-    openUserPage = (id,username) => {
-        let data = {id: id, username: username}
-        this.setState({modalData: data, userModal: true })
+    openDataPage = (id, type) => {
+        let data = {id: id}
+        this.setState({ type: type, modalData: data, modalView: true })
         
     }
 
@@ -90,15 +91,33 @@ class MediaFilter extends Component {
     }
 
     render(){
-        let {data, viewPostDetails, userModal} = this.state
+        let {data, viewPostDetails, modalView} = this.state
         return (
             <View style={styles.container}>
-                {userModal && <ModalView type={'user'} data={this.state.modalData} closeModal={() => this.setState({userModal: false})} modalVisable={userModal}/>}
+                {modalView && <ModalView type={this.state.type} data={this.state.modalData} closeModal={() => this.setState({modalView: false})} modalVisable={modalView}/>}
+                {data.route && 
+                    <View 
+                        style={{
+                            backgroundColor: 'white',
+                            borderRadius: 2,
+                            borderWidth: 1,
+                            borderColor: 'black',
+                            padding: 3,
+                        }}
+                    >
+                        <View>
+                            <TouchableOpacity
+                                onPress={() => this.openDataPage(data.route.id, 'route')}
+                            >
+                                <Text style={{fontSize: 15}}>{data.route.name} - {data.route.rating}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
+
                 {data.media &&
                     <View style={{height: windowWidth*.95, width: '100%'}}>
                         <MediaPost type={data.media.media_type} uri={data.media.media_large}/>
-
-                        
                     </View>
                 }
                 { ( data.user) && 
@@ -116,7 +135,7 @@ class MediaFilter extends Component {
                         <View style={{width: '30%', justifyContent: 'center'}}>
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{justifyContent: 'center'}}>
-                                    <TouchableOpacity style={{alignItems: 'center'}} onPress={() => this.openUserPage(data.user.id, data.user.username)}>
+                                    <TouchableOpacity style={{alignItems: 'center'}} onPress={() => this.openDataPage(data.user.id, 'user')}>
                                         <Image 
                                             source={{'uri': data.user.thumbnail}}  
                                             style={styles.userThumbnail} 
@@ -144,7 +163,7 @@ class MediaFilter extends Component {
                                 </View>
                             </View>
                             <View>
-                                <TouchableOpacity onPress={() => this.openUserPage(data.user.id, data.user.username)}>
+                                <TouchableOpacity onPress={() => this.openDataPage(data.user.id, 'user')}>
                                     <Text style={{fontWeight: 'bold'}}>@{data.user.username}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -191,7 +210,7 @@ class MediaFilter extends Component {
                                             {
                                             data.tagged_users.map((data, index) => (
                                                 <TouchableOpacity
-                                                    onPress={() => this.openUserPage(data.id, data.username)}
+                                                    onPress={() => this.openDataPage(data.id, 'user')}
                                                     key={index}
                                                 >
                                                     <Text>@{data.username} </Text>
@@ -205,7 +224,7 @@ class MediaFilter extends Component {
                                     <View>
                                         <Text style={styles.postDetails}>Tagged Route</Text>
                                         <TouchableOpacity
-                                            onPress={() => alert('Viewing route: ' +data.route.id)}
+                                            onPress={() => this.openDataPage(data.route.id, 'route')}
                                         >
                                             <Text>{data.route.name} - {data.route.rating}</Text>
                                         </TouchableOpacity>
@@ -215,18 +234,19 @@ class MediaFilter extends Component {
                                 {/* Section to display comments/title */}
                                 <View style={{marginTop: 5, marginBottom: 30}}>
                                     <Text style={styles.postDetails}>Comments</Text>
-                                    <TouchableOpacity 
-                                        onPress={() => this.openUserPage(data.user.id, data.user.username)}
-                                    >
-                                        <Text style={styles.postDetails}>@{data.user.username} </Text> 
-                                    </TouchableOpacity>
-                                    <Text>{data.text}</Text>
-                                
+                                    <View style={{flexDirection:'row'}}>
+                                        <TouchableOpacity 
+                                            onPress={() => this.openDataPage(data.user.id, 'user')}
+                                        >
+                                            <Text style={styles.postDetails}>@{data.user.username} </Text> 
+                                        </TouchableOpacity>
+                                        <Text>{data.text}</Text>
+                                    </View>
                                     {data.comment_count > 0 && 
                                         data.comments.map((data, index) => (
-                                        <View key={index} style={{marginTop: 5}}>
+                                        <View key={index} style={{marginTop: 5, flexDirection:'row'}}>
                                             <TouchableOpacity 
-                                                onPress={() => this.openUserPage(data.user.id, data.user.username)}
+                                                onPress={() => this.openDataPage(data.user.id,'user')}
                                             >
                                                 <Text style={styles.postDetails}>@{data.user.username} </Text>
                                             </TouchableOpacity>
