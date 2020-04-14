@@ -29,7 +29,7 @@ class ModalView extends Component {
     }
 
     render() {
-        let { data, type } = this.state
+        let { data } = this.state
         return (
             <Modal
             animationType="slide"

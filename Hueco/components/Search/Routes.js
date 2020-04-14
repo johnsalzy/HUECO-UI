@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Rating } from 'react-native-elements';
 
 // Import
@@ -25,7 +25,7 @@ export default class RouteView extends React.Component {
               {modalRoute && 
                 <ModalView 
                   type={'route'} 
-                  data={route_id} 
+                  data={{id: route_id}} 
                   closeModal={() => this.setState({modalRoute: false})} 
                   modalVisable={modalRoute}
                 />
