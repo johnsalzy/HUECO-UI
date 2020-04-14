@@ -104,11 +104,11 @@ class Profile extends Component {
                                 {mine ? 
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
                                     <TouchableOpacity onPress={() => this.setState({settingModalVisable: true})}>
-                                        <Icon name={'settings'} color={'gray'} size={20}/>
+                                        <Icon name={'settings'} color={'black'} size={20}/>
                                     </TouchableOpacity>
                                 </View>
                                 : 
-                                // Need to do only one, waiting on data from API
+               
                                 
                                 <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5, flexDirection: 'row'}}>
                                     {data.profile.is_following ? 
@@ -125,42 +125,47 @@ class Profile extends Component {
                                 </View>
                                 }
                             </View>
-                            {data.profile.description &&
+                            <View style={{alignSelf: 'center', width: '70%', alignItems: 'center'}}>
+                                {data.profile.description &&
+                                    <View style={{flexDirection: 'row'}}>
+                                        <Icon name='description' color={'cornflowerblue'}/>
+                                        <Text style={styles.userInfo}>{data.profile.description}</Text>
+                                    </View>
+                                }
                                 <View style={styles.flexInRow}>
-                                    <Icon name='description' /><Text style={styles.userInfo}> {data.profile.description}</Text>
+                                    <Icon name='stars' color={'cornflowerblue'}/><Text style={styles.userInfo}> {'King Beta Sprayer'} </Text>
                                 </View>
-                            }
-                            <View style={styles.flexInRow}>
-                                <Icon name='stars' /><Text style={styles.userInfo}> {'King Beta Sprayer'} </Text>
-                            </View>
-                            <View style={styles.flexInRow}>
-                                <Icon name='event' /><Text style={styles.userInfo}> {data.date_joined.split('T')[0]} </Text>
-                            </View>
-                            <View style={styles.flexInRow}>
-                                <Tooltip popover={<Text>Followers</Text>}>
+                                <View style={styles.flexInRow}>
+                                    <Icon name='event' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.date_joined.split('T')[0]} </Text>
+                                </View>
+                                {data.profile.location &&
                                     <View style={styles.flexInRow}>
-                                        <Icon name='people' /><Text style={styles.userInfo}> {data.profile.followers} </Text>
+                                        <Icon name='place' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.profile.location}</Text>
+                                    </View>
+                                }
+                                {/* Followers/Following */}
+                                <View style={styles.flexInRow}>
+                                    <Tooltip popover={<Text>Followers</Text>}>
+                                        <View style={styles.flexInRow}>
+                                            <Icon color={'cornflowerblue'} name='people' />
+                                            <Text style={styles.userInfo}> {data.profile.followers} </Text>
+                                        </View>
+                                    </Tooltip>
+                                    <Text> </Text>
+                                    <Tooltip popover={<Text>Following</Text>}>
+                                        <View style={styles.flexInRow}>
+                                            <Icon color={'cornflowerblue'} name='search' />
+                                            <Text style={styles.userInfo}> {data.profile.following} </Text>
+                                        </View>
+                                    </Tooltip>
+                                </View>
+                                {/* Sends count */}
+                                <Tooltip popover={<Text>Total Sends</Text>}>
+                                    <View style={styles.flexInRow}>
+                                    <Icon name='timeline' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.profile.sends} </Text>
                                     </View>
                                 </Tooltip>
-                                <Text> </Text>
-                                <Tooltip popover={<Text>Following</Text>}>
-                                    <View style={styles.flexInRow}>
-                                        <Icon name='search' /><Text style={styles.userInfo}> {data.profile.following} </Text>
-                                    </View>
-                                </Tooltip>
                             </View>
-                            {data.profile.location &&
-                                <View style={styles.flexInRow}>
-                                    <Icon name='place' /><Text style={styles.userInfo}> {data.profile.location}</Text>
-                                </View>
-                            }
-                            
-                            <Tooltip popover={<Text>Total Sends</Text>}>
-                                <View style={styles.flexInRow}>
-                                <Icon name='timeline' /><Text style={styles.userInfo}> {data.profile.sends} </Text>
-                                </View>
-                            </Tooltip>
-                            
                             {/* End of profile view, start of stats view */}
                             <UserStatView idUser={data.id}/>
                         </View>
@@ -212,6 +217,7 @@ const styles = StyleSheet.create({
         fontSize:16,
         color:"#778899",
         fontWeight:'600',
+        textAlign: 'center'
     },
     flexInRow: {
         flexDirection: 'row',
