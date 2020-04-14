@@ -17,7 +17,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
-import { fetchGet } from '../../../functions/api'
+import { fetchGet, fetchPatchMedia } from '../../../functions/api'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
 
@@ -37,30 +37,74 @@ class AccountInfo extends Component {
             loadingPage: true,
             errorImage: false,
             changes: false,
+            loadingChange: false,
             profile_pic: this.props.data.profile.profile_picture,
             first_name: '',
             last_name: '',
             email: '',
             location: '',
             password: null,
+            description: '',
             media: null,
         };
     }
     async saveUpdates(){
-        let response = await fetchGet('users/me/')
-        alert('res' + JSON.stringify(response))
+        this.setState({loadingChange: true})
+        let { data, media, first_name, last_name, email, location, description } = this.state;   // Get new data
+        let {orig_first_name, orig_last_name, orig_description, orig_location, orig_email} = this.state; // Get originals to compare
+
+        
+        var formdata = new FormData();
+        // ------------------ Validate all new data ------------------
+
+        // Attach new first name
+        if(first_name != '' && (first_name != orig_first_name)){
+            formdata.append("first_name", first_name);
+        }
+        // Attach new last name
+        if(last_name != '' && (last_name != orig_last_name)){
+            formdata.append("last_name", last_name);
+        }
+        // Attach new email
+        if(email != '' && (email != orig_email)){
+            // Validate email
+            formdata.append("email", email);
+        }
+        // Attach new description
+        if(description != '' && (description != orig_description)){
+            formdata.append("profile.description", description);
+        }
+        // Attach new description
+        if(location != '' && (location != orig_location)){
+            formdata.append("profile.location", location);
+        }
+        //Attach new media
+        if(media){
+            let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+            formdata.append("profile.profile_pic.media", {uri:uri, type:'image/jpeg', name:'fetchPost'});
+            formdata.append("profile.profile_pic.media_type", media.type);
+        }
+
+        let apiRoute = 'users/' + data.id + '/'
+        let response = await fetchPatchMedia(apiRoute, formdata)
+
+
+        
+        // Update props
+        this.setState({changes: false, response: response, loadingChange: false})
 
     }
     componentDidMount() {
         this.getPermissionAsync();      // Get cameral roll perms
-
+        let {data} = this.state
         // get all user info and set to check for changes later
         this.setState({
-            orig_profile_pic: '',
-            orig_first_name: '',
-            orig_last_name: '',
-            orig_email: '',
-            orig_location: '',
+            orig_profile_pic: data.profile.profile_picture,
+            orig_first_name: data.first_name,
+            orig_last_name: data.last_name,
+            orig_description: data.profile.description,
+            orig_email: null, // Waiting on api route
+            orig_location: data.profile.location,
         })
     }
     getPermissionAsync = async () => {
@@ -77,7 +121,6 @@ class AccountInfo extends Component {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,  // 0-1(max)
-        base64: true,
         });
 
         if (!result.cancelled) {
@@ -85,17 +128,9 @@ class AccountInfo extends Component {
         }
     };
 
-    updateUserInfo(){
-        let {username} = this.state;
-        //Compare all info
-        //Make headers/body
-        //Call api route
-
-        this.setState({changes: false})
-    }
 
     render() {
-        let { data, loadingPage, errorImage, profile_pic, changes } = this.state
+        let { data, loadingPage, errorImage, profile_pic, changes, loadingChange } = this.state
         return (
             <View style={{alignSelf: 'center', width: '80%'}}>
                 {data && 
@@ -197,7 +232,7 @@ class AccountInfo extends Component {
                             <View style={{width: 200}}>
                                 <TextInput 
                                     style={styles.text_input} 
-                                    placeholder={data.description}
+                                    placeholder={data.profile.description}
                                     placeholderTextColor="darkblue"
                                     onChangeText = {(description) => this.setState({description: description, changes: true})}
                                     value = {this.state.description}
@@ -209,7 +244,7 @@ class AccountInfo extends Component {
                             <View style={{width: 200}}>
                                 <TextInput 
                                     style={styles.text_input} 
-                                    placeholder={data.location}
+                                    placeholder={data.profile.location}
                                     placeholderTextColor="darkblue"
                                     onChangeText = {(location) => this.setState({location: location, changes: true})}
                                     value = {this.state.location}
@@ -221,9 +256,16 @@ class AccountInfo extends Component {
                 </View>
                 }
                 {changes && 
-                    <TouchableOpacity onPress={()=> this.saveUpdates()} style={{paddingTop: 10, alignSelf: 'center', marginBottom: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize: 20, color: 'green'}}>Save Changes</Text>
-                    </TouchableOpacity>
+                    <View>
+                        { loadingChange ?
+                            <ActivityIndicator animating size={'large'}/>
+                        :
+                            <TouchableOpacity onPress={()=> this.saveUpdates()} style={{paddingTop: 10, alignSelf: 'center', marginBottom: 10}}>
+                                <Text style={{fontWeight: 'bold', fontSize: 20, color: 'green'}}>Save Changes</Text>
+                            </TouchableOpacity>
+                        }
+                        
+                    </View>
                 }
             </View>
         );
