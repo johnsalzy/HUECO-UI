@@ -37,7 +37,7 @@ class Posts extends Component {
     async componentDidMount(){
         let {baseAPI, id, type} = this.state;
         if(type == 'user'){this.loadPostData(baseAPI + 'post/?user=' + id)}
-        else{alert('gettig route data')}
+        // else{this.loadPostData('route/media/?id=' + id)}
     }
 
     async loadPostData(apiPath){

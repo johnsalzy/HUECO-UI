@@ -1,24 +1,15 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { ButtonGroup } from 'react-native-elements'
-import {connect} from 'react-redux';
 
 
 // Import needed componenets
 import TabIcon from './TabIcon';
-import StatView from './Stats'
+import Stats from './Stats'
 import Posts from './Posts/Posts'
 
 
-const mapStateToProps = state => (
-  {
-    login: state.login,
-    user: state.user
-  }
-)
-
-
-class UserStatView extends Component {
+class StatView extends Component {
   constructor(props){
     super(props);
     this.state= {
@@ -48,10 +39,10 @@ class UserStatView extends Component {
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatView type={type} idUser={id} />: <Posts type={type} id={id}/> }
+                { selectedIndex ? <Stats type={type} idUser={id} />: <Posts type={type} id={id}/> }
             </View>
         </View>
     );
   }
 }
-export default connect(mapStateToProps)(UserStatView)
+export default StatView

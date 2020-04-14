@@ -19,9 +19,6 @@ import * as Permissions from 'expo-permissions';
 
 import { fetchGet, fetchPatchMedia } from '../../../functions/api'
 import ImageWithLoader from '../../ImageWithLoader';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').width;
-
 
 const mapStateToProps = state => (
     {
