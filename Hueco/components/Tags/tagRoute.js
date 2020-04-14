@@ -17,7 +17,7 @@ import Activity from '../ActivityIndicator';
 
 //Redux imports
 import {connect} from 'react-redux';
-import { fetchGet } from '../../functions/requests'
+import { fetchGet } from '../../functions/api'
 // import { loginUserNormal } from '../redux/actions'
 
 
@@ -60,10 +60,8 @@ class TagRoute extends Component {
     }
 
     async loadData(apiPath){
-        console.log('api route' + apiPath)
-        let { login } = this.state
         this.setState({dataFetched: false, prevData: false, nextData: false})
-        let responseData = await fetchGet(apiPath, login.access_token)
+        let responseData = await fetchGet(apiPath)
         this.setState({data: responseData, prevData: responseData.previous, nextData: responseData.next, dataFetched: true})
         
     }
@@ -81,12 +79,14 @@ class TagRoute extends Component {
         }
     }
     render() {
-        let {baseAPI, route_name, prevData, nextData, selected_area, data, dataFetched} = this.state
+        let { route_name, prevData, nextData, selected_area, data, dataFetched} = this.state
         let placeholder = ""
+        let search_bonus = ""
         if(selected_area != null){
             placeholder = 'Search Routes In ' + selected_area.area.name
+            search_bonus = selected_area.area.id
         } else {
-            placeholder = 'Search Routes By Name '
+            placeholder = 'Search Routes By Name'
         }
         return (
             <View>
@@ -116,7 +116,7 @@ class TagRoute extends Component {
                     </View>
                     <View style={{paddingLeft: 2, width: '20%'}}>
                         <TouchableOpacity 
-                            onPress={() => this.loadData(baseAPI + 'routes/?name=' + route_name + '&area='+ selected_area.area.id)}
+                            onPress={() => this.loadData('routes/?name=' + route_name + '&area='+ search_bonus)}
                         >
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
