@@ -23,7 +23,8 @@ class UserStatView extends Component {
     super(props);
     this.state= {
         selectedIndex: 0,
-        idUser: this.props.idUser,
+        id: this.props.id,
+        type: this.props.type,
     }
     this.updateIndex = this.updateIndex.bind(this)
   }
@@ -34,7 +35,7 @@ class UserStatView extends Component {
   
   render(){
     const buttons = [<TabIcon focused={true} name='md-camera'/>, <TabIcon name='md-stats'/>]
-    const { selectedIndex, idUser } = this.state
+    const { selectedIndex, id, type } = this.state
     // alert('this.state render' + JSON.stringify(this.state))
     return (
         <View style={{width: '90%'}}>
@@ -47,7 +48,7 @@ class UserStatView extends Component {
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <StatView idUser={idUser} />: <Posts idUser={idUser}/> }
+                { selectedIndex ? <StatView type={type} idUser={id} />: <Posts type={type} id={id}/> }
             </View>
         </View>
     );
