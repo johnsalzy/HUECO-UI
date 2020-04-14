@@ -43,12 +43,33 @@ export async function fetchDelete(apiRoute){
   const baseAPI = state.api.baseAPI
   const access_token = state.login.access_token;
   apiRoute = baseAPI + apiRoute
-  console.log('api Route '+ apiRoute)
   let response = await fetch(apiRoute, {
       method: 'DELETE',
       headers: {
         'Authorization': 'Bearer ' + access_token,
       }
+  })
+  .then(response => response.json())
+  .catch((err) => handleError(err));
+  return response
+}
+
+export async function fetchPatchMedia(apiRoute, body){
+  const state = store.getState();
+  const baseAPI = state.api.baseAPI
+  const access_token = state.login.access_token;
+
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json")
+  myHeaders.append("Authorization", "Bearer " + access_token);
+  myHeaders.append("Content-type", "multipart/form-data");
+
+  apiRoute = baseAPI + apiRoute
+  console.log(apiRoute, body)
+  let response = await fetch(apiRoute, {
+      method: 'PATCH',
+      headers: myHeaders,
+      body: body,
   })
   .then(response => response.json())
   .catch((err) => handleError(err));
