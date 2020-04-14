@@ -41,6 +41,19 @@ class Register extends Component {
             username: '',
         };
     }
+    componentDidUpdate(){
+        let { response_register } = this.state;
+        if(response_register){
+            if(response_register.status == "User Created"){
+                this.props.userRegistered(this.state.email, this.state.password)
+                this.setState({response_register: null, registeringUser: false, password: ''})
+                this.props.closeModal()
+            } else {
+                this.setState({errorText: "Register Failed: " + JSON.stringify(response_register), errorPresent: true ,response_register: null, registeringUser: false})
+            }
+        }
+    }
+
     register_user = () => {
         this.setState({errorPresent: false, errorText: ""})
         let { baseAPI, username, email, first_name, last_name, password } = this.state;
@@ -72,39 +85,34 @@ class Register extends Component {
             return
         }
         this.setState({registeringUser: true})
+        let body = {
+            username: username,
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            password: password
+        }
         fetch(baseAPI + 'users/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                first_name: first_name,
-                last_name: last_name,
-                password: password,
-            })
+            body: JSON.stringify(body)
         })
         .then()
         .then(response => response.json())
-        .then((response) => this.setState({response_register: response}))
-        .catch();
-
-
-
+        .then((response) => {
+            this.setState({response_register: response, registeringUser: false})})
+        .catch((err) => {
+            this.setState({registeringUser: false, errorPresent: true, errorText: "Register Failed: " + JSON.stringify(err)})
+        }    
+        );
     }
+
+
     render() {
-        let { modalVisible, errorPresent, errorText, response_register, registeringUser } = this.state;
-        if(response_register){
-            if(response_register.status == "User Created"){
-                this.props.userRegistered(this.state.email, this.state.password)
-                this.setState({response_register: null, registeringUser: false, password: ''})
-                this.props.closeModal()
-            } else {
-                alert('Register Failed Because' + JSON.stringify(response_register))
-                this.setState({errorText: "Register Failed", errorPresent: true ,response_register: null, registeringUser: false})
-            }
-        }
+        let { modalVisible, errorPresent, errorText, registeringUser } = this.state;
+        
         return (
                 <Modal
                     animationType="slide"
