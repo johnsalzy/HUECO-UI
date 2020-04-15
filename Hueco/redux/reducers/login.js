@@ -23,11 +23,12 @@ const login = (state = {username: '', status: false, access_token: '', refresh_t
                 expires: null,
             }
         case 'REFRESH_TOKEN':
+            alert('refresh token from login.js' + JSON.stringify(action.data))
             return {
                 ...state,
                 expires: Date.now()/1000 + action.expiration,
-                access_token: action.access_token,
-                refresh_token: action.refresh_token,
+                // access_token: action.access_token,
+                // refresh_token: action.refresh_token,
             }      
         default:
             return state

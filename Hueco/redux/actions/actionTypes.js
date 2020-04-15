@@ -7,6 +7,7 @@ export const TOGGLE_TODO = 'TOGGLE_TODO'
 export const LOGIN_USER_NORMAL = 'LOGIN_USER_NORMAL'
 export const LOGIN_USER_GOOGLE = 'LOGIN_USER_GOOGLE'
 export const LOGOUT_USER_NORMAL = 'LOGOUT_USER_NORMAL'
+export const REFRESH_TOKEN = 'REFRESH_TOKEN'
 
 
 // User data

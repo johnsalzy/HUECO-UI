@@ -1,4 +1,5 @@
-import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA, UPDATE_USER_STATS } from './actionTypes'
+import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, UPDATE_USER_DATA, DELETE_USER_DATA, 
+        UPDATE_USER_STATS, REFRESH_TOKEN } from './actionTypes'
 import {UPDATE_SEARCH_DATA, UPDATE_MEDIA_INDEX} from './actionTypes' // For updating media
 import {UPDATE_AREA_DATA} from './actionTypes' // For updating media
 
@@ -28,8 +29,12 @@ export const loginUserNormal = (email, response) => ({
     id: response.user_id,
 })
 
+export const refreshToken = (data) => ({
+    type: REFRESH_TOKEN,
+    data: data,
+})
 
-export const logoutUser = (user) => ({
+export const logoutUser = () => ({
     type: LOGOUT_USER_NORMAL,
     username: '',
     password: '',
