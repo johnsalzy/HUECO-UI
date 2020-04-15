@@ -37,8 +37,9 @@ class Achievements extends Component {
 
     async componentDidMount(){
         let { id } = this.state;
-        let response = await fetchGet('social/user-achievement/?user=' + id)
+        let response = await fetchGet('social/achievement/user/' + id)
         this.setState({data: response})
+        console.log(response)
     }
 
 
@@ -50,20 +51,33 @@ class Achievements extends Component {
                     <View style={{alignSelf: 'center'}}>
                         {data && 
                             <View style={{paddingTop: 20}}>
-                                {data.results.map((data, index) =>
-                                    <View key={index} style={{flexDirection: 'row', alignSelf: 'center'}}>
-                                        <Tooltip popover={<Text>{data.achievement.description}</Text>}>
-                                            <Text style={styles.has}>{data.achievement.name}</Text>
-                                        </Tooltip>
-                                        {data.selected ? 
-                                            <Icon name={'place'} size={20} color={'dodgerblue'}/>
+                                {data.map((data, index) =>
+                                    <View key={index} style={{alignSelf: 'center'}}>
+                                        {data.access ?
+                                            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                                                <Tooltip popover={<Text>{data.achievement.description}</Text>}>
+                                                    <Text style={styles.has}>{data.achievement.name}</Text>
+                                                </Tooltip>
+                                                {data.selected ? 
+                                                    <Icon name={'place'} size={20} color={'dodgerblue'}/>
+                                                :
+                                                    <TouchableOpacity
+                                                        onPress={() => alert('set as main: ' + data.achievement.id)}
+                                                    >
+                                                        <Text>PIN</Text>
+                                                    </TouchableOpacity>
+                                                }
+                                                
+
+                                            </View>
+                                            
                                         :
-                                            <TouchableOpacity
-                                                onPress={() => alert('set as main' + data)}
-                                            >
-                                                <Text>PIN</Text>
-                                            </TouchableOpacity>
+                                            <Tooltip popover={<Text>{data.achievement.description}</Text>}>
+                                                <Text style={styles.doesNotHave}>{data.achievement.name}</Text>
+                                            </Tooltip>
                                         }
+                                        
+                                        
                                     </View>
                                 
                                 )}
