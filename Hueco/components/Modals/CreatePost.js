@@ -204,27 +204,3 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     }
 });
-
-
-
-
-        // alert('postData: '+ JSON.stringify(post));
-        // fetch(baseAPI + 'post', {
-        //     method: "POST",
-        //     // headers: {
-        //     //     'Authorization': 'Bearer ' + login.access_token,
-        //     //     'Accept': 'application/json',
-        //     //     'Content-Type': 'application/json'
-        //     // },
-        //     // body: "uname=value1&password=value2"
-        // })
-        //   .then(response => response.json())
-        //   .then(response => {
-        //     console.log("upload succes" + response);
-        //     alert("Upload success!" + JSON.stringify(response));
-        //     // this.setState({ post: null });
-        //   })
-        //   .catch(error => {
-        //     // console.log("upload error" + error);
-        //     // alert("Upload failed!" + error);
-        //   });

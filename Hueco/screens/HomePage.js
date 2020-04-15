@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Ionicon from '../components/Ionicon';
 import AddOptionModal from '../components/Modals/AddOptions';
 import AddPostModal from '../components/Modals/CreatePost';
+import AddTickModal from '../components/Modals/CreateTick';
 import {app_styles} from '../assets/styles/universal';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/requests'
@@ -47,7 +48,6 @@ class HomeScreen extends Component {
       modalAddPost: false,});
   }
   createTick = () => {
-    alert('creating tick')
     this.setState({
       modalAddVisable: false, 
       modalAddTick: true,
@@ -170,6 +170,10 @@ class HomeScreen extends Component {
             />
             <AddPostModal 
               modalVisible={modalAddPost}
+              closeModal={() => this.closeAllModals()} 
+            />
+            <AddTickModal 
+              modalVisible={modalAddTick}
               closeModal={() => this.closeAllModals()} 
             />
           </View>

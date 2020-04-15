@@ -14,7 +14,8 @@ import { Tooltip, Rating } from 'react-native-elements';
 
 import Icon from '../Ionicon';
 import StatView from '../UserStatView';
-import Settings from './Settings/Settings'
+import Settings from './Settings/Settings';
+import AddTickModal from '../Modals/CreateTick';
 import { fetchGet, fetchPost } from '../../functions/api'
 
 const windowWidth = Dimensions.get('window').width;
@@ -37,11 +38,10 @@ class Profile extends Component {
             data: null,
             mine: false,
             settingModalVisable: false,
+            tickModal: false,
             pic_loaded: false,
         };
     }
-
-
 
     followUser(id){
         let { data } = this.state;
@@ -68,30 +68,31 @@ class Profile extends Component {
             let response = await fetchGet('routes/' + propsData.id + '/')
             let data = {
                 full_name: null, date_joined: null, 
-                stars: null, setter: null, 
+                stars: null, setter: null, id: null,
                 rating: null, route_type: null,
-                pitches: null,
+                pitches: null, wall: null,
                 profile: 
                     {
                         profile_picture: null, 
                         description: null, sends: 10
                     }
             }
+            data.id = response.id;
             data.profile.profile_picture = response.img_url;
-            data.full_name = response.name
-            data.rating = response.rating
-            data.stars = response.stars
-            data.setter = response.setter
-            data.route_type = response.route_type
-            data.pitches = response.pitches
-            data.date_joined = response.set_date
-            this.setState({data})
-            //Check if it is the users route
-
+            data.full_name = response.name;
+            data.rating = response.rating;
+            data.stars = response.stars;
+            data.setter = response.setter;
+            data.wall = response.wall;
+            data.route_type = response.route_type;
+            data.pitches = response.pitches;
+            data.date_joined = response.set_date;
+            this.setState({data});
+            //Check if user owns the route
         }
     }
     render() {
-        let { mine, data, settingModalVisable, pic_loaded, type } = this.state
+        let { mine, data, settingModalVisable, tickModal, pic_loaded, type } = this.state
         return (
             <View>
                 {data && 
@@ -128,19 +129,26 @@ class Profile extends Component {
                                     </View>
                                 : 
                                 <View>
-                                {type == 'user' &&
+                                {type == 'user' ?
                                     <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5, flexDirection: 'row'}}>
                                         {data.profile.is_following ? 
-                                        <TouchableOpacity onPress={() => this.followUser(data.id)}>
-                                            <Text style={styles.unFollowButton}>UnFollow</Text>
-                                        </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => this.followUser(data.id)}>
+                                                <Text style={styles.unFollowButton}>UnFollow</Text>
+                                            </TouchableOpacity>
                                         : 
-                                        <TouchableOpacity onPress={() => this.followUser(data.id)}>
-                                            <Text style={styles.followButton}>Follow</Text>
-                                        </TouchableOpacity> 
+                                            <TouchableOpacity onPress={() => this.followUser(data.id)}>
+                                                <Text style={styles.followButton}>Follow</Text>
+                                            </TouchableOpacity> 
                                         }
-                                    
-                                    
+                                    </View>
+                                    :
+                                    <View style={{justifyContent: 'center', paddingLeft: 5, alignItems: 'center'}}>
+                                        <TouchableOpacity
+                                            onPress={() => this.setState({tickModal: true})}
+                                            style={{justifyContent: 'center'}}
+                                        >
+                                            <Text style={styles.followButton}>Add Tick</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 }
                                 </View>
@@ -203,6 +211,7 @@ class Profile extends Component {
                                 }
                                 {type == 'route' &&
                                     <View>
+                                        <Text style={styles.userInfo}>Wall: {data.wall.name}</Text>
                                         <Text style={styles.userInfo}>Grade: {data.rating}</Text>
                                         <Text style={styles.userInfo}>Type: {data.route_type}</Text>
                                         {data.pitches && (data.pitches > 1) && <Text style={styles.userInfo}>Pitches: {data.pitches}</Text>}
@@ -239,6 +248,13 @@ class Profile extends Component {
                         modalVisable={settingModalVisable} 
                         close={() => this.setState({settingModalVisable: false})} 
                         data={data}
+                    />
+                }
+                {tickModal && 
+                    <AddTickModal 
+                        modalVisible={tickModal}
+                        closeModal={() => this.setState({tickModal: false})} 
+                        data={{id: data.id, name: data.full_name, wall: data.wall.name}}
                     />
                 }
             </View>
@@ -281,7 +297,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     followButton: {
-        color: 'green',
+        color: 'white',
         padding: 5,
         backgroundColor: 'dodgerblue',
         borderRadius: 5,
