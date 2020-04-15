@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 
+import {fetchGet } from '../../functions/api';
 import ViewPost from '../Modals/ViewPost';
 import Icon from '../Ionicon';
 import ImageLoader from '../ImageWithLoader';
@@ -24,8 +25,6 @@ class Posts extends Component {
             userData: this.props.user,
             id: this.props.id,
             type: this.props.type,
-            baseAPI: "http://3.133.123.120:8000/api/v1/",
-            // For New API call
             dataFetched: false,
             fetchData: {count: 0, results: []},
             prevData: false, 
@@ -35,9 +34,17 @@ class Posts extends Component {
         }
     }
     async componentDidMount(){
-        let {baseAPI, id, type} = this.state;
-        if(type == 'user'){this.loadPostData(baseAPI + 'post/?user=' + id)}
-        // else{this.loadPostData('route/media/?id=' + id)}
+        let { id, type } = this.state;
+        if(type == 'user'){
+            let response = await fetchGet('post/?user=' + id)
+            this.setState({dataFetched: true, fetchData: response, prevData: response.previous, nextData: response.next})
+        }
+        else{
+            let response = await fetchGet('routes/' + id + '/data/')
+            response = response.media
+            console.log('resposne in Posts.js', response)
+        
+        }
     }
 
     async loadPostData(apiPath){
