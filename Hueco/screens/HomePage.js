@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
+import { FAB, Portal, Provider } from 'react-native-paper';
 
 //Import files/componenets
-import Ionicon from '../components/Ionicon';
-import AddOptionModal from '../components/Modals/AddOptions';
 import AddPostModal from '../components/Modals/CreatePost';
 import AddTickModal from '../components/Modals/CreateTick';
 import {app_styles} from '../assets/styles/universal';
@@ -27,7 +26,6 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
         login: this.props.login,
-        modalAddVisable: false,
         modalAddTick: false,
         modalAddPost: false,
         data: null,
@@ -38,26 +36,11 @@ class HomeScreen extends Component {
         userModal: false,
         initialLoad: true,
         baseAPI: this.props.api.baseAPI,
+        open: false,
 
     };
   }
-  closeAllModals = () => {
-    this.setState({
-      modalAddVisable: false, 
-      modalAddTick: false,
-      modalAddPost: false,});
-  }
-  createTick = () => {
-    this.setState({
-      modalAddVisable: false, 
-      modalAddTick: true,
-    });
-  }
-  createPost = () => {
-    this.setState({
-      modalAddVisable: false, 
-      modalAddPost: true,});
-  }
+
   refreshPosts(){
     this.setState({refreshingPosts: true})
     this.fetchPostData()
@@ -114,7 +97,7 @@ class HomeScreen extends Component {
       this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
   }
   render(){
-    let {modalAddVisable, modalAddPost, modalAddTick, refreshingPosts, data, initialLoad} = this.state
+    let {modalAddPost, modalAddTick, refreshingPosts, data, initialLoad, open} = this.state
     return (
         <View style={app_styles.screen}>
             <View style={{alignItems: 'center', height: '100%'}}>
@@ -147,36 +130,28 @@ class HomeScreen extends Component {
                 }
             </View>
 
-              
-
-
-
-
-            {/* <SocialMedia />
-            <Text>{"\n"}{"\n"}</Text>Breaks needed so social media does not get covered by nav bar */}
-
-        {/* Create Post Button */}
-          <View style={styles.addButton}>
-            <TouchableOpacity onPress={() => this.setState({modalAddVisable: true})}>
-                <Ionicon color={'cornflowerblue'} name={'add-circle'} size={60}/>
-            </TouchableOpacity>
-          </View>
+          {/* All the modals you can open */}
           <View>
-            <AddOptionModal 
-              createPost={() => this.createPost()}
-              createTick={() => this.createTick()}
-              closeModal={() => this.closeAllModals()} 
-              modalVisible={modalAddVisable}
-            />
             <AddPostModal 
               modalVisible={modalAddPost}
-              closeModal={() => this.closeAllModals()} 
+              closeModal={() => this.setState({modalAddPost: false})} 
             />
             <AddTickModal 
               modalVisible={modalAddTick}
-              closeModal={() => this.closeAllModals()} 
+              closeModal={() => this.setState({modalAddTick: false})} 
             />
           </View>
+          <FAB.Group
+             open={open}
+             icon={open ? 'minus' : 'plus-outline'}
+             color={'white'}
+             fabStyle={{backgroundColor: 'cornflowerblue'}}
+             actions={[
+               { icon: 'camera', label: 'Create Post', onPress: () => this.setState({modalAddPost: true})},
+               { icon: 'map', label: 'Create Tick', onPress: () => this.setState({modalAddTick: true,})},
+             ]}
+             onStateChange={() => this.setState({open: !open})}
+           />
         </View>
 
     );
@@ -196,10 +171,4 @@ const styles = StyleSheet.create({
     borderColor:'black',
     margin:10,
   },
-  addButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    padding: 20,
-  }
 });
