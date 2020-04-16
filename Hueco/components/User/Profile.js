@@ -119,7 +119,7 @@ class Profile extends Component {
                 }
                 {data ? 
                         <View style={{paddingTop: 5, alignItems: 'center',}}>
-                            <View style={{flexDirection: 'row'}}>
+                            <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center'}}>
                                 <Text style={styles.name}> {data.full_name}</Text>
                                 {mine ? 
                                     <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 5}}>
@@ -160,12 +160,12 @@ class Profile extends Component {
                                     <View style={styles.flexInRow}>
                                         <Text style={styles.userInfo}>Rating: </Text>
                                         <Rating
-                                        type='star'
-                                        ratingCount={5}
-                                        imageSize={16}
-                                        readonly
-                                        startingValue={data.stars}
-                                        style={{justifyContent: 'center'}}
+                                            type='star'
+                                            ratingCount={5}
+                                            imageSize={16}
+                                            readonly
+                                            startingValue={data.stars}
+                                            style={{justifyContent: 'center'}}
                                         />
                                     </View>
                                 }
@@ -254,7 +254,11 @@ class Profile extends Component {
                     <AddTickModal 
                         modalVisible={tickModal}
                         closeModal={() => this.setState({tickModal: false})} 
-                        data={{id: data.id, name: data.full_name, wall: data.wall.name}}
+                        data={{
+                            id: data.id, name: data.full_name, 
+                            wall: data.wall.name, route_type: data.route_type,
+                            picture: data.profile.profile_picture
+                        }}
                     />
                 }
             </View>

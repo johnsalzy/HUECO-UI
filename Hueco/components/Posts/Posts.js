@@ -121,21 +121,21 @@ class Posts extends Component {
                 </View>
 
                 <View style={{flexDirection: 'row', paddingBottom: 20, padding: 5, width: '100%'}}>
-                    {prevData ? 
+                    {prevData && 
                         <TouchableOpacity 
                             onPress={() => this.viewPrevResults(fetchData.previous)}
                         >
                             <Icon name={'skip-previous'} color={'dodgerblue'} size={30}/>
                         </TouchableOpacity> 
-                    : null}
-                    {nextData ? 
+                    }
+                    {nextData && 
                         <TouchableOpacity 
                             onPress={() => this.viewNextResults(fetchData.next)} 
                             style={{ marginLeft: 'auto'}}
                         >
                             <Icon name={'skip-next'} color={'dodgerblue'} size={30}/>
                         </TouchableOpacity> 
-                    : null}
+                    }
                 </View>
             </View>
         );
