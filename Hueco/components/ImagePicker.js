@@ -17,7 +17,6 @@ export default class MediaPickerComp extends React.Component {
     super(props);
     this.state = {
       image: null,
-      displayMedia: this.props.display,
       type: this.props.type,
       caption: this.props.caption,
       result: {type: null},
@@ -51,7 +50,7 @@ export default class MediaPickerComp extends React.Component {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        quality: 1,  // 0-1(max)
+        quality: .8,  // 0-1(max)
         base64: true,
       });
     }
@@ -67,7 +66,7 @@ export default class MediaPickerComp extends React.Component {
   }
 
   render() {
-    let { image, result, caption, displayMedia } = this.state;
+    let { image, result, caption } = this.state;
     // alert(JSON.stringify(this.state))
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -77,7 +76,7 @@ export default class MediaPickerComp extends React.Component {
             {result.type == 'image' &&
                 <View>
                     <View style={styles.image}>
-                        <Image source={{ uri: image }} style={{ width: windowWidth*.7, height: windowHeight*.6 }} />
+                        <Image source={{ uri: image }} style={{ width: windowWidth*.94, height: windowWidth*.94 }} />
                     </View>
                     {caption && 
                       <TextInput style={styles.mediaDescription} 
