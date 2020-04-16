@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { FAB, Portal, Provider } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 
 //Import files/componenets
 import AddPostModal from '../components/Modals/CreatePost';
@@ -12,8 +12,6 @@ import { fetchGet } from '../functions/requests'
 import { updateAreaData } from '../redux/actions'
 
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 const mapStateToProps = state => (
   {
     login: state.login,
