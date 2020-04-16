@@ -35,6 +35,7 @@ class Settings extends Component {
         this.props.dispatch(logoutUser(this.state.username))
         this.props.dispatch(clearProfile(this.state.username))
         this.setState({profileDataLoaded: false})
+        this.props.close()
     }
 
     
