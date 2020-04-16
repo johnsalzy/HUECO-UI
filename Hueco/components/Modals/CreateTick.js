@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 import Icon from '../Ionicon';
 import TagRoute from '../Tags/tagRoute';
 import ImageWithLoader from '../ImageWithLoader';
-
+import { fetchGet, fetchPost } from '../../functions/api'
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -40,16 +40,26 @@ class CreateTick extends Component {
             modalVisible: this.props.modalVisible,
             data: this.props.data,
             login: this.props.login,
-            taggedRoute: null,
-            tagRoute: false,
+            tagRoute: true,
             caption: null,
             response: null,
             date: Date.now(),
             showDatePicker: false,
             checked: 'first',
-            rating: 2.5,
+            rating: 3,
+            taggedRoute: null
         };
     }
+
+    async chooseRoute(taggedRoute){
+        this.setState({data: {
+            id: taggedRoute.id, 
+            picture: taggedRoute.img_url,
+            name: taggedRoute.name,
+            wall: taggedRoute.wall.name
+        }})
+    }
+
     updateDate(date){
         console.log('date', date)
         if(date.type == "set"){
@@ -62,7 +72,7 @@ class CreateTick extends Component {
         //close modal
     }
     render() {
-        let { tagRoute, data, taggedRoute, showDatePicker, date, checked, rating } = this.state;
+        let { tagRoute, data, showDatePicker, date, checked, rating } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -130,7 +140,9 @@ class CreateTick extends Component {
                                                     status={checked === 'first' ? 'checked' : 'unchecked'}
                                                     onPress={() => { this.setState({ checked: 'first' }); }}
                                                 />
-                                                <Text>On Sight</Text>
+                                                <Tooltip popover={<Text>To climb a route clean first time from bottom to top in one continual flow, placing your own equipment or clipping the bolts with no falls and no resting on the rope.</Text>}>
+                                                    <Text>On Sight</Text>
+                                                </Tooltip>
                                             </View>
                                             <View style={styles.radioButton}>
                                                 <RadioButton
@@ -138,7 +150,9 @@ class CreateTick extends Component {
                                                     status={checked === 'second' ? 'checked' : 'unchecked'}
                                                     onPress={() => { this.setState({ checked: 'second' }); }}
                                                 />
-                                                <Text>Flash</Text>
+                                                <Tooltip popover={<Text>Climbing a route clean with prior knowledge and/or equipment already in place.</Text>}>
+                                                    <Text>Flash</Text>
+                                                </Tooltip>
                                             </View>
                                             <View style={styles.radioButton}>
                                                 <RadioButton
@@ -152,12 +166,12 @@ class CreateTick extends Component {
                                         {/* Section to make rating */}
                                         <View>
                                             <Text style={styles.title}>Rating</Text>
-                                            <View style={{alignItems: 'flex-start', marginTop: -50}}>
+                                            <View style={{alignItems: 'flex-start'}}>
                                                 <AirbnbRating 
                                                     type='star'
                                                     count={5}
                                                     size={25}
-                                                    reviews={[]}
+                                                    style={{marginTop: '-100%'}}
                                                     defaultRating={rating}
                                                     onFinishRating={(rating) => this.setState({rating: rating})}
                                                 />
@@ -166,17 +180,15 @@ class CreateTick extends Component {
                                     
                                     </View>
                                 :
-                                    <View>
-                                        <Text style={styles.text}>Tag A Route</Text>
-                                        <View style={styles.flexRow}>
-                                            <TouchableOpacity onPress={() => this.setState({tagRoute: !tagRoute})}>
-                                                <Icon size={30} color='dodgerblue' name='map'/>
-                                            </TouchableOpacity>
-                                        </View>
+                                    <View style={{alignItems: 'flex-start', marginRight: 'auto'}}>
+                                        <Text style={styles.text}>Search A Route</Text>
+                                        <TouchableOpacity onPress={() => this.setState({tagRoute: !tagRoute})}>
+                                            <Icon size={30} color='dodgerblue' name='map'/>
+                                        </TouchableOpacity>
+
                                         {tagRoute && 
                                             <TagRoute 
-                                                currentlyTagged={taggedRoute}
-                                                updateRouteTag={(id) => this.setState({taggedRoute: id})}
+                                                updateRouteTag={(data) => this.chooseRoute(data)}
                                                 closeRoute={() => this.setState({tagRoute: false})}
                                             />
                                         }

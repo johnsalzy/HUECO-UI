@@ -130,14 +130,18 @@ class HomeScreen extends Component {
 
           {/* All the modals you can open */}
           <View>
-            <AddPostModal 
-              modalVisible={modalAddPost}
-              closeModal={() => this.setState({modalAddPost: false})} 
-            />
-            <AddTickModal 
-              modalVisible={modalAddTick}
-              closeModal={() => this.setState({modalAddTick: false})} 
-            />
+            {modalAddPost && 
+              <AddPostModal 
+                modalVisible={modalAddPost}
+                closeModal={() => this.setState({modalAddPost: false})} 
+              />
+            }
+            {modalAddTick && 
+              <AddTickModal 
+                modalVisible={modalAddTick}
+                closeModal={() => this.setState({modalAddTick: false})} 
+              />
+            }
           </View>
           <FAB.Group
              open={open}

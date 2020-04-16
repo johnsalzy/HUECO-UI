@@ -72,7 +72,7 @@ class TagRoute extends Component {
                 alert('You cannot tag more than one route')
                 return
             } else {
-                this.props.updateRouteTag({id: data.id, name: data.name, img_url: data.img_url})
+                this.props.updateRouteTag({id: data.id, name: data.name, img_url: data.img_url, wall: data.wall.name, route_type: data.route_type})
             }
         } else {
             this.props.updateRouteTag(null)
