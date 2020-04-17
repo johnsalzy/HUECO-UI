@@ -6,7 +6,7 @@ async function handleError(err){
   return null
 }
 
-async function checkToken(state){
+function checkToken(state){
     let experation = state.login.expires
     const now = Date.now()/1000;
     
@@ -45,7 +45,11 @@ export async function fetchGet(apiRoute) {
   const state = store.getState();     // grab current state
   const baseAPI = state.api.baseAPI
   const access_token = await checkToken(state)
-  let response = await fetch(baseAPI + apiRoute, {
+  if(! apiRoute.includes(baseAPI)){
+    apiRoute = baseAPI + apiRoute
+  }
+
+  let response = await fetch(apiRoute, {
     headers: {
         'Authorization': 'Bearer ' + access_token,
     }
@@ -59,7 +63,6 @@ export async function fetchGet(apiRoute) {
 export async function fetchPost(apiRoute, body){
   const state = store.getState();
   const baseAPI = state.api.baseAPI
-  
   const access_token = checkToken(state)
   let response = await fetch(baseAPI + apiRoute, {
       method: 'POST',
