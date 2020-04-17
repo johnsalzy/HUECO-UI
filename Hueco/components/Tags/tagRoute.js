@@ -84,7 +84,7 @@ class TagRoute extends Component {
         let search_bonus = ""
         if(selected_area != null){
             placeholder = 'Search Routes In ' + selected_area.area.name
-            search_bonus = selected_area.area.id
+            search_bonus = '&area=' + selected_area.area.id
         } else {
             placeholder = 'Search Routes By Name'
         }
@@ -116,7 +116,7 @@ class TagRoute extends Component {
                     </View>
                     <View style={{paddingLeft: 2, width: '20%'}}>
                         <TouchableOpacity 
-                            onPress={() => this.loadData('routes/?name=' + route_name + '&area='+ search_bonus)}
+                            onPress={() => this.loadData('routes/?name=' + route_name + search_bonus)}
                         >
                             <Text style={buttons.searchText}>Search</Text>
                         </TouchableOpacity>
