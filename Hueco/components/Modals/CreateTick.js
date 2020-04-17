@@ -17,7 +17,6 @@ import { RadioButton } from 'react-native-paper';
 import { Tooltip, AirbnbRating  } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns'
-import {connect} from 'react-redux';
 
 //Import Screens/Components/Styles
 import Icon from '../Ionicon';
@@ -27,11 +26,7 @@ import { fetchGet, fetchPost } from '../../functions/api'
 
 
 const windowWidth = Dimensions.get('window').width;
-const mapStateToProps = state => (
-    {
-    login: state.login
-    }
-)
+
 
 class CreateTick extends Component {
     constructor(props){
@@ -39,15 +34,13 @@ class CreateTick extends Component {
         this.state = {
             modalVisible: this.props.modalVisible,
             data: this.props.data,
-            login: this.props.login,
             tagRoute: true,
-            caption: null,
-            response: null,
-            date: Date.now(),
+            date: new Date(Date.now()),
             showDatePicker: false,
-            checked: 'first',
+            checked: 'onsight',
             rating: 3,
-            taggedRoute: null
+            canSubmit: false,
+            taggedRoute: null,
         };
     }
 
@@ -56,23 +49,39 @@ class CreateTick extends Component {
             id: taggedRoute.id, 
             picture: taggedRoute.img_url,
             name: taggedRoute.name,
-            wall: taggedRoute.wall.name
+            wall: taggedRoute.wall
         }})
     }
 
-    updateDate(date){
-        console.log('date', date)
-        if(date.type == "set"){
-            date = date.nativeEvent.timestamp
-            this.setState({date: date, showDatePicker: false})
+    onChange = (event, selectedDate) => {
+        if(Platform.OS === 'ios'){
+            const currentDate = selectedDate || date;
+            this.setState({date: currentDate})
+        } else {
+            if(event.type == 'set'){
+                const currentDate = selectedDate || date;
+                console.log('currentData' + currentDate, 'event', event)
+                this.setState({date: currentDate, showDatePicker: false})
+            } else {
+                this.setState({showDatePicker: false})
+            }
         }
-    }
+        
+        // setShow(Platform.OS === 'ios');
+        // setDate(currentDate);
+      };
+
     submitTick(){
-        alert('submit tick')
-        //close modal
+        let { data, rating, checked, date } = this.state
+
+ 
+        // Call api route to submit tick
+        this.props.closeModal()
+
+
     }
     render() {
-        let { tagRoute, data, showDatePicker, date, checked, rating } = this.state;
+        let { tagRoute, data, showDatePicker, date, checked, rating, canSubmit } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -113,7 +122,7 @@ class CreateTick extends Component {
                                         <View>
                                             <Text style={styles.title}>Date</Text>
                                             <TouchableOpacity
-                                                onPress={() => this.setState({showDatePicker: true})}
+                                                onPress={() => this.setState({showDatePicker: !showDatePicker})}
                                             >
                                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                                     <Icon size={40} color='cornflowerblue' name='today'/>
@@ -125,8 +134,9 @@ class CreateTick extends Component {
                                                     value={date}
                                                     mode={"date"}
                                                     display="default"
-                                                    onChange={(date) => this.updateDate(date)}
+                                                    onChange={(event, selectedDate) => this.onChange(event, selectedDate)}
                                                     maximumDate={Date.now()}
+                                                    onTouchCancel={() => alert('cancel')}
                                                 />
                                             }
                                         </View>
@@ -136,9 +146,9 @@ class CreateTick extends Component {
                                             <Text style={styles.title}>Ascent Type</Text>
                                             <View style={styles.radioButton}>
                                                 <RadioButton
-                                                    value="first"
-                                                    status={checked === 'first' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'first' }); }}
+                                                    value="onsight"
+                                                    status={checked === 'onsight' ? 'checked' : 'unchecked'}
+                                                    onPress={() => { this.setState({ checked: 'onsight', canSubmit: true }); }}
                                                 />
                                                 <Tooltip popover={<Text>To climb a route clean first time from bottom to top in one continual flow, placing your own equipment or clipping the bolts with no falls and no resting on the rope.</Text>}>
                                                     <Text>On Sight</Text>
@@ -146,9 +156,9 @@ class CreateTick extends Component {
                                             </View>
                                             <View style={styles.radioButton}>
                                                 <RadioButton
-                                                    value="second"
-                                                    status={checked === 'second' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'second' }); }}
+                                                    value="flash"
+                                                    status={checked === 'flash' ? 'checked' : 'unchecked'}
+                                                    onPress={() => { this.setState({ checked: 'flash', canSubmit: true }); }}
                                                 />
                                                 <Tooltip popover={<Text>Climbing a route clean with prior knowledge and/or equipment already in place.</Text>}>
                                                     <Text>Flash</Text>
@@ -156,9 +166,9 @@ class CreateTick extends Component {
                                             </View>
                                             <View style={styles.radioButton}>
                                                 <RadioButton
-                                                    value="third"
-                                                    status={checked === 'third' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'third' }); }}
+                                                    value="fell_hung"
+                                                    status={checked === 'fell_hung' ? 'checked' : 'unchecked'}
+                                                    onPress={() => { this.setState({ checked: 'fell_hung', canSubmit: true }); }}
                                                 />
                                                 <Text>Fell / Hung</Text>
                                             </View>
@@ -171,13 +181,21 @@ class CreateTick extends Component {
                                                     type='star'
                                                     count={5}
                                                     size={25}
-                                                    style={{marginTop: '-100%'}}
                                                     defaultRating={rating}
-                                                    onFinishRating={(rating) => this.setState({rating: rating})}
+                                                    onFinishRating={(rating) => this.setState({rating: rating, canSubmit: true })}
                                                 />
                                             </View>
                                         </View>
-                                    
+
+                                        {/* Section to submit */}
+                                        <View style={{alignItems: 'center', marginTop: 15}}>
+                                            <TouchableOpacity
+                                                style={styles.add}
+                                                onPress={() => this.submitTick()}
+                                            >
+                                                <Text style={{textAlign: 'center', color: 'white', fontSize: 20, fontWeight: 'bold', textAlignVertical: 'center'}}>Submit</Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                 :
                                     <View style={{alignItems: 'flex-start', marginRight: 'auto'}}>
@@ -195,14 +213,8 @@ class CreateTick extends Component {
                                     </View>
                                 }
                                 
-                                <TouchableOpacity
-                                    style={{marginTop: 15}}
-                                    onPress={() => this.submitTick()}
-                                >
-                                    <Text style={styles.add}>
-                                        Submit
-                                    </Text>
-                                </TouchableOpacity>
+                                    
+                                
                             </View>
                         </ScrollView>
                     </View>
@@ -210,7 +222,7 @@ class CreateTick extends Component {
         );
     }
 }
-export default connect(mapStateToProps)(CreateTick);
+export default CreateTick;
 
 
 const styles = StyleSheet.create({
@@ -250,6 +262,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         textAlignVertical: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         textAlign: 'center',
         height: 50,
         width: 200
