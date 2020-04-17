@@ -232,7 +232,7 @@ class MediaFilter extends Component {
                                 }
 
                                 {/* Section to display comments/title */}
-                                <View style={{marginTop: 5, marginBottom: 30}}>
+                                <View style={{marginTop: 5, marginBottom: 30, width: '100%'}}>
                                     <Text style={styles.postDetails}>Comments</Text>
                                     <View style={{flexDirection:'row'}}>
                                         <TouchableOpacity 
@@ -240,17 +240,17 @@ class MediaFilter extends Component {
                                         >
                                             <Text style={styles.postDetails}>@{data.user.username} </Text> 
                                         </TouchableOpacity>
-                                        <Text>{data.text}</Text>
+                                        <Text style={{width: '90%'}}>{data.text}</Text>
                                     </View>
                                     {data.comment_count > 0 && 
                                         data.comments.map((data, index) => (
-                                        <View key={index} style={{marginTop: 5, flexDirection:'row'}}>
+                                        <View key={index} style={{marginTop: 5, flexDirection:'row', width: '100%'}}>
                                             <TouchableOpacity 
                                                 onPress={() => this.openDataPage(data.user.id,'user')}
                                             >
                                                 <Text style={styles.postDetails}>@{data.user.username} </Text>
                                             </TouchableOpacity>
-                                            <Text>{data.text}</Text>
+                                            <Text style={{width: '90%'}}>{data.text}</Text>
                                         </View>
                                         ))
                                     }
