@@ -24,15 +24,16 @@ const buttons = StyleSheet.create({
         textAlign: 'center',
     },
     searchText: {
-        padding: 4,
         borderRadius: 4,
         borderWidth: 2,
         borderColor: 'black',
         backgroundColor: 'lightblue',
-        justifyContent: 'center',
         textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         fontWeight: 'bold',
         fontSize: 15,
+        lineHeight: 31
     },
     add: {
         padding: 2,
@@ -84,11 +85,14 @@ const text_input = StyleSheet.create({
         color: 'black',
     },
     search:{
+        padding: 4,
+        fontSize: 15,
         borderWidth: 2,
         backgroundColor: 'lightskyblue',
         borderColor: 'black',
         borderRadius: 4,
         paddingLeft: 10,
+        height: 35
     },
 })
 
