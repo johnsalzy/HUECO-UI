@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 
 import WrapComp from '../components/Search/Wrap'
 import {app_styles} from '../assets/styles/universal'
+import { fetchGet } from '../functions/api';
 // import { updateSearchData } from '../redux/actions'
 const mapStateToProps = state => (
   {
@@ -34,30 +35,16 @@ class SearchScreen extends React.Component {
         this.updateIndex = this.updateIndex.bind(this)
     }
     
-    async loadUserData(apiPath, type){
+    async loadUserData(apiPath){
         let {access_token} = this.state
         this.setState({dataFetched: false, loading: true, prevData: false, nextData: false})
-        try {
-          //Assign the promise unresolved first then get the data using the json method.
-          await fetch(apiPath, {
-            headers: {
-                'Authorization': 'Bearer ' + access_token,
-            }
-          })
-          .then((response) => response.json())
-          .then((responseData) => {
-              this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next, loading: false})
-            //   this.props.dispatch(updateSearchData(responseData, type))
-          })
-          .done();
-        } catch(err) {
-            alert("Error with data -----------" + err);
-        }
+        let responseData = await(fetchGet(apiPath))
+        this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next, loading: false})
     }
 
     searchItem = () => {
-        let {search, searchCat, baseAPI} = this.state
-        let apiRoute = baseAPI
+        let {search, searchCat} = this.state
+        let apiRoute = ''
         let type= ''
         if(searchCat == "Users"){
             apiRoute = apiRoute + 'users/?search=' + search
@@ -72,7 +59,7 @@ class SearchScreen extends React.Component {
             apiRoute = apiRoute + 'routes/?name=' + search
             type = 'Routes'
         }
-        this.loadUserData(apiRoute, type)
+        this.loadUserData(apiRoute)
 
     };
     updateSearch = search => {

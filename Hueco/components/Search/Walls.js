@@ -18,7 +18,7 @@ class WallView extends React.Component {
         let {data} = this.state
         return (
             <View style={app_styles.background}>
-                {data.count > 0 ?
+                {data.results.length > 0 ?
                     data.results.map((data, index) => (
                         <View key={index} style={styles.container}>
                             <View style={search_results.resultContainer}>
