@@ -9,6 +9,8 @@ import { buttons } from '../../assets/styles/styles';
 import {search_results} from '../../assets/styles/styles'
 import {fetchDelete, fetchPost} from '../../functions/api'
 import Icon from '../Ionicon';
+import AreaModal from '../Modals/AreaModal';
+import { updateAreaData } from '../../redux/actions'
 
 const mapStateToProps = state => (
   {
@@ -26,74 +28,83 @@ class DisplayArea extends React.Component {
         subscribed: this.props.subscribed,
         selected: this.props.selected,
         response: null,
+        areaModal: false,
     };
   }
   render(){
-    let { data, subscribed} = this.state;
+    let { data, subscribed, areaModal } = this.state;
     return(
-      <TouchableOpacity
-        onPress={() => alert('open area modal for ' + data.id)}
-      >
-        <View style={styles.container}>
-            <View style={search_results.resultContainer}>
-                <View style={styles.headerContent}>
-                    <View>
-                      <View style={{flexDirection: 'row', width: '100%',}}>
-                        <Text style={styles.name}>{data.name}</Text>
-                        {this.props.selected && 
-                          <Tooltip popover={<Text>Pinned As Main Area</Text>}>
-                            <Icon name={'place'} size={30} color={'cornflowerblue'}/>
-                          </Tooltip>
-                        }
-                      </View>
-                      
-                      <View style={{alignItems: 'center', alignSelf: 'center'}}>
-                        {subscribed ? 
-                          <View>
-                            <TouchableOpacity
-                                style={buttons.delete}
-                                onPress={() => this.props.subscribe(data, 'leave')}
-                            >
-                              <Text style={styles.textButton}>Remove Pin</Text>
-                            </TouchableOpacity>
-                            {! this.props.selected && 
-                              <View style={{paddingTop: 5}}>
-                                <TouchableOpacity
-                                  style={buttons.add}
-                                  onPress={() => this.props.setMain(data.id)}
-                                >
-                                  <Text style={styles.textButton}>Pin as Main Area</Text>
-                                </TouchableOpacity>
-                              </View>
-                            }
-                            
-                          </View>
-                        :
+      <View>
+        <TouchableOpacity
+          onPress={() => this.setState({areaModal: true})}
+        >
+          <View style={styles.container}>
+              <View style={search_results.resultContainer}>
+                  <View style={styles.headerContent}>
+                      <View>
+                        <View style={{flexDirection: 'row', width: '100%',}}>
+                          <Text style={styles.name}>{data.name}</Text>
+                          {this.props.selected && 
+                            <Tooltip popover={<Text>Pinned As Main Area</Text>}>
+                              <Icon name={'place'} size={30} color={'cornflowerblue'}/>
+                            </Tooltip>
+                          }
+                        </View>
+                        
+                        <View style={{alignItems: 'center', alignSelf: 'center'}}>
+                          {subscribed ? 
                             <View>
-                                <TouchableOpacity
+                              <TouchableOpacity
+                                  style={buttons.delete}
+                                  onPress={() => this.props.subscribe(data, 'leave')}
+                              >
+                                <Text style={styles.textButton}>Remove Pin</Text>
+                              </TouchableOpacity>
+                              {! this.props.selected && 
+                                <View style={{paddingTop: 5}}>
+                                  <TouchableOpacity
                                     style={buttons.add}
-                                    onPress={() => this.props.subscribe(data, 'join')}
-                                >
-                                  <Text style={styles.textButton}> Pin Area </Text>
-                                </TouchableOpacity>
+                                    onPress={() => this.props.setMain(data.id)}
+                                  >
+                                    <Text style={styles.textButton}>Pin as Main Area</Text>
+                                  </TouchableOpacity>
+                                </View>
+                              }
+                              
                             </View>
-                        }
+                          :
+                              <View>
+                                  <TouchableOpacity
+                                      style={buttons.add}
+                                      onPress={() => this.props.subscribe(data, 'join')}
+                                  >
+                                    <Text style={styles.textButton}> Pin Area </Text>
+                                  </TouchableOpacity>
+                              </View>
+                          }
+                        </View>
                       </View>
-                    </View>
 
-                    {data.location ? 
-                      <Text style={styles.userInfo}>Location: {data.location} </Text>
-                    :
-                    <Text style={styles.userInfo}>Location: Unknown</Text>
-                    }
-                    {data.description && 
-                      <Text style={styles.userInfo}>Description: {data.description} </Text>
-                    }
-                </View>
-            </View>
-        </View>
-      </TouchableOpacity>
-
+                      {data.location ? 
+                        <Text style={styles.userInfo}>Location: {data.location} </Text>
+                      :
+                      <Text style={styles.userInfo}>Location: Unknown</Text>
+                      }
+                      {data.description && 
+                        <Text style={styles.userInfo}>Description: {data.description} </Text>
+                      }
+                  </View>
+              </View>
+          </View>
+        </TouchableOpacity>
+        {areaModal && 
+          <AreaModal 
+            data={data} 
+            closeModal={() => this.setState({areaModal: false})} 
+            modalVisable={areaModal}
+          />
+          }
+      </View>
     );
   }
 }
@@ -109,7 +120,6 @@ class AreaView extends React.Component {
 
     }
     async setMainArea(id){
-      //Update props, state
       let { areas } = this.state;
       for (var i=0; i < areas.area_data.length; i++) {
 
@@ -124,7 +134,8 @@ class AreaView extends React.Component {
       let body = {selected: true, area: id}
       let response = await fetchPost(apiRoute, body)
       this.setState({areas, response: response})
-
+      console.log('Area.js Updating new main area')
+      this.props.dispatch(updateAreaData(areas.area_data))
     }
 
     async subscribeToArea(data, type){
@@ -142,8 +153,6 @@ class AreaView extends React.Component {
             return
           }
         }
-        
-        
         if(area_count == 0){
           selected = true
         } else if (area_count >= 10) {
@@ -156,28 +165,31 @@ class AreaView extends React.Component {
         let newData = {selected: selected, area: data.id}
         let response = await fetchPost(apiRoute, newData)
         this.setState({areas, response: response})
-        // Update props
-
+        this.props.dispatch(updateAreaData(areas.area_data))
       } else {
         // TO LEAVE AN AREA
         for (var i=0; i < areas.area_data.length; i++) {
+          console.log('Area.js deleting' + data.id)
           if(areas.area_data[i].area.id == data.id){
+            
             areas.area_data.splice(i, 1)
             // Remove selected area call
             apiRoute = 'user-areas/unsub/?area=' + data.id
             let response = await fetchDelete(apiRoute)
             this.setState({areas, response: response})
+            this.props.dispatch(updateAreaData(areas.area_data))
             break
           }
         }
       }
-      // Push update to props
+      
 
 
     }
 
     render(){
         let {data, areas} = this.state
+        console.log('Area.js areas', areas)
         return (
             <View style={{alignItems: 'center'}, app_styles.background}>
                 {data.count > 0 ?
