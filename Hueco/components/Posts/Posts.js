@@ -36,13 +36,12 @@ class Posts extends Component {
     async componentDidMount(){
         let { id, type } = this.state;
         if(type == 'user'){
-            let response = await fetchGet('post/?user=' + id)
+            let response = await fetchGet('post/media/?user=' + id)
             this.setState({dataFetched: true, fetchData: response, prevData: response.previous, nextData: response.next})
         }
         else{
-            let response = await fetchGet('routes/' + id + '/data/')
-            response = response.media
-            console.log('resposne in Posts.js', response)
+            let response = await fetchGet('post/media/?route=' + id)
+            this.setState({dataFetched: true, fetchData: response, prevData: response.previous, nextData: response.next})
         
         }
     }
