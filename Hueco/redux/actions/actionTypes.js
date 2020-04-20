@@ -10,8 +10,10 @@ export const LOGOUT_USER_NORMAL = 'LOGOUT_USER_NORMAL'
 export const REFRESH_TOKEN = 'REFRESH_TOKEN'
 
 
-// User data
-export const UPDATE_USER_DATA = 'UPDATE_USER_DATA'
+// User data'
+
+export const SET_USER_PROFILE = 'SET_USER_PROFILE'
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
 export const DELETE_USER_DATA = 'DELETE_USER_DATA'
 
 // Stat data

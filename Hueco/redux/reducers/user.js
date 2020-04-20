@@ -1,23 +1,18 @@
-const user = (state = {dataLoaded: false, name: '', private: true, location: '', profile_pic: ''}, action) => {
+const user = (state = { userProfile: null, needToUpdate: false}, action) => {
     switch (action.type) {
-        case 'UPDATE_USER_DATA':
+        case 'UPDATE_USER_PROFILE':
             return {
-                    dataLoaded: true,
-                    username: action.username,
-                    name: action.name,
-                    location: action.location,
-                    profile_pic: action.profile_pic,
-                    private: action.private,
-                }
-
+                ...state, 
+                needToUpdate: action.data,
+            }
+        case 'SET_USER_PROFILE':
+            return {
+                ...state, 
+                userProfile: action.data,
+            }
         case 'DELETE_USER_DATA':
             return {
-                username: '',
-                name: '',
-                location: '',
-                profile_pic: '',
-                private: true,
-                dataLoaded: false,
+                userProfile: null,
             }
         default:
             return state

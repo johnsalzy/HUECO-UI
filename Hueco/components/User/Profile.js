@@ -12,6 +12,7 @@ import {
 import {connect} from 'react-redux';
 import { Tooltip, Rating } from 'react-native-elements';
 
+import { setUserProfile, updateUserProfile } from '../../redux/actions'
 import Icon from '../Ionicon';
 import StatView from '../UserStatView';
 import Settings from './Settings/Settings';
@@ -25,6 +26,7 @@ const windowHeight = Dimensions.get('window').width;
 const mapStateToProps = state => (
     {
       login: state.login,
+      user: state.user,
     }
 )
 
@@ -34,6 +36,7 @@ class Profile extends Component {
         this.state = {
             login: this.props.login,
             propsData: this.props.data,
+            user: this.props.user,
             type: this.props.type,
             data: null,
             mine: false,
@@ -50,8 +53,19 @@ class Profile extends Component {
         data.profile.is_following = !data.profile.is_following;
         this.setState({data})
     }
-    async componentDidMount(){
+
+    async componentDidUpdate(){
+        let needToUpdate = this.props.user.needToUpdate;
+        if(needToUpdate){
+            this.props.dispatch(updateUserProfile(false))
+            let response = await fetchGet('users/me/')
+            this.setState({data: response})
+            this.props.dispatch(setUserProfile(response))
+        }
         
+    }
+
+    async componentDidMount(){
         let apiRoute = ''
         let { propsData, login, type } = this.state
         // Check if is me
@@ -59,11 +73,22 @@ class Profile extends Component {
             if(login.id == propsData.id){
                 this.setState({mine: true})
                 apiRoute = 'me/'
+                //Check if props has data
+                if(this.state.user.userProfile == null){
+                    let response = await fetchGet('users/' + apiRoute)
+                    this.setState({data: response})
+                    this.props.dispatch(setUserProfile(response))
+                }else {
+                    this.setState({data: this.state.user.userProfile})
+                }
             } else {
                 apiRoute = propsData.id + '/'
+                let response = await fetchGet('users/' + apiRoute)
+                this.setState({data: response})
+
             }
-            let response = await fetchGet('users/' + apiRoute)
-            this.setState({data: response})
+            
+
         } else {
             let response = await fetchGet('routes/' + propsData.id + '/')
             let data = {

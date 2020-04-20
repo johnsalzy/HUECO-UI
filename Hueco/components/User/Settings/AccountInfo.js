@@ -18,11 +18,13 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
 import { fetchGet, fetchPatchMedia } from '../../../functions/api'
+import { updateUserProfile } from '../../../redux/actions'
 import ImageWithLoader from '../../ImageWithLoader';
 
 const mapStateToProps = state => (
     {
       login: state.login,
+      user: state.user,
     }
 )
 
@@ -31,17 +33,17 @@ class AccountInfo extends Component {
         super(props);
         this.state = {
             login: this.props.login,
-            data: this.props.data, // Should contain current user data
+            data: this.props.user.userProfile, // Should contain current user data
             changes: false,
             error_change: false,
             error_text: '',
             loadingChange: false,
-            profile_pic: this.props.data.profile.profile_picture,
+            email: '',
             first_name: '',
             last_name: '',
-            email: '',
+            full_name: '',
+            profile_picture: this.props.data.profile.profile_picture,
             location: '',
-            password: null,
             description: '',
             media: null,
         };
@@ -50,8 +52,6 @@ class AccountInfo extends Component {
         this.setState({loadingChange: true, error_change: false})
         let { data, media, first_name, last_name, email, location, description } = this.state;   // Get new data
         let {orig_first_name, orig_last_name, orig_description, orig_location, orig_email} = this.state; // Get originals to compare
-
-        
         var formdata = new FormData();
         // ------------------ Validate all new data ------------------
         // If there is a error...
@@ -83,13 +83,10 @@ class AccountInfo extends Component {
             formdata.append("profile.profile_pic.media", {uri:uri, type:'image/jpeg', name:'fetchPost'});
             formdata.append("profile.profile_pic.media_type", media.type);
         }
-
         let apiRoute = 'users/' + data.id + '/'
         let response = await fetchPatchMedia(apiRoute, formdata)
-
-
-        
         // Update props
+        this.props.dispatch(updateUserProfile(true))
         this.setState({changes: false, response: response, loadingChange: false})
 
     }
@@ -98,11 +95,11 @@ class AccountInfo extends Component {
         let {data} = this.state
         // get all user info and set to check for changes later
         this.setState({
-            orig_profile_pic: data.profile.profile_picture,
+            orig_profile_picture: data.profile.profile_picture,
             orig_first_name: data.first_name,
             orig_last_name: data.last_name,
             orig_description: data.profile.description,
-            orig_email: null, // Waiting on api route
+            orig_email: data.profile.email, // Waiting on api route
             orig_location: data.profile.location,
         })
     }
@@ -123,13 +120,13 @@ class AccountInfo extends Component {
         });
 
         if (!result.cancelled) {
-            this.setState({media: result, profile_pic: result.uri, changes: true });
+            this.setState({media: result, profile_picture: result.uri, changes: true });
         }
     };
 
 
     render() {
-        let { data, profile_pic, error_change, changes, loadingChange } = this.state
+        let { data, profile_picture, error_change, changes, loadingChange } = this.state
         return (
             <View style={{alignSelf: 'center', width: '80%'}}>
                 {data && 
@@ -148,7 +145,7 @@ class AccountInfo extends Component {
                                 overflow: "hidden"
                             }}
                         >
-                            <ImageWithLoader uri={profile_pic}/>
+                            <ImageWithLoader uri={profile_picture}/>
                         </View>
                         <View>
                         </View>
