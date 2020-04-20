@@ -7,6 +7,7 @@ import { FAB } from 'react-native-paper';
 import AddPostModal from '../components/Modals/CreatePost';
 import AddTickModal from '../components/Modals/CreateTick';
 import {app_styles} from '../assets/styles/universal';
+import {details} from '../assets/styles/text';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/requests'
 import { updateAreaData } from '../redux/actions'
@@ -63,7 +64,7 @@ class HomeScreen extends Component {
     if (nextData==null){
       return(
         <View style={{paddingVertical: 10, alignItems:'center'}}>
-            <Text style={{fontSize: 20, color: 'cornflowerblue'}}>No More Posts ):</Text>
+            <Text style={details.not_found}>No More Posts ):</Text>
         </View>
       )
     }else if (!loading){
@@ -121,7 +122,7 @@ class HomeScreen extends Component {
                       {initialLoad ? 
                         <ActivityIndicator animating size="large"/>
                       :
-                        <Text>Can't load any posts ):</Text>
+                        <Text style={details.not_found}>Can't load any posts ):</Text>
                       }
                       
                     </View>
