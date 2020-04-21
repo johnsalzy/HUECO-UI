@@ -82,7 +82,7 @@ class MediaFilter extends Component {
                             <TouchableOpacity
                                 onPress={() => this.openDataPage(data.route.id, 'route')}
                             >
-                                <Text style={{fontSize: 15}}>{data.route.name} - {data.route.rating}</Text>
+                                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>{data.route.name} - {data.route.rating}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
