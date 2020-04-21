@@ -95,14 +95,15 @@ class AreaView extends Component {
                                             </View>
                                         }
                                     </View>
-                                    <TouchableOpacity 
-                                        onPress={() => this.props.closeModal()}
-                                        style={{marginRight: 'auto', position: 'absolute'}}
-                                    >
-                                        <Icon name={'arrow-back'} size={50} color={'firebrick'}/>
-                                    </TouchableOpacity>
+                                    
                                 </View>
                             </View>
+                            <TouchableOpacity 
+                                onPress={() => this.props.closeModal()}
+                                style={{marginRight: 'auto', position: 'absolute'}}
+                            >
+                                <Icon name={'arrow-back'} size={50} color={'firebrick'}/>
+                            </TouchableOpacity>
                         </View>
                     </TouchableWithoutFeedback>
                 </TouchableOpacity>
