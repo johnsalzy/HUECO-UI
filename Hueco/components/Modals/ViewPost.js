@@ -16,7 +16,7 @@ import {connect} from 'react-redux';
 import PostFilter from '../Posts/PostFilter';
 import Icon from '../Ionicon';
 import Activity from '../ActivityIndicator'
-import { fetchGet } from '../../functions/requests'
+import { fetchGet } from '../../functions/api'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
@@ -44,9 +44,8 @@ class ViewPost extends Component {
     }
     async componentDidMount() {
         // Get data about post using id
-        let { post_id, baseAPI, login } = this.state;
-        let access_token = login.access_token
-        let response = await fetchGet(baseAPI+ 'post/' + post_id + '/', access_token)
+        let { post_id } = this.state;
+        let response = await fetchGet('post/' + post_id + '/')
         this.setState({data: response, dataFetched: true})
     }
     render() {
