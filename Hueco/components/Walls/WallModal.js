@@ -72,8 +72,7 @@ class WallModal extends Component {
                                 <View>
                                     <View style={{ marginTop: 45}}>
                                         <Text style={styles.name}>{data.name}</Text>
-                                        <Text style={styles.userInfo}>@</Text>
-                                        <Text style={styles.userInfo}>{data.area.name}</Text>
+                                        {data.area && <Text style={styles.userInfo}>{data.area.name}</Text> }
                                     </View>
 
                                     <View>
