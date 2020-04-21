@@ -89,7 +89,7 @@ class Posts extends Component {
                     {fetchData.count == 0 ? 
                         <View style={{alignContent: 'center', alignSelf: 'center', alignItems: 'center'}}>
                             { dataFetched ?
-                                <Text>User Has No Posts :(</Text>
+                                <Text>No Posts :(</Text>
                             :
                                 <ActivityIndicator size="large" color="#0000ff"/>
                             }
