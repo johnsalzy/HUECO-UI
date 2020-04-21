@@ -71,11 +71,12 @@ class CreateTick extends Component {
         // setDate(currentDate);
       };
 
-    submitTick(){
+    async submitTick(){
         let { data, rating, checked, date } = this.state
-
- 
-        // Call api route to submit tick
+        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay()
+        let body = {route: data.id, stars: rating, date: date, send_type: checked, attempts : 1}
+        let respose = await fetchPost('climbing/tick/', body) // Call api route to submit tick
+        this.setState({respose: respose})
         this.props.closeModal()
 
 
