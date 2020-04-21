@@ -3,9 +3,9 @@ import { View } from 'react-native';
 
 // Import Components
 import UserView from './Users';
-import AreaView from './Area';
+import AreaView from '../Areas/Area';
 import RouteView from './Routes';
-import WallView from './Walls';
+import WallView from '../Walls/Walls';
 
 
 
