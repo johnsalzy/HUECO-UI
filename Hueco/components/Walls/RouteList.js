@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
-
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 
 
 //Import files/componenets
-
-import { buttons, dividers, avatars, containers, info, text_input } from '../../assets/styles/styles';
 import {details} from '../../assets/styles/text';
-import ModalView from '../Modals/ModalView';
+import RouteResult from '../Routes/RouteResult';
 import { fetchGet } from '../../functions/api'
 
 
@@ -20,8 +17,6 @@ class RouteList extends Component {
         data: this.props.data,
         nextData: this.props.apiRoute,
         loading: false,
-        profileModal: false,
-        modalData: null,
     };
   }
   async loadMoreData(){
@@ -56,35 +51,15 @@ class RouteList extends Component {
 
 
   render(){
-    let { data, profileModal, modalData } = this.state
+    let { data } = this.state
     return (
         <View>
-            {/* Profile/Route Modal */}
-            {profileModal && 
-                <ModalView 
-                    data={modalData} 
-                    type={'route'}
-                    closeModal={() => this.setState({profileModal: false})} 
-                    modalVisable={profileModal}
-                />
-            }
             <View style={{height: '100%'}}>
                 <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 
                         <View style={{paddingBottom: 5}}>
-                            <TouchableOpacity
-                                onPress={() => this.setState({profileModal: true, modalData: {id: item.id}})}
-                            >
-                                <View style={containers.small_search_result}>
-                                    <View style={styles.flexRow}>
-                                        <Image style={avatars.small}
-                                            source={{uri: item.img_url}}
-                                        />
-                                        <Text style={info.user_search_info}>{item.name}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
+                            <RouteResult data={item}/>
                         </View>
                     }
                     onEndReached={() => this.loadMoreData()}
@@ -98,18 +73,3 @@ class RouteList extends Component {
   }
 }
 export default RouteList
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'white', 
-        width: '100%', 
-        height: '100%', 
-        marginTop: 0,
-        marginLeft: 0,
-        padding: 10,
-        borderRadius: 4,
-    },
-    flexRow: {
-        flexDirection: 'row',
-    },
-});
