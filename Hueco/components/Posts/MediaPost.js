@@ -26,7 +26,7 @@ class MediaPost extends Component {
                     }
                     {error && 
                         <View style={{justifyContent: 'center',height: '100%',backgroundColor: 'cornflowerblue'}}>
-                            <Text style={{textAlign: 'center', justifyContent: 'center', fontSize: 20, fontWeight:'bold', color: 'white'}}>Could Not Load Image :(</Text>
+                            <Text style={{textAlign: 'center', justifyContent: 'center', fontSize: 20, fontWeight:'bold', color: 'white'}}>Could Not Load Media :(</Text>
                         </View>
                     }
                     {type == "image" ? 
