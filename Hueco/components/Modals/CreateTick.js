@@ -23,6 +23,7 @@ import Icon from '../Ionicon';
 import TagRoute from '../Tags/tagRoute';
 import ImageWithLoader from '../ImageWithLoader';
 import { fetchGet, fetchPost } from '../../functions/api'
+import { showMessage } from "react-native-flash-message";
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -75,9 +76,20 @@ class CreateTick extends Component {
         let { data, rating, checked, date } = this.state
         date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay()
         let body = {route: data.id, stars: rating, date: date, send_type: checked, attempts : 1}
-        let respose = await fetchPost('climbing/tick/', body) // Call api route to submit tick
-        this.setState({respose: respose})
+        let response = await fetchPost('climbing/tick/', body) // Call api route to submit tick
         this.props.closeModal()
+        if(response.status == 201){
+            showMessage({
+                message: "Tick Added",
+                type: "success"
+            })
+        } else {
+            showMessage({
+                message: "Failed to Add Tick ):",
+                type: "danger"
+            })
+        }
+
 
 
     }
@@ -217,6 +229,7 @@ class CreateTick extends Component {
                                     
                                 
                             </View>
+                            
                         </ScrollView>
                     </View>
                 </Modal>

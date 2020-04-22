@@ -12,17 +12,16 @@ import {
     Platform,
     ActivityIndicator
 } from "react-native";
-
+import {connect} from 'react-redux';
+import { showMessage } from "react-native-flash-message";
 
 //Import Screens/Components/Styles
 import Icon from '../../components/Ionicon';
 import MediaPicker from '../ImagePicker';
 import TagFriend from '../Tags/tagFriend';
 import TagRoute from '../Tags/tagRoute';
-// import { text_input } from '../../assets/styles/styles';
+import { fetchPostMedia } from '../../functions/api';
 
-//Redux imports
-import {connect} from 'react-redux';
 
 
 
@@ -51,8 +50,8 @@ class CreatePost extends Component {
             postingMedia: false
         };
     }
-    handleSubmit = () => {
-        let {login, media, title, taggedFriends, taggedRoute, baseAPI} = this.state
+    async handleSubmit(){
+        let {login, media, title, taggedFriends, taggedRoute } = this.state
         if (title == ""){
             alert('Please enter a title')
             return
@@ -77,28 +76,26 @@ class CreatePost extends Component {
             formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'postUpload'});
             formdata.append("media.media_type", media.type);
         }
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-        };
-        fetch(baseAPI + 'post/', requestOptions)
-        .then(result => this.setState({response: result}))
-        .catch(error => console.log('error ' + error));
+        let response = await fetchPostMedia('post/', formdata)
+        console.log('CreatePost.js res', JSON.stringify(response))
+        if(response.status == 201){
+            this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null, postingMedia: false})
+            this.props.closeModal()
+            showMessage({
+                message: "Post Created!",
+                type: "success"
+            })
+        } else {
+            this.setState({response: null, postingMedia: false})
+            showMessage({
+                message: "Failed To Create Post ):",
+                type: "danger"
+            })
+        }
     }
 
     render() {
-        let { tagFriend, tagRoute, response, taggedFriends, taggedRoute, postingMedia } = this.state;
-        if (response!= null){
-            if(response.status == 201){
-                this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null, postingMedia: false})
-                this.props.closeModal()
-            } else {
-                this.setState({response: null, postingMedia: false})
-                alert('Post failed: '+ JSON.stringify(response.status))
-            }
-            
-        }
+        let { tagFriend, tagRoute, taggedFriends, taggedRoute, postingMedia } = this.state;
         return (
                 <Modal
                     animationType="fade"
