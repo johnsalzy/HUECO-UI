@@ -81,18 +81,23 @@ class CreateTick extends Component {
         if(response.status == 201){
             showMessage({
                 message: "Tick Added",
-                type: "success"
+                type: "success",
+                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                floating: true,
+                icon: { icon: "success", position: "left" }
             })
         } else {
             showMessage({
                 message: "Failed to Add Tick ):",
-                type: "danger"
+                type: "danger",
+                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                floating: true,
+                icon: { icon: "danger", position: "left" }
             })
         }
-
-
-
     }
+
+
     render() {
         let { tagRoute, data, showDatePicker, date, checked, rating, canSubmit } = this.state;
         return (

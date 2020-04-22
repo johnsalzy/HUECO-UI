@@ -77,13 +77,15 @@ class CreatePost extends Component {
             formdata.append("media.media_type", media.type);
         }
         let response = await fetchPostMedia('post/', formdata)
-        console.log('CreatePost.js res', JSON.stringify(response))
         if(response.status == 201){
             this.setState({response: null, media: null, title: null, taggedFriends: [], taggedRoute: null, postingMedia: false})
             this.props.closeModal()
             showMessage({
                 message: "Post Created!",
-                type: "success"
+                type: "danger",
+                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                floating: true,
+                icon: { icon: "danger", position: "left" }
             })
         } else {
             this.setState({response: null, postingMedia: false})
