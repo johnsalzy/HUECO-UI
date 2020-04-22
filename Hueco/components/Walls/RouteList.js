@@ -38,7 +38,7 @@ class RouteList extends Component {
     let {loading, nextData} = this.state
     if (nextData==null){
       return(
-        <View style={{height: '10%', alignItems:'center', paddingBottom: 25,}}>
+        <View style={{height: '10%', alignItems:'center'}}>
             <Text style={details.not_found}>No More Routes ):</Text>
         </View>
       )
@@ -54,7 +54,7 @@ class RouteList extends Component {
     let { data } = this.state
     return (
         <View>
-            <View style={{height: '100%'}}>
+            <View style={{height: '90%'}}>
                 <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 

@@ -38,14 +38,14 @@ class RouteResult extends Component {
                     <View style={styles.container}>
                         <View style={search_results.resultContainer}>
                             <View style={styles.alignInRow}>
-                                <View style={{ width: '26%', justifyContent: 'center'}}>
+                                <View style={{ width: '30%', justifyContent: 'center'}}>
                                   <View style={styles.avatar}>
                                     <ImageWithLoader uri={data.img_url}/>
                                   </View>
                                 </View>
                                 
 
-                                <View style={{marginLeft: '4%', width: '70%', justifyContent: 'center'}}>
+                                <View style={{marginLeft: '4%', width: '62%', justifyContent: 'center'}}>
                                     <Text style={styles.name}>{data.name}</Text>
                                     <Text style={styles.userInfo}>Grade: {data.rating}</Text>
                                     <Text style={styles.userInfo}>Type: {data.route_type} </Text>

@@ -70,14 +70,14 @@ class WallModal extends Component {
                         <View style={styles.containerModal}>
                             <View style={styles.containerModal}>
                                 <View>
-                                    <View style={{ marginTop: 45}}>
+                                    <View style={{ marginTop: 25}}>
                                         <Text style={styles.name}>{data.name}</Text>
                                         {data.area && <Text style={styles.userInfo}>{data.area.name}</Text> }
                                     </View>
 
                                     <View>
                                         {route_data.count > 0  ?
-                                            <View style={{height: '80%', overflow: 'hidden', marginTop: 20}}>
+                                            <View style={{height: '80%', overflow: 'hidden', marginTop: 20, marginBottom: 20}}>
                                                 <Text style={details.not_found}>Routes At This Wall</Text>
                                                 <RouteList 
                                                     data={route_data} 
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     name:{
         fontSize:20,
         color:"#000000",
-        fontWeight:'600',
+        fontWeight:'bold',
         textAlign: 'center'
     },
     userInfo:{

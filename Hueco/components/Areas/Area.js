@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
-import { Tooltip } from 'react-native-elements';
 
 // Import
 import {app_styles} from '../../assets/styles/universal'
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
       name:{
         fontSize:20,
         color:"#000000",
-        fontWeight:'600',
+        fontWeight:'bold',
         textAlign: 'center'
       },
       userInfo:{
