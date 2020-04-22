@@ -115,17 +115,5 @@ function BottomTabNavigator({ navigation }) {
       )}
     </RootStack.Navigator>
   );
-
-
-
-  // if(!loggedIn){
-  //   return(
-  //     <AuthNavigator />
-  //   );
-  // } else {
-  //   return(
-  //     <HomeNavigator />
-  //   )
-  // }
 }
 export default connect()(BottomTabNavigator);
