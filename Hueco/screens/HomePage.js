@@ -9,7 +9,7 @@ import AddTickModal from '../components/Modals/CreateTick';
 import {app_styles} from '../assets/styles/universal';
 import {details} from '../assets/styles/text';
 import PostFilter from '../components/Posts/PostFilter';
-import { fetchGet } from '../functions/requests'
+import { fetchGet } from '../functions/api'
 import { updateAreaData } from '../redux/actions'
 
 
@@ -80,19 +80,15 @@ class HomeScreen extends Component {
     this.fetchUserAreaInfo()
   }
   async fetchUserAreaInfo(){
-    let {login, baseAPI} = this.state;
-    let apiRoute = baseAPI + 'user-areas/me';
-    let access_token = login.access_token;
-    let response = await fetchGet(apiRoute, access_token)
+    let apiRoute = 'user-areas/me/';
+    let response = await fetchGet(apiRoute)
     this.props.dispatch(updateAreaData(response))
   }
 
 
   async fetchPostData(){
-      let {id, login, baseAPI} = this.state;
-      let apiRoute = baseAPI + 'post/';
-      let access_token = login.access_token;
-      let response = await fetchGet(apiRoute, access_token)
+      let apiRoute = 'post/';
+      let response = await fetchGet(apiRoute)
       this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
   }
   render(){
