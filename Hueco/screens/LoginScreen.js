@@ -126,6 +126,7 @@ class Login extends Component {
                             placeholderTextColor="black"
                             onChangeText = {(email) => this.setState({email})}
                             value = {this.state.email}
+                            autoCapitalize = {"none"}
                         />
                         <TextInput style={text_input.default} 
                             placeholder='Password'
