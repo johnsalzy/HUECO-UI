@@ -72,10 +72,29 @@ export async function fetchPost(apiRoute, body){
       },
       body: JSON.stringify(body)
   })
-  .then(response => response.json())
+  // .then(response => response.json())
   .catch((err) => handleError(err));
   return response
 }
+
+
+export async function fetchPostMedia(apiRoute, body){
+  const state = store.getState();
+  const baseAPI = state.api.baseAPI
+  const access_token = checkToken(state)
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json")
+  myHeaders.append("Authorization", "Bearer " + access_token);
+  myHeaders.append("Content-type", "multipart/form-data");
+  let response = await fetch(baseAPI + apiRoute, {
+      method: 'POST',
+      headers: myHeaders,
+      body: body
+  })
+  .catch((err) => handleError(err));
+  return response
+}
+
 
 export async function fetchDelete(apiRoute){
   const state = store.getState();
