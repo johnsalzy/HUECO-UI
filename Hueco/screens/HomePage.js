@@ -82,6 +82,7 @@ class HomeScreen extends Component {
   async fetchUserAreaInfo(){
     let apiRoute = 'user-areas/me/';
     let response = await fetchGet(apiRoute)
+    // console.log('area', response)
     this.props.dispatch(updateAreaData(response))
   }
 
@@ -93,6 +94,15 @@ class HomeScreen extends Component {
   }
   render(){
     let {modalAddPost, modalAddTick, refreshingPosts, data, initialLoad, open} = this.state
+    
+    //Set fab actions based on if user is admin of a area
+    
+    let fab_actions = []
+    fab_actions = [
+      { icon: 'camera', label: 'Create Post', onPress: () => this.setState({modalAddPost: true})},
+      { icon: 'map', label: 'Create Tick', onPress: () => this.setState({modalAddTick: true,})},
+    ]
+
     return (
         <View style={app_styles.screen}>
             <View style={{alignItems: 'center', height: '100%'}}>
@@ -145,10 +155,7 @@ class HomeScreen extends Component {
              icon={open ? 'minus' : 'plus-outline'}
              color={'white'}
              fabStyle={{backgroundColor: 'cornflowerblue'}}
-             actions={[
-               { icon: 'camera', label: 'Create Post', onPress: () => this.setState({modalAddPost: true})},
-               { icon: 'map', label: 'Create Tick', onPress: () => this.setState({modalAddTick: true,})},
-             ]}
+             actions={fab_actions}
              onStateChange={() => this.setState({open: !open})}
            />
         </View>
