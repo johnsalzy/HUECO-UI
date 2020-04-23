@@ -4,9 +4,14 @@ import { SearchBar, ButtonGroup, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
-import WrapComp from '../components/Search/Wrap'
+// Import Components
 import {app_styles} from '../assets/styles/universal'
 import { fetchGet } from '../functions/api';
+import UserView from '../components/User/UsersSearch';
+import AreaView from '../components/Areas/Area';
+import RouteView from '../components/Routes/Routes';
+import WallView from '../components/Walls/Walls';
+
 // import { updateSearchData } from '../redux/actions'
 const mapStateToProps = state => (
   {
@@ -24,7 +29,7 @@ class SearchScreen extends React.Component {
             search: '',
             selectedIndex: 0,
             searchCat: "Users",
-            placeholder: "Username",
+            placeholder: "Username / Name",
             baseAPI: "http://3.133.123.120:8000/api/v1/",
             fetchData: {results: []},
             dataFetched: false,
@@ -36,7 +41,6 @@ class SearchScreen extends React.Component {
     }
     
     async loadUserData(apiPath){
-        let {access_token} = this.state
         this.setState({dataFetched: false, loading: true, prevData: false, nextData: false})
         let responseData = await(fetchGet(apiPath))
         this.setState({dataFetched: true, fetchData: responseData, prevData: responseData.previous, nextData: responseData.next, loading: false})
@@ -69,6 +73,7 @@ class SearchScreen extends React.Component {
         this.setState({ search: '' });
     };
     updateIndex (selectedIndex) {
+        this.setState({dataFetched: false, prevData: false, nextData: false, fetchData: {results: []}})
         let searchCat = ''
         let placeholder = ''
         if(selectedIndex == 0){
@@ -77,6 +82,7 @@ class SearchScreen extends React.Component {
         }else if(selectedIndex == 1){
             searchCat = "Areas"
             placeholder = "Gym/Area Name"
+            this.setState({dataFetched: true, fetchData: {results: [], recommended: true}})
         }else if(selectedIndex == 2){
             searchCat = "Walls"
             placeholder = "Wall Name"
@@ -94,7 +100,6 @@ class SearchScreen extends React.Component {
     }
     render(){
         let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData, loading } = this.state;
-        
         const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
             <View style={app_styles.screen}>
@@ -135,24 +140,25 @@ class SearchScreen extends React.Component {
                             </View>
                             
                         }
-                        {dataFetched ? 
+                        { dataFetched &&
                             <View>
-                                <WrapComp searchCat={searchCat} data={fetchData} />
-
+                                {searchCat == 'Users' && <UserView data={fetchData}/>}
+                                {searchCat == 'Areas' && <AreaView data={fetchData}/>}
+                                {searchCat == 'Routes' && <RouteView data={fetchData}/>}
+                                {searchCat == 'Walls' && <WallView data={fetchData}/>}
                                 <View style={{flexDirection: 'row', padding: 10}}>
-                                    {prevData ? 
+                                    {prevData &&
                                         <TouchableOpacity onPress={() => this.viewPrevResults(fetchData.previous)} style={{alignItems: 'center',}}>
                                             <Text style={styles.loadNextData}>Load Previous</Text>
                                         </TouchableOpacity> 
-                                    : null}
-                                    {nextData ? 
+                                    }
+                                    {nextData && 
                                         <TouchableOpacity onPress={() => this.viewNextResults(fetchData.next)} style={{alignItems: 'center', marginLeft: 'auto'}}>
                                             <Text style={styles.loadNextData}>Load Next</Text>
                                         </TouchableOpacity> 
-                                    : null}
+                                    }
                                 </View>
                             </View>
-                            : null 
                         }
                     </View>
                     
