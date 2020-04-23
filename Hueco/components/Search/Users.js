@@ -46,6 +46,7 @@ class Users extends React.Component {
                                             </View>
                                             <View style={{paddingLeft: 10, width: '70%'}}>
                                               <Text style={styles.name}>{data.full_name}</Text>
+                                              <Text style={styles.userInfo}>@{data.username} </Text>
                                               <Text style={styles.userInfo}>Following: {data.following} </Text>
                                               <Text style={styles.userInfo}>Followers: {data.followers} </Text>
                                               <Text style={styles.userInfo}>Sends: {data.sends} </Text>
@@ -87,8 +88,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       avatar: {
-        width: 90,
-        height: 90,
+        width: 100,
+        height: 100,
         borderRadius: 50,
         borderWidth: 4,
         borderColor: "black",
