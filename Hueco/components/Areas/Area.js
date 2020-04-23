@@ -136,7 +136,12 @@ class AreaView extends React.Component {
                   </View>
                 : 
                   <View>
-                    <Text style={{fontWeight: 'bold', textAlign: 'center'}}>No Areas Found :(</Text> 
+                    {data.recommended ? 
+                      null
+                    :
+                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>No Areas Found :(</Text>
+                    }
+                     
                   </View>
                 }
 
