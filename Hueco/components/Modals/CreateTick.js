@@ -14,9 +14,10 @@ import {
     ActivityIndicator
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
-import { Tooltip, AirbnbRating  } from 'react-native-elements';
+import { AirbnbRating  } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns'
+import FlashMessage from "react-native-flash-message";
 
 //Import Screens/Components/Styles
 import Icon from '../Ionicon';
@@ -27,6 +28,15 @@ import { showMessage } from "react-native-flash-message";
 
 
 const windowWidth = Dimensions.get('window').width;
+const send_messages = [
+    "Completing a route first try without falling and without prior information. i.e. you haven't watched someone do the boulder problem.",
+    "Completing a route first try without falling with some information, such as, rack suggestion or beta.",
+    "Completing a route without falls, regardless of the amount you've attempted the route.",
+    "Completed a route, however, during completion you fell or were supported by the rope.",
+    "Route was attempted, but not completed"
+]
+const send_values = [1, 2, 3, 4, 5]
+const send_types = ['On Sight', 'Flash', 'Send', 'Fell/Hung', 'Attempt' ]
 
 
 class CreateTick extends Component {
@@ -38,10 +48,11 @@ class CreateTick extends Component {
             tagRoute: true,
             date: new Date(Date.now()),
             showDatePicker: false,
-            checked: 'onsight',
+            checked: 0,
             rating: 3,
             canSubmit: false,
             taggedRoute: null,
+            comment: null,
         };
     }
 
@@ -61,24 +72,23 @@ class CreateTick extends Component {
         } else {
             if(event.type == 'set'){
                 const currentDate = selectedDate || date;
-                console.log('currentData' + currentDate, 'event', event)
                 this.setState({date: currentDate, showDatePicker: false})
             } else {
                 this.setState({showDatePicker: false})
             }
         }
-        
-        // setShow(Platform.OS === 'ios');
-        // setDate(currentDate);
       };
 
     async submitTick(){
-        let { data, rating, checked, date } = this.state
+        let { data, rating, checked, date, comment } = this.state
         date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay()
-        let body = {route: data.id, stars: rating, date: date, send_type: checked, attempts : 1}
+        let body = {
+            route: data.id, stars: rating, date: date, 
+            ascent_type: checked+1, comments: comment
+        }
         let response = await fetchPost('climbing/tick/', body) // Call api route to submit tick
-        this.props.closeModal()
         if(response.status == 201){
+            this.props.closeModal()
             showMessage({
                 message: "Tick Added",
                 type: "success",
@@ -87,7 +97,7 @@ class CreateTick extends Component {
                 icon: { icon: "success", position: "left" }
             })
         } else {
-            showMessage({
+            this.refs.localFlashMessage.showMessage({
                 message: "Failed to Add Tick ):",
                 type: "danger",
                 titleStyle: {fontWeight: 'bold', fontSize: 15},
@@ -162,35 +172,36 @@ class CreateTick extends Component {
                                         {/* Section to mark ascent type */}
                                         <View>
                                             <Text style={styles.title}>Ascent Type</Text>
-                                            <View style={styles.radioButton}>
-                                                <RadioButton
-                                                    value="onsight"
-                                                    status={checked === 'onsight' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'onsight', canSubmit: true }); }}
-                                                />
-                                                <Tooltip popover={<Text>To climb a route clean first time from bottom to top in one continual flow, placing your own equipment or clipping the bolts with no falls and no resting on the rope.</Text>}>
-                                                    <Text>On Sight</Text>
-                                                </Tooltip>
-                                            </View>
-                                            <View style={styles.radioButton}>
-                                                <RadioButton
-                                                    value="flash"
-                                                    status={checked === 'flash' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'flash', canSubmit: true }); }}
-                                                />
-                                                <Tooltip popover={<Text>Climbing a route clean with prior knowledge and/or equipment already in place.</Text>}>
-                                                    <Text>Flash</Text>
-                                                </Tooltip>
-                                            </View>
-                                            <View style={styles.radioButton}>
-                                                <RadioButton
-                                                    value="fell_hung"
-                                                    status={checked === 'fell_hung' ? 'checked' : 'unchecked'}
-                                                    onPress={() => { this.setState({ checked: 'fell_hung', canSubmit: true }); }}
-                                                />
-                                                <Text>Fell / Hung</Text>
+                                            <View>
+                                                {
+                                                send_values.map((data, index) => (
+                                                    <View style={styles.radioButton} key={index}>
+                                                        <RadioButton
+                                                            value={data-1}
+                                                            status={checked === data-1 ? 'checked' : 'unchecked'}
+                                                            onPress={() => { this.setState({ checked: data-1}); }}
+                                                        />
+                                                        <TouchableOpacity 
+                                                            onPress={() =>
+                                                                this.refs.localFlashMessage.showMessage({
+                                                                    message: send_types[data-1],
+                                                                    description: send_messages[data-1],
+                                                                    type: "info",
+                                                                    titleStyle: {fontWeight: 'bold', fontSize: 15},
+                                                                    floating: true,
+                                                                    icon: { icon: "info", position: "left" }
+                                                                })
+                                                            }
+                                                        >
+                                                            <Text>{send_types[data-1]}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+
+                                                ))
+                                                }
                                             </View>
                                         </View>
+
                                         {/* Section to make rating */}
                                         <View>
                                             <Text style={styles.title}>Rating</Text>
@@ -204,6 +215,20 @@ class CreateTick extends Component {
                                                 />
                                             </View>
                                         </View>
+
+                                        {/* Section to add comment */}
+                                        <View>
+                                            <Text style={styles.title}>Comment</Text>
+                                            <View style={{alignItems: 'flex-start'}}>
+                                                <TextInput 
+                                                    placeholder={'Crux was sweet.'}
+                                                    style={{height: 40, borderColor: 'black', borderWidth: 2, paddingRight: 5, paddingLeft: 5, borderRadius: 5, width: '80%'}}
+                                                    onChangeText = {(comment) => this.setState({comment})}
+                                                    value = {this.state.comment}
+                                                />
+                                            </View>
+                                        </View>
+
 
                                         {/* Section to submit */}
                                         <View style={{alignItems: 'center', marginTop: 15}}>
@@ -237,6 +262,7 @@ class CreateTick extends Component {
                             
                         </ScrollView>
                     </View>
+                    <FlashMessage ref="localFlashMessage"/>
                 </Modal>
         );
     }
