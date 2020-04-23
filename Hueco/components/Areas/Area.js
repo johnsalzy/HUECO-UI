@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
+import { showMessage } from "react-native-flash-message";
 
 // Import
 import {app_styles} from '../../assets/styles/universal'
@@ -57,14 +58,26 @@ class AreaView extends React.Component {
         for (var i=0; i < area_count; i++) 
         {
           if(areas.area_data[i].area.id == data.id){
-            alert('You are already subscribed to this area!')
+            showMessage({
+              message: "You are already subscribed to this area!",
+              type: "warning",
+              titleStyle: {fontWeight: 'bold', fontSize: 14},
+              floating: true,
+              icon: { icon: "warning", position: "left" }
+            })
             return
           }
         }
         if(area_count == 0){
           selected = true
         } else if (area_count >= 10) {
-          alert("You can't have more than 10 areas!")
+          showMessage({
+            message: "You can't have more than 10 areas!",
+            type: "danger",
+            titleStyle: {fontWeight: 'bold', fontSize: 14},
+            floating: true,
+            icon: { icon: "danger", position: "left" }
+          })
           return
         }
         areas.area_data.push({selected: selected, area: data})
@@ -74,6 +87,13 @@ class AreaView extends React.Component {
         let response = await fetchPost(apiRoute, newData)
         this.setState({areas, response: response})
         this.props.dispatch(updateAreaData(areas.area_data))
+        showMessage({
+          message: "Area Pinned!",
+          type: "success",
+          titleStyle: {fontWeight: 'bold', fontSize: 14},
+          floating: true,
+          icon: { icon: "success", position: "left" }
+        })
       } else {
         // TO LEAVE AN AREA
         for (var i=0; i < areas.area_data.length; i++) {

@@ -82,10 +82,10 @@ class CreatePost extends Component {
             this.props.closeModal()
             showMessage({
                 message: "Post Created!",
-                type: "danger",
+                type: "success",
                 titleStyle: {fontWeight: 'bold', fontSize: 15},
                 floating: true,
-                icon: { icon: "danger", position: "left" }
+                icon: { icon: "success", position: "left" }
             })
         } else {
             this.setState({response: null, postingMedia: false})
