@@ -14,7 +14,7 @@ import { Tooltip, Rating } from 'react-native-elements';
 
 import { setUserProfile, updateUserProfile } from '../../redux/actions'
 import Icon from '../Ionicon';
-import StatView from '../UserStatView';
+import StatView from '../Stats/StatView';
 import Settings from './Settings/Settings';
 import AddTickModal from '../Modals/CreateTick';
 import { fetchGet, fetchPost } from '../../functions/api'

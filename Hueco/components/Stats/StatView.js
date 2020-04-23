@@ -4,9 +4,9 @@ import { ButtonGroup } from 'react-native-elements'
 
 
 // Import needed componenets
-import TabIcon from './TabIcon';
+import TabIcon from '../TabIcon';
 import Stats from './Stats'
-import Posts from './Posts/Posts'
+import Posts from '../Posts/Posts'
 
 
 class StatView extends Component {

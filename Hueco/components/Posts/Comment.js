@@ -78,7 +78,6 @@ class Comment extends Component {
 
     render(){
         let { data, modalView, comments_loading, next, loading} = this.state
-        console.log('Comments data', data)
         return (
             <View>
                 {modalView && 
