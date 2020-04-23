@@ -57,8 +57,9 @@ class Comment extends Component {
                 post: post_id,
                 text: comment_to_add
             }
+            data.comment_count += 1;
             let response = await fetchPost(apiRoute, body)  // Waiting for api to be updated
-            this.setState({data: data, comment_to_add: ""}) // Updates/clears state
+            this.setState({data, comment_to_add: ""}) // Updates/clears state
             this.props.comment(1)
         }
     }
@@ -77,6 +78,7 @@ class Comment extends Component {
 
     render(){
         let { data, modalView, comments_loading, next, loading} = this.state
+        console.log('Comments data', data)
         return (
             <View>
                 {modalView && 
