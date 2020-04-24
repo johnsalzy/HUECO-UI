@@ -69,10 +69,10 @@ class TagRoute extends Component {
         let currentlyTagged  = this.props.currentlyTagged;
         if(type == 'add'){
             if(currentlyTagged != null){
-                alert('You cannot tag more than one route')
+                this.props.showMessage("warning", "You cannot tag more than one route")
                 return
             } else {
-                this.props.updateRouteTag({id: data.id, name: data.name, img_url: data.img_url, wall: data.wall.name, route_type: data.route_type})
+                this.props.updateRouteTag({id: data.id, name: data.name, uri: data.thumbnail, wall: data.wall.name, route_type: data.route_type})
             }
         } else {
             this.props.updateRouteTag(null)
@@ -96,7 +96,9 @@ class TagRoute extends Component {
                         <Text>Searching In Your Currently Selected Area: </Text>
                         <TouchableOpacity
                             style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}
-                            onPress={() => alert('Changing area')}
+                            onPress={() => 
+                                this.props.showMessage("info", "Change Area On Search Page")
+                            }
                         >
                             <Text>{selected_area.area.name}</Text>
                             <Text style={{paddingLeft: 5, color: 'red'}}>Change Area</Text>
@@ -131,7 +133,7 @@ class TagRoute extends Component {
                         <View style={containers.small_search_result}>
                             <View style={styles.flexRow}>
                                 <Image style={avatars.small}
-                                    source={{uri: this.props.currentlyTagged.img_url}}
+                                    source={{uri: this.props.currentlyTagged.uri}}
                                 />
                                 <Text style={info.user_search_info}>{this.props.currentlyTagged.name}</Text>
                                 <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tag(null, 'remove')}>
@@ -153,7 +155,7 @@ class TagRoute extends Component {
                                 <View key={index} style={containers.small_search_result}>
                                     <View style={styles.flexRow}>
                                         <Image style={avatars.small}
-                                            source={{uri: data.img_url}}
+                                            source={{uri: data.thumbnail}}
                                         />
                                         <Text style={info.user_search_info}>{data.name}</Text>
                                         <TouchableOpacity style={{marginLeft: 'auto', justifyContent: 'center'}} onPress={() => this.tag(data, 'add')}>

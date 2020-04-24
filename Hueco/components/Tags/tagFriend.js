@@ -71,14 +71,14 @@ class TagFriend extends Component {
         if(type == 'add'){
             let { login } = this.state;
             if(username == login.username){
-                alert('You cannot tag yourself')
+                this.props.showMessage('warning', "You can't tag yourself!")
                 return
             } else if(newTagged.some(temp => temp.id == user.id)){
-                alert('User already tagged')
+                this.props.showMessage('warning', "User is already tagged!")
                 return
             } else {
                 if(currentlyTaggedCount >= 10){
-                    alert('You can not tag any more than 10!')
+                    this.props.showMessage('warning', "You can't tag more than 10 users!")
                     return
                 }
                 newTagged.push(user)

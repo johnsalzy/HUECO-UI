@@ -13,6 +13,7 @@ import {
     ActivityIndicator
 } from "react-native";
 import {connect} from 'react-redux';
+import FlashMessage from "react-native-flash-message";
 import { showMessage } from "react-native-flash-message";
 
 //Import Screens/Components/Styles
@@ -130,12 +131,31 @@ class CreatePost extends Component {
                                 </View>
                                 {tagFriend && 
                                     <TagFriend 
-                                    currentlyTagged={taggedFriends}
-                                    updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
-                                    closeFriends={() => this.setState({tagFriend: false})}/>
+                                        showMessage={(type, message) =>
+                                            this.refs.localFlashMessage.showMessage({
+                                                message: message,
+                                                type: type,
+                                                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                                                floating: true,
+                                                icon: { icon: type, position: "left" }
+                                            })
+                                        }
+                                        currentlyTagged={taggedFriends}
+                                        updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
+                                        closeFriends={() => this.setState({tagFriend: false})}
+                                    />
                                 }
                                 {tagRoute && 
                                     <TagRoute 
+                                        showMessage={(type, message) =>
+                                            this.refs.localFlashMessage.showMessage({
+                                                message: message,
+                                                type: type,
+                                                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                                                floating: true,
+                                                icon: { icon: type, position: "left" }
+                                            })
+                                        }
                                         currentlyTagged={taggedRoute}
                                         updateRouteTag={(id) => this.setState({taggedRoute: id})}
                                         closeRoute={() => this.setState({tagRoute: false})}
@@ -170,6 +190,7 @@ class CreatePost extends Component {
                             </View>
                         </ScrollView>
                     </View>
+                    <FlashMessage ref="localFlashMessage"/>
                 </Modal>
         );
     }
