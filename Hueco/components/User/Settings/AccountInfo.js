@@ -16,10 +16,13 @@ import {connect} from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import FlashMessage from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 
 import { fetchGet, fetchPatchMedia } from '../../../functions/api'
 import { updateUserProfile } from '../../../redux/actions'
 import ImageWithLoader from '../../ImageWithLoader';
+
 
 const mapStateToProps = state => (
     {
@@ -85,9 +88,25 @@ class AccountInfo extends Component {
         }
         let apiRoute = 'users/' + data.id + '/'
         let response = await fetchPatchMedia(apiRoute, formdata)
-        // Update props
-        this.props.dispatch(updateUserProfile(true))
-        this.setState({changes: false, response: response, loadingChange: false})
+        let message = ""
+        let type = ""
+        if(response.status == "User Updated"){
+            message = "Account Info Updated!"
+            type = "success"
+            this.props.dispatch(updateUserProfile(true))
+        } else {
+            console.log('status', response.status)
+            message = "Could not update user profile ):"
+            type = "danger"
+        }
+        this.refs.localFlashMessage.showMessage({
+            message: message,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
+        this.setState({changes: false, loadingChange: false})
 
     }
     componentDidMount() {
@@ -247,6 +266,7 @@ class AccountInfo extends Component {
                         
                     </View>
                 }
+                <FlashMessage ref="localFlashMessage"/>
             </View>
         );
     }

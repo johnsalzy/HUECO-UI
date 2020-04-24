@@ -40,7 +40,7 @@ class RouteResult extends Component {
                             <View style={styles.alignInRow}>
                                 <View style={{ width: '30%', justifyContent: 'center'}}>
                                   <View style={styles.avatar}>
-                                    <ImageWithLoader uri={data.img_url}/>
+                                    <ImageWithLoader uri={data.media_large}/>
                                   </View>
                                 </View>
                                 

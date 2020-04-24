@@ -18,13 +18,14 @@ import { AirbnbRating  } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns'
 import FlashMessage from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 
 //Import Screens/Components/Styles
 import Icon from '../Ionicon';
 import TagRoute from '../Tags/tagRoute';
 import ImageWithLoader from '../ImageWithLoader';
 import { fetchGet, fetchPost } from '../../functions/api'
-import { showMessage } from "react-native-flash-message";
+
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -59,7 +60,7 @@ class CreateTick extends Component {
     async chooseRoute(taggedRoute){
         this.setState({data: {
             id: taggedRoute.id, 
-            picture: taggedRoute.img_url,
+            picture: taggedRoute.thumbnail,
             name: taggedRoute.name,
             wall: taggedRoute.wall
         }})

@@ -99,11 +99,12 @@ class Profile extends Component {
                 profile: 
                     {
                         profile_picture: null, 
-                        description: null, sends: 10
+                        description: null, sends: 0
                     }
             }
             data.id = response.id;
-            data.profile.profile_picture = response.img_url;
+            data.profile.sends = response.send_count
+            data.profile.profile_picture = response.media_large;
             data.full_name = response.name;
             data.rating = response.rating;
             data.stars = response.stars;
