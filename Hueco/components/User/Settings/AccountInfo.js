@@ -95,7 +95,6 @@ class AccountInfo extends Component {
             type = "success"
             this.props.dispatch(updateUserProfile(true))
         } else {
-            console.log('status', response.status)
             message = "Could not update user profile ):"
             type = "danger"
         }
