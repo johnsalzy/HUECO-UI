@@ -9,7 +9,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
 import HomePage from '../screens/HomePage';
-import Profile from '../screens/Profile';
+import Profile from '../screens/ProfileScreen';
 import WorkOutScreen from '../screens/Workout';
 import SearchScreen from '../screens/SearchScreen';
 import { Transition } from './Transition';
