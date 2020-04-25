@@ -51,16 +51,16 @@ class CreateTick extends Component {
             showDatePicker: false,
             checked: 0,
             rating: 3,
-            canSubmit: false,
             taggedRoute: null,
             comment: null,
         };
     }
 
-    async chooseRoute(taggedRoute){
+    chooseRoute(taggedRoute){
+        console.log('CreateTick.js', taggedRoute)
         this.setState({data: {
             id: taggedRoute.id, 
-            picture: taggedRoute.thumbnail,
+            picture: taggedRoute.uri,
             name: taggedRoute.name,
             wall: taggedRoute.wall
         }})
@@ -110,7 +110,7 @@ class CreateTick extends Component {
 
 
     render() {
-        let { tagRoute, data, showDatePicker, date, checked, rating, canSubmit } = this.state;
+        let { tagRoute, data, showDatePicker, date, checked, rating } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -124,8 +124,6 @@ class CreateTick extends Component {
                             </TouchableOpacity>
                             <View style={{alignItems: 'center',}}>
                                 {data ?
-                                    
-
                                     <View>
                                         {/* Section to show image/title */}
                                         <View style={{flexDirection: 'row'}}>
@@ -212,7 +210,7 @@ class CreateTick extends Component {
                                                     count={5}
                                                     size={25}
                                                     defaultRating={rating}
-                                                    onFinishRating={(rating) => this.setState({rating: rating, canSubmit: true })}
+                                                    onFinishRating={(rating) => this.setState({rating: rating })}
                                                 />
                                             </View>
                                         </View>
