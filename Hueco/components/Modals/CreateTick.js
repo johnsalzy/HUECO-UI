@@ -115,6 +115,7 @@ class CreateTick extends Component {
                     animationType="fade"
                     transparent={true}
                     visible={this.props.modalVisible}
+                    onRequestClose={() => this.props.closeModal()}
                 >
                     <View style={styles.container}>
                         <ScrollView>

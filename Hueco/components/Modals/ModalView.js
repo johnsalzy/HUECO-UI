@@ -35,6 +35,7 @@ class ModalView extends Component {
             animationType="slide"
             transparent={true}
             visible={this.props.modalVisable}
+            onRequestClose={() => this.props.closeModal()}
             >   
                 <TouchableOpacity onPress={() => this.props.closeModal()} >
                         <View style={styles.container}>
