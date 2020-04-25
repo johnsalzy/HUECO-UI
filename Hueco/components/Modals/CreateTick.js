@@ -57,7 +57,6 @@ class CreateTick extends Component {
     }
 
     chooseRoute(taggedRoute){
-        console.log('CreateTick.js', taggedRoute)
         this.setState({data: {
             id: taggedRoute.id, 
             picture: taggedRoute.uri,
