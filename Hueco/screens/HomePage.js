@@ -6,17 +6,19 @@ import { FAB } from 'react-native-paper';
 //Import files/componenets
 import AddPostModal from '../components/Modals/CreatePost';
 import AddTickModal from '../components/Modals/CreateTick';
+import EditGymModal from '../components/Areas/EditArea/EditGym';
 import {app_styles} from '../assets/styles/universal';
 import {details} from '../assets/styles/text';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/api'
-import { updateAreaData } from '../redux/actions'
+import { setAreaData } from '../redux/actions'
 
 
 const mapStateToProps = state => (
   {
     login: state.login,
     api: state.api,
+    areas: state.areas,
   }
 );
 
@@ -27,6 +29,7 @@ class HomeScreen extends Component {
         login: this.props.login,
         modalAddTick: false,
         modalAddPost: false,
+        modalEditGym: false,
         data: null,
         nextData: null,
         dataLoaded: false,
@@ -36,7 +39,10 @@ class HomeScreen extends Component {
         initialLoad: true,
         baseAPI: this.props.api.baseAPI,
         open: false,
-
+        fab_actions: [
+          { icon: 'camera', label: 'Create Post', onPress: () => this.setState({modalAddPost: true})},
+          { icon: 'map', label: 'Create Tick', onPress: () => this.setState({modalAddTick: true,})},
+        ]
     };
   }
 
@@ -79,11 +85,21 @@ class HomeScreen extends Component {
     // Get user area info
     this.fetchUserAreaInfo()
   }
+
   async fetchUserAreaInfo(){
     let apiRoute = 'user-areas/me/';
     let response = await fetchGet(apiRoute)
-    // console.log('area', response)
-    this.props.dispatch(updateAreaData(response))
+    let status = [];
+    // Figure out is the area moderater/setter for an area
+    for(const area in response){
+        if(response[area].member_type > 1){
+          status.push({id:response[area].area.id, name:response[area].area.name, type: response[area].member_type})
+        }
+    }
+    this.props.dispatch(setAreaData(response, status))
+    if(status.length > 0){
+      this.state.fab_actions.push({ icon: 'nature', label: 'Edit Area', onPress: () => this.setState({modalEditGym: true})})
+    }
   }
 
 
@@ -93,16 +109,7 @@ class HomeScreen extends Component {
       this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
   }
   render(){
-    let {modalAddPost, modalAddTick, refreshingPosts, data, initialLoad, open} = this.state
-    
-    //Set fab actions based on if user is admin of a area
-    
-    let fab_actions = []
-    fab_actions = [
-      { icon: 'camera', label: 'Create Post', onPress: () => this.setState({modalAddPost: true})},
-      { icon: 'map', label: 'Create Tick', onPress: () => this.setState({modalAddTick: true,})},
-    ]
-
+    let {modalAddPost, modalAddTick, modalEditGym, refreshingPosts, data, initialLoad, open} = this.state
     return (
         <View style={app_styles.screen}>
             <View style={{alignItems: 'center', height: '100%'}}>
@@ -114,7 +121,6 @@ class HomeScreen extends Component {
                         <View style={{paddingBottom: 25}}>
                           <PostFilter data={item} />
                         </View>
-                      
                     }
                     onEndReached={() => this.loadMorePosts()}
                     onEndReachedThreshold={.1}
@@ -149,13 +155,20 @@ class HomeScreen extends Component {
                 closeModal={() => this.setState({modalAddTick: false})} 
               />
             }
+            {modalEditGym && 
+              <EditGymModal 
+                modalVisible={modalEditGym}
+                closeModal={() => this.setState({modalEditGym: false})} 
+              />
+            }
+
           </View>
           <FAB.Group
              open={open}
              icon={open ? 'minus' : 'plus-outline'}
              color={'white'}
              fabStyle={{backgroundColor: 'cornflowerblue'}}
-             actions={fab_actions}
+             actions={this.state.fab_actions}
              onStateChange={() => this.setState({open: !open})}
            />
         </View>
