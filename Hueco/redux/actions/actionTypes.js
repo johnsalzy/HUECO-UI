@@ -26,3 +26,4 @@ export const UPDATE_SEARCH_DATA = 'UPDATE_SEARCH_DATA'
 
 // Area
 export const UPDATE_AREA_DATA = 'UPDATE_AREA_DATA'
+export const SET_AREA_DATA = 'SET_AREA_DATA'
