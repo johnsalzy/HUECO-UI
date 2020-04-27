@@ -1,7 +1,7 @@
 import {ADD_TODO, TOGGLE_TODO, LOGIN_USER_NORMAL, LOGOUT_USER_NORMAL, DELETE_USER_DATA, 
         UPDATE_USER_STATS, REFRESH_TOKEN, UPDATE_USER_PROFILE, SET_USER_PROFILE } from './actionTypes'
 import {UPDATE_SEARCH_DATA, UPDATE_MEDIA_INDEX} from './actionTypes' // For updating media
-import {UPDATE_AREA_DATA} from './actionTypes' // For updating media
+import {UPDATE_AREA_DATA, SET_AREA_DATA} from './actionTypes' // For updating media
 
 let nextId = 0
 export const addTodo = (text) => ({
@@ -83,4 +83,10 @@ export const updateMediaIndex = (index) => ({
 export const updateAreaData = (data) => ({
     type: UPDATE_AREA_DATA,
     data: data,
+})
+
+export const setAreaData = (data, status) => ({
+    type: SET_AREA_DATA,
+    data: data,
+    status: status
 })
