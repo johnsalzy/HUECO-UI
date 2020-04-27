@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Switch, Dimensions } from 'react-native';
 import {connect} from 'react-redux';
 
 import { VictoryBar, VictoryChart, VictoryLabel, VictoryAxis, VictoryLine } from "victory-native";
+import { fetchGet } from '../../functions/api';
 const windowWidth = Dimensions.get('window').width;
 // const windowHeight = Dimensions.get('window').height;
 
@@ -128,50 +129,42 @@ class Stats extends Component {
       userData: this.props.user,
       type: this.props.type,
       switch1Value: false,
-      data: { //Show bolder by default
-        type: 'Boulder',
-        sends: this.props.stats.allTime.boulder
-      },
+      tickValues: [new Date(1999, 1, 1), new Date(Date.now())],
+      boulder: [],
+      rope: []
     }
   }
-
-    getTickValues(rope, boulder) {
-        const dataRopeLast = rope[rope.length]
-        const dataBoulderLast = boulder[boulder.length]
-        const dataRopeFirst = rope[0]
-        const dataBoulderFirst = boulder[0]
-
-        return [
-        new Date(1999, 1, 1),
-        new Date(2000, 1, 1),
-        new Date(2001, 1, 1),
-        new Date(2002, 1, 1),
-        new Date(2003, 1, 1),
-        new Date(2004, 1, 1),
-        new Date(2005, 1, 1),
-        new Date(2006, 1, 1),
-        new Date(2007, 1, 1),
-        new Date(2008, 1, 1),
-        new Date(2009, 1, 1),
-        new Date(2010, 1, 1),
-        new Date(2011, 1, 1),
-        new Date(2012, 1, 1),
-        new Date(2013, 1, 1),
-        new Date(2014, 1, 1),
-        new Date(2015, 1, 1),
-        new Date(2016, 1, 1),
-        new Date(2017, 1, 1),
-        new Date(2018, 1, 1),
-        new Date(2019, 1, 1),
-        new Date(2020, 1, 1),
-        ];
+  async componentDidMount(){
+    let response = await fetchGet('climbing/tick/daily/')
+    let rope = []
+    for(const item in response.rope){
+      console.log('item', item)
+      rope.push({x: new Date(response.rope[item].date), y: response.rope[item].count})
     }
+
+    this.setState({boulder: response.boulder, rope: rope})
+    this.getTickValues(response)
+  }
+  getTickValues(data) {
+      const dataRopeLast = data.rope[data.rope.length-1].date
+      const dataBoulderLast = data.boulder[data.boulder.length-1].date
+      const dataRopeFirst = data.rope[0].date
+      const dataBoulderFirst = data.boulder[0].date
+      let new_tick_vals = [
+        new Date(dataRopeFirst),
+        new Date(dataBoulderFirst),
+        new Date(dataBoulderLast),
+        new Date(dataRopeLast),
+      ];
+      this.setState({tickValues: new_tick_vals})
+  }
 
 
   render(){
-    // alert('this.state render ' + JSON.stringify(this.state.data))
     const chartWidth = windowWidth*.9;
     const ChartStyles = getStyles();
+    let {tickValues, boulder, rope } = this.state;
+    console.log('SendsVsTime', rope)
     const data_toprope = [
         { x: new Date(1999, 1, 1), y: 2 },
         { x: new Date(2000, 1, 1), y: 3 },
@@ -190,7 +183,7 @@ class Stats extends Component {
         { x: new Date(2019, 4, 1), y: 1 },
         { x: new Date(2020, 3, 11), y: 9 },
     ]
-    const tickValues = this.getTickValues(data_toprope, data_boulder);
+    
 
     return (
         <View style={styles.container}>
@@ -219,6 +212,12 @@ class Stats extends Component {
                     standalone={false}
                     style={ChartStyles.axisOne}
                 />
+                <VictoryAxis dependentAxis
+                  offsetX={50}
+                  orientation="right"
+                  standalone={false}
+                  style={ChartStyles.axisTwo}
+                />
 
                 <VictoryLabel style={ChartStyles.title} text={"Sends vs. Time"} x={chartWidth/2} y={30} textAnchor="middle"/>
                 <VictoryLabel x={50} y={55} style={ChartStyles.labelOne}
@@ -227,20 +226,21 @@ class Stats extends Component {
                 <VictoryLabel x={350} y={55} style={ChartStyles.labelTwo}
                     text={"Toprope & Lead Sends"}
                 />
-                
-                <VictoryLine
-                    style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"}
-                    }}
-                    domain={{
-                        x: [data_toprope[0].x, new Date(Date.now())],
-                        y: [0, 30]
-                    }}
-                    scale={{x: "time", y: "linear"}}
-                    data={data_toprope}
-                    style={ChartStyles.lineOne}
-                />
+                {rope.length > 1 && 
+                  <VictoryLine
+                      style={{
+                          data: { stroke: "#c43a31" },
+                          parent: { border: "1px solid #ccc"}
+                      }}
+                      domain={{
+                          x: [data_toprope[0].x, new Date(Date.now())],
+                          y: [0, 30]
+                      }}
+                      scale={{x: "time", y: "linear"}}
+                      data={rope}
+                      style={ChartStyles.lineTwo}
+                  />
+                }
                 <VictoryLine
                     style={{
                         data: { stroke: "#c43a31" },
@@ -252,7 +252,7 @@ class Stats extends Component {
                     }}
                     scale={{x: "time", y: "linear"}}
                     data={data_boulder}
-                    style={ChartStyles.lineTwo}
+                    style={ChartStyles.lineOne}
                 />
             </VictoryChart>
         </View>
