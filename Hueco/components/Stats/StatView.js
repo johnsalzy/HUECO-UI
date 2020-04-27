@@ -39,7 +39,7 @@ class StatView extends Component {
                 />
             </View>
             <View style={{width: '100%', alignItems: 'center', alignContent: 'center'}}>
-                { selectedIndex ? <Stats type={type} idUser={id} />: <Posts type={type} id={id}/> }
+                { selectedIndex ? <Stats id={id} type={type} idUser={id} />: <Posts type={type} id={id}/> }
             </View>
         </View>
     );

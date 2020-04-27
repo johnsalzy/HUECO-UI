@@ -16,7 +16,7 @@ export default class RouteView extends React.Component {
     render(){
         let { data } = this.state
         return (
-            <View style={app_styles.background}>
+            <View>
                 {data.count > 0 ?
                   data.results.map((data, index) => (
                         <RouteResult key={index} data={data}/>
