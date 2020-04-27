@@ -10,4 +10,12 @@ const details = StyleSheet.create({
     },
 })
 
-export { details }
+const titles = StyleSheet.create({
+    regular: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        color: 'cornflowerblue',
+    },
+})
+
+export { details, titles }
