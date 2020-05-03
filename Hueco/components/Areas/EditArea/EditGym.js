@@ -8,26 +8,24 @@ import {
     TouchableOpacity,
     Modal,
     Dimensions,
-    Picker,
-    Button,
     TextInput,
+    ActivityIndicator,
     Platform,
-    ActivityIndicator
 } from "react-native";
-
+import Dropdown from '../../DropDown';
 import { connect } from 'react-redux';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from 'date-fns'
 import FlashMessage from "react-native-flash-message";
 import { showMessage } from "react-native-flash-message";
 import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
 //Import Screens/Components/Styles
+import AttachMedia from '../../Media/AttachMedia';
+import ImageWithLoader from '../../ImageWithLoader';
 import Icon from '../../Ionicon';
-import { fetchGet, fetchPost } from '../../../functions/api'
+import { fetchGet, fetchPost, fetchPostMedia } from '../../../functions/api'
 import { titles } from '../../../assets/styles/text';
 import Routes from '../../Routes/Routes';
+import { boulder_grade, rope_grade } from '../../../assets/languages/ClimbingGrades';
 
-const windowWidth = Dimensions.get('window').width;
 const mapStateToProps = state => (
     {
       areas: state.areas,
@@ -43,61 +41,119 @@ class EditGym extends Component {
             user: this.props.user,
             sel_area: this.props.areas.status[0].id,
             route_data: null,
-            loading_routes: true,
-
+            loading_routes: false,
+            media: null,
             // Create a route vars
-            sel_grade: 'Boulder',
+            wall_list: [],
+            wallSelectID: null,
+            wallSelect: 'Select a Wall',
+            gradeSelect: "Select a Grade",
+            typeSelect: 'Boulder',
+            areaSelect: 'Select An Area',
             route_name: '',
+            walls_in_area: [],
+            sel_wall_value: null,
+            sel_grade_value: '',
+            grades: boulder_grade.v_scale,
+            attach_media: false,
         };
     }
-    componentDidMount(){
-        let {sel_area} = this.state;
-        this.getRoutesInArea(sel_area)
-    }
 
-    getRoutesInArea(sel_area){
+    getAreaData(sel_area){
         let { user } = this.state;
-        let apiRoute = 'routes/?setter=' + user.id + '&area=' + sel_area
-        this.loadData(apiRoute)
+        let apiRoute = '';
+        apiRoute = 'routes/?setter=' + user.id + '&area=' + sel_area.id
+        this.loadRouteData(apiRoute)
+        // Get the walls in area
+        apiRoute = 'walls/?area=' + sel_area.id
+        this.loadWallData(apiRoute, [])
+    }
+    async createRoute(){
+        var formdata = new FormData();
+        // Will create a route when submit button is pressed
+        let {wallSelectID, gradeSelect, typeSelect, route_name, media, user} = this.state;
+        let message, type = ''
+        formdata.append("name", route_name);
+        formdata.append("setter", user.id);
+        formdata.append("wall", wallSelectID);
+        formdata.append("rating", gradeSelect);
+        formdata.append("route_type", typeSelect);
+        if(media){
+            let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
+            formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'fetchPostMedia'});
+            formdata.append("media.media_type", media.type);
+        }
+        if(route_name=="" || wallSelectID == null || gradeSelect == "Select a Grade" ){
+            type = 'info'
+            message = "Could Not Create Route"
+        } else {
+            let response = await fetchPostMedia('routes/', formdata)
+            if(response.status == 201){
+                this.setState({route_name: "", media: null, gradeSelect: "Select a Grade"})
+                type = 'success'
+                message = "Route Created"
+            } else {
+                type = 'danger'
+                message = "Could Not Create Route"
+            }
+        }
+        this.refs.localFlashMessage.showMessage({
+            message: message,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
     }
 
-    async loadData(apiRoute){
+    async loadWallData(apiRoute, wall_list){
+        let response = await fetchGet(apiRoute)
+        //Create array of data
+        for(const i in response.results){
+            wall_list.push({name: response.results[i].name, id: response.results[i].id})
+        }
+        if(response.next){this.loadWallData(response.next, wall_list)}
+        else(this.setState({wall_list: wall_list}))
+    }
+
+    async loadRouteData(apiRoute){
+        console.log('EditGym.js', apiRoute)
         this.setState({loading_routes: true})
         let response = await fetchGet(apiRoute)
         this.setState({route_data: response, loading_routes: false})
     }
-
+    selectGrade(sel_grade){
+        let grade = [];
+        if(sel_grade.name == "Boulder"){
+            grade = boulder_grade.v_scale
+        } else {
+            grade = rope_grade.yosemite_D_S
+        }
+        this.setState({ typeSelect: sel_grade.name, grades: grade, gradeSelect: "Select a Grade"})
+    }
     render() {
-        let { areas, route_data, loading_routes } = this.state;
+        let { areas, route_data, loading_routes, grades, wall_list, areaSelect, wallSelect, typeSelect, gradeSelect, attach_media, media } = this.state;
         return (
                 <Modal
                     animationType="fade"
                     transparent={true}
                     visible={this.props.modalVisible}
                     onRequestClose={() => this.props.closeModal()}
-                    
                 >
                     <ScrollView style={styles.container}>
-                        <TouchableOpacity style={styles.backButton} onPress={() => this.props.closeModal()}>
-                            <Icon size={40} color='firebrick' name='arrow-back'/>
-                        </TouchableOpacity>
                         <View>
                             <Text style={titles.regular}>Select Area to Edit</Text>
-                            <View style={{ height: 40, borderColor: 'black', borderWidth: 1, justifyContent: 'center' }}>
-                                <Picker
-                                    selectedValue={this.state.sel_area}
-                                    placeholder={'Select An Area...'}
-                                    onValueChange={(itemValue) => {
-                                                this.setState({ sel_area: itemValue })
-                                                this.getRoutesInArea(itemValue)
-                                            }
-                                        }
-                                    >
-                                    {areas.status.map((area) => (
-                                        <Picker.Item key={area.id} label={area.name} value={area.id}/>
-                                    ))}
-                                </Picker>
+                            <View style={{width: '100%'}}>
+                                <Dropdown
+                                    selected={areaSelect}
+                                    setSelected={(item) => {
+                                        this.setState({ areaSelect: item.name, wallSelect: 'Select a Wall', wallSelectID: null})
+                                        this.getAreaData(item)
+                                    }}
+                                    data={areas.status}
+                                />
                             </View>
+
                         </View>
 
                         {/* ------------------- Create a Route Seciton -------------------*/}
@@ -106,7 +162,7 @@ class EditGym extends Component {
 
                             <View style={styles.flexRow}>
                                 <Text style={styles.createTitle}>Name</Text>
-                                <View style={{ marginLeft: 10, height: 25, width: 150, borderColor: 'black', borderWidth: 1, justifyContent: 'center' }}>
+                                <View style={{ height: 30, width: 200, borderColor: 'black', borderWidth: 1, justifyContent: 'center' }}>
                                     <TextInput 
                                         style={{paddingLeft: 5}}
                                         onChangeText = {(route_name) => this.setState({route_name})}
@@ -115,25 +171,71 @@ class EditGym extends Component {
                                     />
                                 </View>
                             </View>
+                            {/* Sections to choose wall to add route to */}
+                            <View style={styles.flexRow}>
+                                <Text style={styles.createTitle}>Wall</Text>
+                                <View style={{width: 200}}>
+                                    <Dropdown
+                                        selected={wallSelect}
+                                        setSelected={(item) => this.setState({wallSelect: item.name, wallSelectID: item.id})}
+                                        data={wall_list}
+                                    />
+                                </View>
 
+                            </View>
                             <View style={styles.flexRow}>
                                 <Text style={styles.createTitle}>Type</Text>
-                                <View style={{ marginLeft: 10, height: 25, width: 150, borderColor: 'black', borderWidth: 1, justifyContent: 'center' }}>
-                                    <Picker
-                                        selectedValue={this.state.sel_grade}
-                                        placeholder={'Select An Area...'}
-                                        onValueChange={(itemValue) => this.setState({ sel_grade: itemValue })}
-                                        >
-                                        <Picker.Item label={'Boulder'} value={'Boulder'}/>
-                                        <Picker.Item label={'Top Rope'} value={'TopRope'}/>
-                                        <Picker.Item label={'Lead'} value={'Lead'}/>
-                                        <Picker.Item label={'Trad'} value={'Trad'}/>
-                                    </Picker>
+                                <View style={{width: 200}}>
+                                    <Dropdown
+                                        selected={typeSelect}
+                                        setSelected={(item) => this.selectGrade(item)}
+                                        data={[{name: "Boulder"}, {name: "Top Rope"}, {name: "Lead"}, {name: "Trad"}]}
+                                    />
                                 </View>
                             </View>
-                            <Text>Grade</Text>
-                            <Text>Wall</Text>
-                            <Text>Picture(Optional)</Text>
+                            <View style={styles.flexRow}>
+                                <Text style={styles.createTitle}>Grade</Text>
+                                <View style={{width: 200}}>
+                                    <Dropdown
+                                        selected={gradeSelect}
+                                        setSelected={(item) => this.setState({gradeSelect: item.name})}
+                                        data={grades}
+                                    />
+                                </View>
+                            </View>
+                            <View style={styles.flexRow}>
+                                <Text style={styles.createTitle}>Picture(Optional)</Text>
+                                {media ? 
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({media: null})}
+                                    >
+                                        <View
+                                            style={{width: 200, height: 200}}
+                                        >
+                                            <ImageWithLoader uri={media.uri}/>
+                                        </View>
+                                        
+                                        <Text style={{color: 'red', textAlign: 'center'}}>Remove Media</Text> 
+                                    </TouchableOpacity>
+                                : 
+                                    
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({attach_media: true})}
+                                    >
+                                        <Icon size={20} name={'add-a-photo'}/>
+                                    </TouchableOpacity>
+                                }
+                                
+                            </View>
+                            
+                            <View style={{alignItems: 'center'}}>
+                                <TouchableOpacity
+                                    onPress={() => this.createRoute()}
+                                    style={{width: '50%', alignItems: 'center', backgroundColor: 'cornflowerblue', borderRadius: 5, marginTop: 10}}
+                                >
+                                    <Text style={{textAlign: 'center', color: 'white', paddingVertical: 3}}>Create Route</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
 
@@ -144,25 +246,41 @@ class EditGym extends Component {
                                     <ActivityIndicator  animating size="large" />
                                 :
                                     <View>
-                                        {route_data && 
-                                            <View>
+                                        {route_data ? 
+                                            <View 
+                                                style={{...ifIphoneX({
+                                                    paddingBottom: 65
+                                                }, {
+                                                    paddingBottom: 50,
+                                                })}}
+                                            >
                                                 <Routes data={route_data}/>
-                                                {route_data.next && <TouchableOpacity><Text>Next</Text></TouchableOpacity>}
-                                                {route_data.next && <TouchableOpacity><Text>Previous</Text></TouchableOpacity>}
+                                                <View style={{flexDirection: 'row', padding: 10}}>
+                                                    {route_data.next &&
+                                                        <TouchableOpacity onPress={() => this.loadRouteData(route_data.previous)} style={{alignItems: 'center',}}>
+                                                            <Text style={styles.loadNextData}>Load Previous</Text>
+                                                        </TouchableOpacity> 
+                                                    }
+                                                    {route_data.prev && 
+                                                        <TouchableOpacity onPress={() => this.loadRouteData(route_data.next)} style={{alignItems: 'center', marginLeft: 'auto'}}>
+                                                            <Text style={styles.loadNextData}>Load Next</Text>
+                                                        </TouchableOpacity> 
+                                                    }
+                                                </View>
                                             </View>
+                                        :
+                                            <Text style={{textAlign: 'center', fontSize: 15, color: 'cornflowerblue'}}>Select Area To View Routes</Text>
                                         }
                                     </View>
                                 }
                             </View>
                         </View>
-
-                            
-
-
-                            
-
                     </ScrollView>
+                    <TouchableOpacity style={styles.backButton} onPress={() => this.props.closeModal()}>
+                        <Icon size={40} color='firebrick' name='arrow-back'/>
+                    </TouchableOpacity>
                     <FlashMessage ref="localFlashMessage"/>
+                    {attach_media && <AttachMedia attachMedia={(given) => this.setState({media: given})} cancelMedia={() => this.setState({attach_media: false})}/>}
                 </Modal>
         );
     }
@@ -174,9 +292,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         ...ifIphoneX({
-            paddingTop: 50
+            paddingTop: 65
         }, {
-            paddingTop: 0
+            paddingTop: 50,
         }),
         marginBottom: getBottomSpace(),
         width: '100%', 
@@ -188,7 +306,14 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     backButton: {
-        marginRight: 'auto'
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        ...ifIphoneX({
+            paddingTop: 30
+        }, {
+            paddingTop: 15
+        }),
     },
     flexRow: {
         flexDirection: 'row',
@@ -198,6 +323,11 @@ const styles = StyleSheet.create({
     createTitle: {
         width: '35%',
         fontSize: 14,
-    }
+    },    
+    loadNextData: {
+        color: 'dodgerblue', 
+        fontWeight: 'bold', 
+        fontSize: 20}
+    },
 
-});
+);
