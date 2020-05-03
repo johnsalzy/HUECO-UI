@@ -17,13 +17,14 @@ import { connect } from 'react-redux';
 import FlashMessage from "react-native-flash-message";
 import { showMessage } from "react-native-flash-message";
 import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
+
 //Import Screens/Components/Styles
 import AttachMedia from '../../Media/AttachMedia';
 import ImageWithLoader from '../../ImageWithLoader';
 import Icon from '../../Ionicon';
-import { fetchGet, fetchPost, fetchPostMedia } from '../../../functions/api'
+import { fetchGet, fetchPostMedia, fetchDelete } from '../../../functions/api'
+import RouteResult from '../../Routes/RouteResult';
 import { titles } from '../../../assets/styles/text';
-import Routes from '../../Routes/Routes';
 import { boulder_grade, rope_grade } from '../../../assets/languages/ClimbingGrades';
 
 const mapStateToProps = state => (
@@ -129,6 +130,36 @@ class EditGym extends Component {
             grade = rope_grade.yosemite_D_S
         }
         this.setState({ typeSelect: sel_grade.name, grades: grade, gradeSelect: "Select a Grade"})
+    }
+    async deleteRoute(data){
+        console.log('delete route', data.id)
+        let response = await fetchDelete('routes/'+ data.id + '/')
+        let message, type = ""
+        
+        if(response.status == 200){
+            // Remove route from state
+            let {route_data} = this.state;
+            route_data.count = route_data.count - 1
+            for(const route in route_data.results){
+                if(route_data.results[route].id == data.id){
+                    route_data.results.splice(route, 1)
+                    break;
+                }
+            }
+            this.setState({route_data: route_data})
+            message = "Route:" + data.name + " Deleted"
+            type = 'success'
+        } else {
+            message = "Could Not Delete " + data.name
+            type = 'danger'
+        }
+        this.refs.localFlashMessage.showMessage({
+            message: message,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
     }
     render() {
         let { areas, route_data, loading_routes, grades, wall_list, areaSelect, wallSelect, typeSelect, gradeSelect, attach_media, media } = this.state;
@@ -237,7 +268,7 @@ class EditGym extends Component {
                             </View>
                         </View>
 
-
+                        {/* To show routes that you created */}
                         <View style={{marginTop: 10}}>
                             <Text style={titles.regular}>Your Routes</Text>
                             <View style={{alignItems: 'center'}}>
@@ -253,7 +284,27 @@ class EditGym extends Component {
                                                     paddingBottom: 50,
                                                 })}}
                                             >
-                                                <Routes data={route_data}/>
+                                                <View>
+                                                    {route_data.count > 0 ?
+                                                        route_data.results.map((data, index) => (
+                                                            <View key={index} style={{flexDirection: 'row', alignItems: 'center'}}>
+                                                                <View style={{width: '90%'}}>
+                                                                    <RouteResult data={data}/>
+                                                                </View>
+
+                                                                <TouchableOpacity
+                                                                    style={{alignItems: 'center'}}
+                                                                    onPress={() => this.deleteRoute(data)}
+                                                                >
+                                                                    <Icon name="delete" size={30} color={'red'}/>
+                                                                </TouchableOpacity>
+                                                            </View>
+                                                        ))
+                                                    : 
+                                                        <Text style={{color: 'cornflowerblue'}}>No Routes Found :(</Text> 
+                                                    }
+                                                </View>
+                                                    
                                                 <View style={{flexDirection: 'row', padding: 10}}>
                                                     {route_data.next &&
                                                         <TouchableOpacity onPress={() => this.loadRouteData(route_data.previous)} style={{alignItems: 'center',}}>
