@@ -84,9 +84,17 @@ class EditGym extends Component {
             formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'fetchPostMedia'});
             formdata.append("media.media_type", media.type);
         }
-        if(route_name=="" || wallSelectID == null || gradeSelect == "Select a Grade" ){
+        if(route_name=="" ){
             type = 'info'
-            message = "Could Not Create Route"
+            message = "Please Enter A Route Name"
+        }
+        else if(wallSelectID == null){
+            type = 'info'
+            message = "Please Select a Wall"
+        }
+        else if(gradeSelect == "Select a Grade"){
+            type = 'info'
+            message = "Please Select a Grade"
         } else {
             let response = await fetchPostMedia('routes/', formdata)
             if(response.status == 201){
@@ -132,10 +140,8 @@ class EditGym extends Component {
         this.setState({ typeSelect: sel_grade.name, grades: grade, gradeSelect: "Select a Grade"})
     }
     async deleteRoute(data){
-        console.log('delete route', data.id)
         let response = await fetchDelete('routes/'+ data.id + '/')
         let message, type = ""
-        
         if(response.status == 200){
             // Remove route from state
             let {route_data} = this.state;
