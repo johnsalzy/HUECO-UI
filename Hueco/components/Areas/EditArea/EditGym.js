@@ -117,7 +117,6 @@ class EditGym extends Component {
     }
 
     async loadRouteData(apiRoute){
-        console.log('EditGym.js', apiRoute)
         this.setState({loading_routes: true})
         let response = await fetchGet(apiRoute)
         this.setState({route_data: response, loading_routes: false})
