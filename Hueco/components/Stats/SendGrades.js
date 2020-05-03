@@ -55,7 +55,7 @@ class SendGrades extends Component {
     return (
         <View style={styles.container}>
             {/* For showing all sends */}
-            {type == 'user' && data &&
+            {data &&
               <View style={styles.chart}>
                   <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center', marginLeft: 'auto', paddingRight: 10}}>
                       <Text>Boulder</Text>

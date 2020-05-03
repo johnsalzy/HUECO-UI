@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import SendGrades from './SendGrades';
 import SendsVsTime from './SendsVsTime';
+import RouteComments from './RouteComments';
 const windowWidth = Dimensions.get('window').width;
 // const windowHeight = Dimensions.get('window').height;
 
@@ -32,11 +33,11 @@ class Stats extends Component {
   render(){
     let {type, id} = this.state;
     // alert('this.state render ' + JSON.stringify(this.state.data))
-    const chartWidth = windowWidth*.9;
     return (
         <View style={styles.container}>
-            <SendGrades id={id} type={type} />
-            <SendsVsTime id={id} type={type}/>
+            {type == 'user' && <SendGrades id={id} type={type} />}
+            {type == 'user' && <SendsVsTime id={id} type={type}/>}
+            {type == 'route' && <RouteComments />}
 
 
 
