@@ -2,13 +2,9 @@
 import React, { Component } from "react";
 import {
     View,
-    ScrollView,
     Text,
     StyleSheet,
     TouchableOpacity,
-    Image,
-    Dimensions,
-    Modal,
     ActivityIndicator,
     TextInput,
 } from "react-native";
@@ -17,9 +13,8 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import FlashMessage from "react-native-flash-message";
-import { showMessage } from "react-native-flash-message";
 
-import { fetchGet, fetchPatchMedia } from '../../../functions/api'
+import { fetchPatchMedia } from '../../../functions/api'
 import { updateUserProfile } from '../../../redux/actions'
 import ImageWithLoader from '../../ImageWithLoader';
 

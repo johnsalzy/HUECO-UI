@@ -38,8 +38,6 @@ class Settings extends Component {
         this.props.close()
     }
 
-    
-
     render() {
         let { target, data } = this.state
         return (
@@ -56,19 +54,25 @@ class Settings extends Component {
                             <Achievements user_id={data.id}/>
                         }
                         {target == 'world' &&
-                            <Text>Place?</Text>
+                            <View style={{ alignItems: 'center', width: '100%'}}>
+                                <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Your Places</Text>
+                                <Text>Places You've Climbed</Text>
+                                <Text>Coming Soon...</Text>
+                            </View>
                         }
                         {target == 'group' &&
-                            <View style={{paddingTop: 30, alignSelf: 'center', width: '80%'}}>
+                            <View style={{ alignItems: 'center', width: '100%'}}>
+                                <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Groups</Text>
                                 <Text>Your Send Groups</Text>
                                 <Text>Send Group: Top Tier Bouldering</Text>
                                 <Text>Members: @john @matt @emilyrocks</Text>
-                                <Text>Recent Posts....</Text>
+                                <Text>Chats</Text>
                                 <Text>Coming Soon...</Text>
                             </View>
                         }
                         {target == 'settings' &&
-                            <View style={{paddingTop: 30, alignSelf: 'center', width: '80%'}}>
+                            <View style={{ alignSelf: 'center', width: '80%'}}>
+                                <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Settings</Text>
                                 <Text>Low Data Mode</Text>
                                 <Text>Profile Private</Text>
                                 <Text>Coming Soon...</Text>
