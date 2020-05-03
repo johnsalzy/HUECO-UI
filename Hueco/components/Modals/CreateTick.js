@@ -81,7 +81,7 @@ class CreateTick extends Component {
 
     async submitTick(){
         let { data, rating, checked, date, comment } = this.state
-        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay()
+        date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate()
         let body = {
             route: data.id, stars: rating, date: date, 
             ascent_type: checked+1, comments: comment
