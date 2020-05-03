@@ -3,20 +3,18 @@ import React, { Component } from "react";
 import {
     View,
     Text,
-    Dimensions,
     StyleSheet,
     TouchableOpacity,
+    ScrollView,
 } from "react-native";
 import {connect} from 'react-redux';
-import { Tooltip } from 'react-native-elements';
+import FlashMessage from "react-native-flash-message";
 
 // Imports of app libraries
 import Icon from '../../Ionicon';
-import { fetchGet, fetchPatchMedia } from '../../../functions/api'
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').width;
-
+import { fetchGet, fetchPost } from '../../../functions/api'
+import { ActivityIndicator } from "react-native-paper";
+import { updateUserProfile } from '../../../redux/actions';
 
 const mapStateToProps = state => (
     {
@@ -39,55 +37,77 @@ class Achievements extends Component {
         let { id } = this.state;
         let response = await fetchGet('social/achievement/user/' + id)
         this.setState({data: response})
-        console.log(response)
     }
 
+    async pin_achievement(id){
+        let { data } = this.state;
+        for(const achievement in data){
+            if(data[achievement].achievement.id == id){
+                data[achievement].selected = true
+            } else {
+                data[achievement].selected = false
+            }
+        }
+        let resposne = await fetchPost('social/user-achievement/', {achievement: id})
+        if(resposne.status == 200){
+            this.props.dispatch(updateUserProfile(true))
+            this.setState({data: data})
+        } else {
+            this.showLocalMessage('Error', 'Could Not Update Achievement', 'danger')
+        }
+    }
+
+    showLocalMessage(message, description, type){
+        this.refs.localFlashMessage.showMessage({
+            message: message,
+            description: description,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
+    }
 
     render() {
         let {data} = this.state;
         return (
-                <View style={{paddingTop: 5, alignSelf: 'center', width: '80%'}}>
+                <ScrollView style={{paddingTop: 5, alignSelf: 'center', width: '80%'}}>
                     <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Achievements</Text>
                     <View style={{alignSelf: 'center'}}>
-                        {data && 
-                            <View style={{paddingTop: 20}}>
+                        {data ? 
+                            <View style={{paddingTop: 10}}>
                                 {data.map((data, index) =>
                                     <View key={index} style={{alignSelf: 'center'}}>
                                         {data.access ?
                                             <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                                                <Tooltip popover={<Text>{data.achievement.description}</Text>}>
+                                                <TouchableOpacity onPress={()=> this.showLocalMessage(data.achievement.name, data.achievement.description, 'info',)}>
                                                     <Text style={styles.has}>{data.achievement.name}</Text>
-                                                </Tooltip>
+                                                </TouchableOpacity>
                                                 {data.selected ? 
                                                     <Icon name={'place'} size={20} color={'dodgerblue'}/>
                                                 :
                                                     <TouchableOpacity
-                                                        onPress={() => alert('set as main: ' + data.achievement.id)}
+                                                        onPress={() => this.pin_achievement(data.achievement.id)}
                                                     >
-                                                        <Text>PIN</Text>
+                                                        <Icon name={'fiber-pin'} size={20} color={'dodgerblue'}/>
                                                     </TouchableOpacity>
                                                 }
-                                                
-
                                             </View>
-                                            
                                         :
-                                            <Tooltip popover={<Text>{data.achievement.description}</Text>}>
+                                            <TouchableOpacity onPress={()=> this.showLocalMessage(data.achievement.name, data.achievement.description, 'info',)}>
                                                 <Text style={styles.doesNotHave}>{data.achievement.name}</Text>
-                                            </Tooltip>
+                                            </TouchableOpacity>
                                         }
-                                        
-                                        
                                     </View>
                                 
                                 )}
                             </View>
+                        :
+                            <ActivityIndicator animating size={'medium'} />
                         }
-
-                        {/* Back and forth arrows here */}
-                        <Text>Next           Prev</Text>
                     </View>
-                </View>
+                    <FlashMessage ref="localFlashMessage"/>
+                </ScrollView>
         );
     }
 }
