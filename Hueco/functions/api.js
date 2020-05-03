@@ -107,7 +107,6 @@ export async function fetchDelete(apiRoute){
         'Authorization': 'Bearer ' + access_token,
       }
   })
-  .then(response => response.json())
   .catch((err) => handleError(err));
   return response
 }
