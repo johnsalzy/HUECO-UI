@@ -53,7 +53,7 @@ class RouteList extends Component {
   render(){
     let { data } = this.state
     return (
-        <View>
+        <View style={{height: '100%'}}>
             <View style={{height: '90%'}}>
                 <FlatList 
                     data={data.results}

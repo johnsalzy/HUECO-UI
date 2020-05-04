@@ -6,37 +6,64 @@ import {
     TouchableWithoutFeedback,
     Modal,
     Button,
+    ScrollView,
+    Dimensions,
     StyleSheet
 } from "react-native";
 
 //Import Component/Store/etc.
-import AddTodo from '../redux/containers/AddTodo'
-import VisableTodos from '../redux/containers/VisableTodos'
-import {app_styles} from '../assets/styles/universal'
+import { fetchGet } from '../functions/api';
+import RouteList from '../components/Walls/RouteList'
+import AddTodo from '../redux/containers/AddTodo';
+import VisableTodos from '../redux/containers/VisableTodos';
+import {app_styles} from '../assets/styles/universal';
+import { details } from '../assets/styles/text';
+
+
+//Page Constants
+const windowWidth = Dimensions.get('window').width;
 
 class Workout extends Component {
-    render() {
+  constructor(props){
+    super(props);
+    this.state = {
+        new_routes: {count: 0}
+    };
+  } 
 
+    async componentDidMount(){
+      let response = await fetchGet('routes/recent/')
+      this.setState({new_routes: response})
+    }
+
+
+    render() {
+      let {new_routes} = this.state;
         return (
             <View style={app_styles.screen}>
-                <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>This is Workouts Page</Text>
-                <View style={{alignItems: 'center'}}>
-                    <Text style={styles.textHeader}>New Routes Near You</Text>
-                    <View style={styles.headerRow} >
-                        <Text> Setter   |    Type      |            Name            | Grade </Text>
-                        <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                        <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                        <Text>  John  | Boulder   | Taco's First Route |   v0</Text>
-                        <Text>  Matt  | Top Rope  | Matt's First Route |   5.9</Text>
+                <View style={{height: '60%'}}>
+                  {new_routes.count > 0  ?
+                      <View style={{height: '100%', overflow: 'hidden', marginTop: 5, marginBottom: 20, }}>
+                          <Text style={details.not_found}>New Routes In Area</Text>
+                          <RouteList 
+                              data={new_routes} 
+                              apiRoute={new_routes.next}
+                          />
+
+                      </View>
+                  :
+                    <View style={{alignItems: 'center', marginTop: 20}}>
+                      <Text style={details.not_found}>No Routes Found In Your Pinned Area</Text>
                     </View>
+                  }
                 </View>
-                <View>
+                <ScrollView style={{height: '40%'}}> 
                     <AddTodo />
-                    <Text style={{fontSize:20, paddingTop: '5%', paddingLeft: '5%', alignContent: 'center', fontWeight: 'bold'}}>
+                    <Text style={{fontSize:20, paddingLeft: '5%', alignContent: 'center', fontWeight: 'bold'}}>
                       Dispaly List
                     </Text>
                   <VisableTodos />
-                </View>
+                </ScrollView>
             </View>
         );
     }
