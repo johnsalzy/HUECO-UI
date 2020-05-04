@@ -14,12 +14,12 @@ const mapStateToProps = state => (
     stats: state.stats
   }
 )
-const windowWidth = Dimensions.get('window').width;
 
 class Posts extends Component {
     constructor(props){
         super(props);
         this.state= {
+            width: Dimensions.get('window').width,
             username: this.props.login.username,
             access_token: this.props.login.access_token,
             userData: this.props.user,
@@ -76,7 +76,7 @@ class Posts extends Component {
         let { fetchData, prevData, nextData, dataFetched, modal_view_post, post_id } = this.state;
         // alert('fetchdata' + JSON.stringify(fetchData))
         return (
-            <View>
+            <View style={{width: '100%'}}>
                 {modal_view_post && 
                     <ViewPost 
                         modalVisable={modal_view_post} 
@@ -85,7 +85,10 @@ class Posts extends Component {
                     />
                 
                 }
-                <View style={styles.container}>
+                <View 
+                    onLayout={(event) => this.setState({width: event.nativeEvent.layout.width})}
+                    style={styles.container}    
+                >
                     {fetchData.count == 0 ? 
                         <View style={{alignContent: 'center', alignSelf: 'center', alignItems: 'center'}}>
                             { dataFetched ?
@@ -98,7 +101,7 @@ class Posts extends Component {
                     : 
                         fetchData.results.map((data, index) => (
                         <View
-                            style={{overflow: 'hidden'}}
+                            style={{overflow: 'hidden', width: this.state.width*.33, height: this.state.width*.33, paddingHorizontal: this.state.width*.0066, paddingVertical:this.state.width*.01,}}
                             key={index}
                         >
                             <TouchableOpacity onPress={() => this.setState({post_id: data.id, modal_view_post: true})}>
@@ -110,7 +113,7 @@ class Posts extends Component {
                                     </View>
                                 : 
                                     <View style={styles.postThumbnail}>
-                                        <Text>Text: {data.text}</Text>
+                                        <Text style={{padding: 4, textAlign: 'center', color: 'white', fontWeight: "bold"}}>{data.text}</Text>
                                     </View>
                                 }
                             </TouchableOpacity>
@@ -147,9 +150,12 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         alignSelf: 'center',
-        width: '100%',
+        justifyContent: 'center',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        width: '100%',
+        paddingBottom: 10,
+        marginBottom: 10,
     },
     loadNextData: {
         color: 'dodgerblue', 
@@ -157,13 +163,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     postThumbnail: {
-        height: windowWidth*.23,
-        width: windowWidth*.23,
+        height: '100%',
+        width: '100%',
         borderColor: 'black',
         borderWidth: 1,
-        // borderRadius: 4,
+        borderRadius: 4,
         margin: 1,
-        backgroundColor: 'linen',
+        backgroundColor: 'cornflowerblue',
         justifyContent: 'center',
     }
 });
