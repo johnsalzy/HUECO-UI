@@ -37,7 +37,7 @@ class Stats extends Component {
         <View style={styles.container}>
             {type == 'user' && <SendGrades id={id} type={type} />}
             {type == 'user' && <SendsVsTime id={id} type={type}/>}
-            {type == 'route' && <RouteComments />}
+            {type == 'route' && <RouteComments id={id}/>}
 
 
 
