@@ -66,11 +66,16 @@ class HomeScreen extends Component {
   }
 
   renderFooter = () => {
-    let {loading, nextData} = this.state
+    let {loading, nextData, data} = this.state
     if (nextData==null){
       return(
         <View style={{paddingVertical: 10, alignItems:'center'}}>
-            <Text style={details.not_found}>No More Posts ):</Text>
+            
+            {(!loading && data.results.length == 0) ?
+              <Text style={details.not_found}>Follow Users to See Posts</Text>
+            :
+              <Text style={details.not_found}>No More Posts ):</Text>
+            }
         </View>
       )
     }else if (!loading){
