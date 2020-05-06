@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import { logoutUser, clearProfile } from '../../../redux/actions'
 import AccountInfo from './AccountInfo';
 import Achievements from './Achievements';
+import DeviceSettings from './DeviceSettings';
 import Icon from '../../Ionicon';
 import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
 const sideBarIconColor = 'dodgerblue'
@@ -71,12 +72,7 @@ class Settings extends Component {
                             </View>
                         }
                         {target == 'settings' &&
-                            <View style={{ alignSelf: 'center', width: '80%'}}>
-                                <Text style={{color: 'cornflowerblue', fontSize: 30, textAlign: 'center', fontWeight: 'bold'}}>Settings</Text>
-                                <Text>Low Data Mode</Text>
-                                <Text>Profile Private</Text>
-                                <Text>Coming Soon...</Text>
-                            </View>
+                            <DeviceSettings />
                         }
                         {/* Logout Button */}
                         <View style={{alignSelf: 'center'}}>
