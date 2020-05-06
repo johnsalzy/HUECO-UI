@@ -22,6 +22,11 @@ const titles = StyleSheet.create({
         color: 'cornflowerblue',
         textAlign: 'center',
         paddingVertical: 5,
+    },
+    titleDivider: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 15,
     }
 })
 
