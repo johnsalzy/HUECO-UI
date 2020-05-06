@@ -20,7 +20,7 @@ import Register from '../components/Modals/Register';
 //Redux imports
 import {connect} from 'react-redux';
 import { loginUserNormal } from '../redux/actions'
-
+import ResetPassword from '../components/Modals/ResetPassword';
 const mapStateToProps = state => (
     {
     login: state.login
@@ -40,6 +40,7 @@ class Login extends Component {
         response: {},
         loginDataLoaded: false,
         modalVisible: false,
+        resetPassPage: false,
     }
     componentDidUpdate(){
         let {email} = this.state;
@@ -91,7 +92,7 @@ class Login extends Component {
     }
 
     render() {
-        let { modalVisible, loginSuccess} = this.state
+        let { modalVisible, loginSuccess, resetPassPage} = this.state
         return (
             <View style={styles.container}>
                 <View style={styles.container, {paddingTop: '0%'}}>
@@ -136,7 +137,7 @@ class Login extends Component {
                             secureTextEntry={true}
                         />
                     </View>
-                    <TouchableOpacity onPress={() => alert('Reset Password Page Here')}>
+                    <TouchableOpacity onPress={() => this.setState({resetPassPage: true})}>
                         <Text style={{color: 'white', fontSize:10, paddingTop: '3%', 
                                      textAlign: 'center'}}
                         >Forgot Password?
@@ -158,15 +159,6 @@ class Login extends Component {
                         <ActivityIndicator animating size='large'/>
                 
                     }
-                    
-
-
-                    {/* <TouchableOpacity style={ view_style.center} onPress={() => alert('Logging In with FB/Google')}>
-                        <Text style={buttons.primary}
-                        >
-                            Login With Google or Facebook
-                        </Text>
-                    </TouchableOpacity> */}
 
                     <TouchableOpacity style={ view_style.center} onPress={() => this.setState({modalVisible: true})}>
                         <Text style={buttons.primary}
@@ -184,6 +176,12 @@ class Login extends Component {
                         />
                     </View>
                 : null
+                }
+                {resetPassPage &&
+                    <ResetPassword 
+                        closeModal={() => this.setState({resetPassPage: false})} 
+                        modalVisible={resetPassPage}
+                    />
                 }
             </View>
         );

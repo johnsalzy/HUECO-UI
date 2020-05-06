@@ -16,6 +16,13 @@ const titles = StyleSheet.create({
         fontSize: 15,
         color: 'cornflowerblue',
     },
+    page_header: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: 'cornflowerblue',
+        textAlign: 'center',
+        paddingVertical: 5,
+    }
 })
 
 export { details, titles }
