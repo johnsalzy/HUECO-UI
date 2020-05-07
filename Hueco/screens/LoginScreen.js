@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Dimensions,
     ActivityIndicator,
+    Image,
 } from "react-native";
 
 const windowWidth = Dimensions.get('window').width;
@@ -16,6 +17,7 @@ const windowHeight = Dimensions.get('window').height;
 //Import Screens/Components/Styles
 import {view_style, text_input, buttons} from '../assets/styles/styles';
 import Register from '../components/Modals/Register';
+import { LOGO } from '../assets';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -95,32 +97,8 @@ class Login extends Component {
         let { modalVisible, loginSuccess, resetPassPage} = this.state
         return (
             <View style={styles.container}>
-                <View style={styles.container, {paddingTop: '0%'}}>
-
-
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-10%', marginBottom: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
-                    ---
-                    </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginBottom: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
-                    ---    ---
-                    </Text>
-                    <Text style={{color:'#F4DF73', fontSize:60, marginBottom: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
-                    ---            ---
-                    </Text>
-                    <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
-                        <Text style={{color:'#F4DF73', fontSize:47, textAlign: 'center', fontWeight: 'bold', paddingTop: 35, textAlign: 'center'}}>
-                        |      HUECO      |
-                        </Text>
-                    </View>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-18%', textAlign: 'center', fontWeight: 'bold', paddingTop: 35}}>
-                    ---            ---
-                    </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
-                    ---    ---
-                    </Text>
-                    <Text style={{color:'#F4DF73', paddingBottom: '3%', fontSize:60, marginTop: '-25%', textAlign: 'center', fontWeight: 'bold', paddingTop: 30}}>
-                    ---
-                    </Text>
+                <View>
+                    <Image source={ LOGO } style={{maxHeight: windowHeight*.30, width: '100%'}}/>
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
                             placeholder='E-mail'
@@ -194,7 +172,7 @@ export default connect(mapStateToProps)(Login);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#052F5F',
+        backgroundColor: 'cornflowerblue',
         paddingTop: 40
     },
     viewModalIn: {

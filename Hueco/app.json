@@ -14,9 +14,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/hueco.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "notification": {
+      "icon": "./assets/images/icon-notification.png",
+      "color": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
