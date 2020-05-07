@@ -65,8 +65,8 @@ class ResultFlatList extends Component {
                         <TouchableOpacity
                             onPress={() => this.setState({modalData: item, wallModal: true})}
                         >
-                            <View style={{borderWidth: 2, padding: 5, borderColor: 'black'}}>
-                                <Text>{item.name}</Text>
+                            <View style={{borderWidth: 2, borderColor: 'black', borderRadius: 4, paddingVertical: 10}}>
+                                <Text style={{fontWeight: 'bold', paddingLeft: 10}}>{item.name}</Text>
                             </View>
                         </TouchableOpacity>
                         

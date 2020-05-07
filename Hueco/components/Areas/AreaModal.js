@@ -77,7 +77,7 @@ class AreaView extends Component {
 
                                     <View>
                                         {wall_data.count > 0  ?
-                                            <View style={{height: '70%', overflow: 'hidden', marginTop: 20}}>
+                                            <View style={{maxHeight: '80%', overflow: 'hidden', marginTop: 20}}>
                                                 <Text style={details.not_found}>Walls In This Area</Text>
                                                 <ResultFlatList 
                                                     data={wall_data} 

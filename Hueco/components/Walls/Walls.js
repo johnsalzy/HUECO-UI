@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
       name:{
         fontSize:22,
         color:"#000000",
-        fontWeight:'600',
+        fontWeight:'bold',
         textAlign: 'center',
       },
       userInfo:{
