@@ -10,6 +10,7 @@ import {
     Dimensions,
     StyleSheet
 } from "react-native";
+import {connect} from 'react-redux';
 
 //Import Component/Store/etc.
 import { fetchGet } from '../functions/api';
@@ -22,29 +23,60 @@ import { details } from '../assets/styles/text';
 
 //Page Constants
 const windowWidth = Dimensions.get('window').width;
+const mapStateToProps = state => (
+  {
+    areas: state.areas,
+  }
+)
 
 class Workout extends Component {
   constructor(props){
     super(props);
     this.state = {
-        new_routes: {count: 0}
+        areas: this.props.areas,
+        new_routes: {count: 0},
+        pinned_area: {area: {name: ""}},
     };
   } 
+  getPinnedArea(){
+    // Get pinned area
+    let { areas } = this.state;
+    let pinned_area = ""
+    for(const area in areas.area_data){
+      if(areas.area_data[area].selected){
+        pinned_area = areas.area_data[area]
+        break
+      }
+    }
+    return pinned_area
+  }
+
 
     async componentDidMount(){
+      let pinned_area = this.getPinnedArea()
+      // Get new routes in pinned area
       let response = await fetchGet('routes/recent/')
-      this.setState({new_routes: response})
+      this.setState({new_routes: response, pinned_area: pinned_area})
     }
 
+    async componentDidUpdate(){
+      // Check if areas is updated so we can get new routes in the area
+      let { pinned_area } = this.state;
+      let new_pinned_area = this.getPinnedArea()
+      if(pinned_area != new_pinned_area){
+        let response = await fetchGet('routes/recent/')
+        this.setState({new_routes: response, pinned_area: new_pinned_area})
+      }
+    }
 
     render() {
-      let {new_routes} = this.state;
+      let {new_routes, pinned_area} = this.state;
         return (
             <View style={app_styles.screen}>
                 <View style={{maxHeight: '60%'}}>
                   {new_routes.count > 0  ?
                       <View style={{height: '100%', overflow: 'hidden', marginTop: 5, marginBottom: 20, }}>
-                          <Text style={details.not_found}>New Routes In Area</Text>
+                          <Text style={details.not_found}>New Routes In {pinned_area.area.name}</Text>
                           <RouteList 
                               data={new_routes} 
                               apiRoute={new_routes.next}
@@ -53,7 +85,7 @@ class Workout extends Component {
                       </View>
                   :
                     <View style={{alignItems: 'center', marginTop: 20}}>
-                      <Text style={details.not_found}>No Routes Found In Your Pinned Area</Text>
+                      <Text style={details.not_found}>No Routes Found In {pinned_area.area.name}</Text>
                     </View>
                   }
                 </View>
@@ -68,7 +100,7 @@ class Workout extends Component {
         );
     }
 }
-export default Workout;
+export default connect(mapStateToProps)(Workout);
 
 const styles = StyleSheet.create({
     textHeader: {
