@@ -54,7 +54,13 @@ class CreatePost extends Component {
     async handleSubmit(){
         let {login, media, title, taggedFriends, taggedRoute } = this.state
         if (title == ""){
-            alert('Please enter a title')
+            this.refs.localFlashMessage.showMessage({
+                message: "Please Enter a Title For Your Post",
+                type: "info",
+                titleStyle: {fontWeight: 'bold', fontSize: 15},
+                floating: true,
+                icon: { icon: "info", position: "left" }
+            })
             return
         }
         this.setState({response: null, postingMedia: true})
@@ -120,49 +126,53 @@ class CreatePost extends Component {
                                     value = {this.state.title}
                                 />
 
-                                <Text style={styles.text}>Tag A Friend/Route(Optional)</Text>
-                                
-                                <View style={styles.flexRow}>
-                                    <TouchableOpacity onPress={() => this.setState({tagFriend: !tagFriend})}>
+                                {/* Tag a Friend */}
+                                <View>
+                                    <Text style={styles.text}>Tag A Friend(Optional)</Text>
+                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagFriend: !tagFriend})}>
                                         <Icon size={30} color='dodgerblue' name='person-add'/>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.setState({tagRoute: !tagRoute})}>
+                                    {tagFriend && 
+                                        <TagFriend 
+                                            showMessage={(type, message) =>
+                                                this.refs.localFlashMessage.showMessage({
+                                                    message: message,
+                                                    type: type,
+                                                    titleStyle: {fontWeight: 'bold', fontSize: 15},
+                                                    floating: true,
+                                                    icon: { icon: type, position: "left" }
+                                                })
+                                            }
+                                            currentlyTagged={taggedFriends}
+                                            updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
+                                            closeFriends={() => this.setState({tagFriend: false})}
+                                        />
+                                    }
+                                </View>
+
+                                {/* Tag a Route */}
+                                <View>
+                                    <Text style={styles.text}>Tag A Route(Optional)</Text>
+                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagRoute: !tagRoute})}>
                                         <Icon size={30} color='dodgerblue' name='map'/>
                                     </TouchableOpacity>
+                                    {tagRoute && 
+                                        <TagRoute 
+                                            showMessage={(type, message) =>
+                                                this.refs.localFlashMessage.showMessage({
+                                                    message: message,
+                                                    type: type,
+                                                    titleStyle: {fontWeight: 'bold', fontSize: 15},
+                                                    floating: true,
+                                                    icon: { icon: type, position: "left" }
+                                                })
+                                            }
+                                            currentlyTagged={taggedRoute}
+                                            updateRouteTag={(id) => this.setState({taggedRoute: id})}
+                                            closeRoute={() => this.setState({tagRoute: false})}
+                                        />
+                                    }
                                 </View>
-                                {tagFriend && 
-                                    <TagFriend 
-                                        showMessage={(type, message) =>
-                                            this.refs.localFlashMessage.showMessage({
-                                                message: message,
-                                                type: type,
-                                                titleStyle: {fontWeight: 'bold', fontSize: 15},
-                                                floating: true,
-                                                icon: { icon: type, position: "left" }
-                                            })
-                                        }
-                                        currentlyTagged={taggedFriends}
-                                        updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
-                                        closeFriends={() => this.setState({tagFriend: false})}
-                                    />
-                                }
-                                {tagRoute && 
-                                    <TagRoute 
-                                        showMessage={(type, message) =>
-                                            this.refs.localFlashMessage.showMessage({
-                                                message: message,
-                                                type: type,
-                                                titleStyle: {fontWeight: 'bold', fontSize: 15},
-                                                floating: true,
-                                                icon: { icon: type, position: "left" }
-                                            })
-                                        }
-                                        currentlyTagged={taggedRoute}
-                                        updateRouteTag={(id) => this.setState({taggedRoute: id})}
-                                        closeRoute={() => this.setState({tagRoute: false})}
-                                    />
-                                }
-                                
                                 <Text style={styles.text}>Attach Media(Optional)</Text>
                                 <MediaPicker 
                                     type={'all'}
