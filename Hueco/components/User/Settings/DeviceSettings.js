@@ -28,8 +28,8 @@ class DeviceSettings extends Component {
         };
     }
     async enableNotifications(){
-        response = await registerForPushNotificationsAsync()
-        if(response.expoPushToken != ""){ this.setState({expoPushToken: response.expoPushToken})}
+        let response = await registerForPushNotificationsAsync()
+        if(response.expoPushToken){ this.setState({expoPushToken: response.expoPushToken, notifications_enabled: true})}
         else{this.setState({notifications_enabled: false})}
     }
 
@@ -66,7 +66,7 @@ class DeviceSettings extends Component {
                                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                                 thumbColor={notifications_enabled ? "#2239e3" : "#f4f3f4"}
                                 ios_backgroundColor="#3e3e3e"
-                                onValueChange={() => this.setState({notifications_enabled: !notifications_enabled})}
+                                onValueChange={() => this.enableNotifications()}
                                 value={notifications_enabled}
                             />
                         </View>
