@@ -12,7 +12,7 @@ import {details} from '../assets/styles/text';
 import PostFilter from '../components/Posts/PostFilter';
 import { fetchGet } from '../functions/api'
 import { setAreaData } from '../redux/actions'
-
+import Notification from '../components/Notifications/Notification'
 
 const mapStateToProps = state => (
   {
@@ -119,6 +119,7 @@ class HomeScreen extends Component {
         <View style={app_styles.screen}>
             <View style={{alignItems: 'center', height: '100%'}}>
                 {/* <Text style={styles.textHeader}>Recommended Feed</Text> */}
+                <Notification />
                 {data ? 
                   <FlatList 
                     data={data.results}
