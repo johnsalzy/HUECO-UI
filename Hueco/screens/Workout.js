@@ -41,7 +41,7 @@ class Workout extends Component {
       let {new_routes} = this.state;
         return (
             <View style={app_styles.screen}>
-                <View style={{height: '60%'}}>
+                <View style={{maxHeight: '60%'}}>
                   {new_routes.count > 0  ?
                       <View style={{height: '100%', overflow: 'hidden', marginTop: 5, marginBottom: 20, }}>
                           <Text style={details.not_found}>New Routes In Area</Text>
@@ -57,7 +57,7 @@ class Workout extends Component {
                     </View>
                   }
                 </View>
-                <ScrollView style={{height: '40%'}}> 
+                <ScrollView style={{maxHeight: '40%'}}> 
                     <AddTodo />
                     <Text style={{fontSize:20, paddingLeft: '5%', alignContent: 'center', fontWeight: 'bold'}}>
                       Dispaly List
