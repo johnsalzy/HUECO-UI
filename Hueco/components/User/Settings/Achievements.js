@@ -103,7 +103,7 @@ class Achievements extends Component {
                                 )}
                             </View>
                         :
-                            <ActivityIndicator animating size={'medium'} />
+                            <ActivityIndicator animating size={'small'} />
                         }
                     </View>
                     <FlashMessage ref="localFlashMessage"/>

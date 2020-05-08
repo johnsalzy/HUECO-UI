@@ -15,10 +15,9 @@ const app_styles = StyleSheet.create({
     },
     screen2: {
         flex: 1,
-        // paddingTop: 25,
         height: '100%',
         width: '100%',
-        backgroundColor: '#EBEBEB',
+        backgroundColor: 'white',
         ...ifIphoneX({
             marginTop: 35
         }, {
