@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, TextInput } from 'react-native';
 import {connect} from 'react-redux';
 import { Divider } from 'react-native-elements';
@@ -17,7 +17,7 @@ const mapStateToProps = state => (
 )
 const windowWidth = Dimensions.get('window').width;
 
-class MediaFilter extends Component {
+class MediaFilter extends PureComponent {
     constructor(props){
         super(props);
         this.state= {

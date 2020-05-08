@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, FlatList } from 'react-native';
 import {connect} from 'react-redux';
 
@@ -15,7 +15,7 @@ const mapStateToProps = state => (
 )
 
 
-class Comment extends Component {
+class Comment extends PureComponent {
     constructor(props){
         super(props);
         this.state= {
