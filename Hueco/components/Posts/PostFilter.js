@@ -42,17 +42,13 @@ class MediaFilter extends PureComponent {
     }
 
     async likePhoto(post_id){
-        // Hit API to like photo
-        let {login} = this.state;
         let apiRoute = 'social/like/';
-        // let access_token = login.access_token;
-        // fetchGet(apiRoute, access_token)
         let body = {
             post: post_id
         }
         let response = await fetchPost(apiRoute, body) 
 
-        // Flip state
+        // Flip liked state
         let data = {...this.state.data}
         data.liked = !data.liked
         if(data.liked){
@@ -72,8 +68,6 @@ class MediaFilter extends PureComponent {
                     <View 
                         style={{
                             backgroundColor: 'white',
-                            borderRadius: 2,
-                            borderWidth: 1,
                             borderColor: 'black',
                             padding: 3,
                         }}
@@ -82,14 +76,19 @@ class MediaFilter extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => this.openDataPage(data.route.id, 'route')}
                             >
-                                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>{data.route.name} - {data.route.rating}</Text>
+                                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center', textShadowColor: 'rgba(0, 0, 0, 0.75)',
+                                    textShadowOffset: {width: 0, height: 0},
+                                    textShadowRadius: 3}}
+                                >
+                                    {data.route.name} - {data.route.rating}
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 }
 
                 {data.media &&
-                    <View style={{height: windowWidth*.95, width: '100%'}}>
+                    <View style={{height: windowWidth, width: windowWidth, borderColor: 'black',}}>
                         <MediaPost type={data.media.media_type} uri={data.media.media_large}/>
                     </View>
                 }
@@ -97,10 +96,9 @@ class MediaFilter extends PureComponent {
                 <View 
                     style={{
                         backgroundColor: 'white',
-                        borderRadius: 2,
-                        borderWidth: 1,
                         borderColor: 'black',
                         padding: 3,
+                        overflow: "hidden"
                     }}
                 >
                     <View style={{flexWrap: 'wrap', flexDirection: 'row', width: '100%', height: 80, overflow: 'hidden'}}>
@@ -147,10 +145,10 @@ class MediaFilter extends PureComponent {
                             onPress={() => this.setState({viewPostDetails: !viewPostDetails})}
                         >
                             <View style= {{justifyContent: 'center', width: '100%', height: '100%', overflow: 'hidden', flexDirection: 'row'}}>
-                                {data.text.length < 30 ?
+                                {data.text.length < 60 ?
                                     <Text style={{ fontSize: 18, width: '90%', paddingLeft: 10, alignSelf: 'center', justifyContent: 'center'}}>{data.text}</Text>
                                 :
-                                    <Text style={{ fontSize: 18, width: '90%'}}>{data.text}</Text>
+                                    <Text style={{ fontSize: 18, width: '90%', alignSelf: 'center', justifyContent: 'center'}}>{data.text.substring(0, 60)}...</Text>
                                 }
                                 
 
@@ -166,7 +164,7 @@ class MediaFilter extends PureComponent {
                     </View>
 
                     {viewPostDetails &&
-                        <View style={{width: '100%', height: 260, paddingLeft: 5, paddingRight: 5}}>
+                        <View style={{width: '100%', maxHeight: 260, paddingLeft: 5, paddingRight: 5}}>
                             <View>
                                 <Divider style={dividers.standard}/>
                                 {/* Show when posted */}

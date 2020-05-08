@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { FAB } from 'react-native-paper';
+import { FAB, Divider } from 'react-native-paper';
 
 
 //Import files/componenets
@@ -37,12 +37,13 @@ class FlatListItem extends PureComponent {
     render(){
       let {data} = this.state;
       return(
-        <View style={{paddingBottom: 20}}>
+        <View >
         {data.type ? 
           <AdComponent />
         :
           <PostFilter data={data} />
         }
+        <Divider style={{paddingTop: 1, backgroundColor: 'cornflowerblue'}}/>
       </View>
       );
     }

@@ -17,7 +17,7 @@ class AdComponent extends React.PureComponent {
     return (
       <View style={{alignItems: 'center'}}>
           
-      <View style={{width: 320, height: 100, borderRadius: 1, borderColor: 'black', borderWidth: 2, overflow: 'hidden'}}>
+      <View style={{width: 320, height: 100, borderRadius: 1, borderColor: 'black', borderWidth: 2, overflow: 'hidden', marginVertical: 10}}>
         <AdMobBanner
           bannerSize="largeBanner"
           adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
