@@ -79,6 +79,16 @@ class CreateTick extends Component {
         }
       };
 
+    showLocalMessage(type, message){
+        this.refs.localFlashMessage.showMessage({
+            message: message,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
+    }
+
     async submitTick(){
         let { data, rating, checked, date, comment } = this.state
         date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate()
@@ -97,13 +107,7 @@ class CreateTick extends Component {
                 icon: { icon: "success", position: "left" }
             })
         } else {
-            this.refs.localFlashMessage.showMessage({
-                message: "Failed to Add Tick ):",
-                type: "danger",
-                titleStyle: {fontWeight: 'bold', fontSize: 15},
-                floating: true,
-                icon: { icon: "danger", position: "left" }
-            })
+            this.showLocalMessage("danger", "Failed to Add Tick ):")
         }
     }
 
@@ -248,6 +252,7 @@ class CreateTick extends Component {
 
                                         {tagRoute && 
                                             <TagRoute 
+                                                showMessage={(type, message) => this.showLocalMessage(type, message)}
                                                 updateRouteTag={(data) => this.chooseRoute(data)}
                                                 closeRoute={() => this.setState({tagRoute: false})}
                                             />
