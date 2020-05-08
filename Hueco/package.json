@@ -43,7 +43,8 @@
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "victory-native": "^34.1.0"
+    "victory-native": "^34.1.0",
+    "expo-ads-admob": "~8.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

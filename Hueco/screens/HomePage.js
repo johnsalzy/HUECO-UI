@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { FAB } from 'react-native-paper';
+
 
 //Import files/componenets
 import AddPostModal from '../components/Modals/CreatePost';
@@ -10,9 +11,12 @@ import EditGymModal from '../components/Areas/EditArea/EditGym';
 import {app_styles} from '../assets/styles/universal';
 import {details} from '../assets/styles/text';
 import PostFilter from '../components/Posts/PostFilter';
-import { fetchGet } from '../functions/api'
-import { setAreaData } from '../redux/actions'
-import Notification from '../components/Notifications/Notification'
+import { fetchGet } from '../functions/api';
+import { setAreaData } from '../redux/actions';
+import Notification from '../components/Notifications/Notification';
+import AdComponent from '../components/Ad';
+
+
 
 const mapStateToProps = state => (
   {
@@ -22,7 +26,31 @@ const mapStateToProps = state => (
   }
 );
 
-class HomeScreen extends Component {
+
+class FlatListItem extends PureComponent {
+  constructor(props){
+    super(props);
+    this.state = {
+        data: this.props.data,
+      };
+    }
+    render(){
+      let {data} = this.state;
+      return(
+        <View style={{paddingBottom: 20}}>
+        {data.type ? 
+          <AdComponent />
+        :
+          <PostFilter data={data} />
+        }
+      </View>
+      );
+    }
+  }
+
+
+
+class HomeScreen extends PureComponent {
   constructor(props){
     super(props);
     this.state = {
@@ -32,7 +60,6 @@ class HomeScreen extends Component {
         modalEditGym: false,
         data: null,
         nextData: null,
-        dataLoaded: false,
         refreshingPosts: false,
         loading: false,
         userModal: false,
@@ -51,17 +78,18 @@ class HomeScreen extends Component {
     this.fetchPostData()
   }
   async loadMorePosts(){
-    this.setState({loading: true})
-    let {login, nextData} = this.state;
+    let {login, nextData, loading} = this.state;
     let data = {...this.state.data}
-    if(nextData && data){
-      let apiRoute = nextData;
+    if(nextData && data && !loading){      let apiRoute = nextData;
       let access_token = login.access_token;
       let response = await fetchGet(apiRoute, access_token)
+      let num = Math.round(Math.random() * 1000)
+      data.results.push({type: "Ad", id: num })
       let temp = data.results
+      // temp.push({type: "Ad", id: 0})
       let temp2 = response.results
       data.results = temp.concat(temp2)
-      this.setState({data: data, nextData: response.next, dataLoaded: true, loading: false})
+      this.setState({data: data, nextData: response.next, loading: false})
     }
   }
 
@@ -85,7 +113,7 @@ class HomeScreen extends Component {
     }
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     this.fetchPostData()
     // Get user area info
     this.fetchUserAreaInfo()
@@ -106,29 +134,24 @@ class HomeScreen extends Component {
       this.state.fab_actions.push({ icon: 'nature', label: 'Edit Area', onPress: () => this.setState({modalEditGym: true})})
     }
   }
-
-
   async fetchPostData(){
       let apiRoute = 'post/';
       let response = await fetchGet(apiRoute)
-      this.setState({data: response, dataLoaded: true, nextData: response.next, refreshingPosts: false, initialLoad: false})
+      this.setState({data: response, nextData: response.next, refreshingPosts: false, initialLoad: false})
   }
   render(){
-    let {modalAddPost, modalAddTick, modalEditGym, refreshingPosts, data, initialLoad, open} = this.state
+    let {modalAddPost, modalAddTick, modalEditGym, refreshingPosts, data, open} = this.state
     return (
         <View style={app_styles.screen}>
             <View style={{alignItems: 'center', height: '100%'}}>
-                {/* <Text style={styles.textHeader}>Recommended Feed</Text> */}
                 <Notification />
                 {data ? 
                   <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 
-                        <View style={{paddingBottom: 25}}>
-                          <PostFilter data={item} />
-                        </View>
+                      <FlatListItem data={item}/>
                     }
-                    onEndReached={() => this.loadMorePosts()}
+                    onEndReached={() => {this.setState({loading: true}); this.loadMorePosts()}}
                     onEndReachedThreshold={.1}
                     refreshing={refreshingPosts}
                     onRefresh={() => this.refreshPosts()}
@@ -136,14 +159,15 @@ class HomeScreen extends Component {
                     ListFooterComponent={this.renderFooter}
                   />
                 : 
-                    <View>
-                      {initialLoad ? 
-                        <ActivityIndicator animating size="large"/>
-                      :
-                        <Text style={details.not_found}>Can't load any posts ):</Text>
-                      }
-                      
-                    </View>
+                  <ActivityIndicator animating size="large"/>
+                  // <View>
+                  //   {initialLoad ? 
+                  //     <ActivityIndicator animating size="large"/>
+                  //   :
+                  //     <Text style={details.not_found}>Can't load any posts ):</Text>
+                  //   }
+                    
+                  // </View>
                 }
             </View>
 
@@ -183,17 +207,3 @@ class HomeScreen extends Component {
   }
 }
 export default connect(mapStateToProps)(HomeScreen)
-
-const styles = StyleSheet.create({
-  textHeader: {
-    paddingTop: 20, 
-    fontWeight: 'bold', 
-    fontSize: 20
-  },
-  headerRow:{
-    borderWidth: 2,
-    width: '90%',
-    borderColor:'black',
-    margin:10,
-  },
-});
