@@ -71,8 +71,6 @@ const styles = StyleSheet.create({
     },
     postContainer: {
         borderColor: 'black', 
-        borderWidth: 1, 
-        borderRadius: 2,
         width: '100%',
         height: '100%',
     },

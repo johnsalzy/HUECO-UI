@@ -142,10 +142,10 @@ class HomeScreen extends PureComponent {
   render(){
     let {modalAddPost, modalAddTick, modalEditGym, refreshingPosts, data, open} = this.state
     return (
-        <View style={app_styles.screen}>
+        <View style={app_styles.screen2}>
+            <Notification />
             <View style={{alignItems: 'center', height: '100%'}}>
-                <Notification />
-                {data ? 
+                {data &&
                   <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 
@@ -158,16 +158,6 @@ class HomeScreen extends PureComponent {
                     keyExtractor={item => item.id.toString(8)}
                     ListFooterComponent={this.renderFooter}
                   />
-                : 
-                  <ActivityIndicator animating size="large"/>
-                  // <View>
-                  //   {initialLoad ? 
-                  //     <ActivityIndicator animating size="large"/>
-                  //   :
-                  //     <Text style={details.not_found}>Can't load any posts ):</Text>
-                  //   }
-                    
-                  // </View>
                 }
             </View>
 
