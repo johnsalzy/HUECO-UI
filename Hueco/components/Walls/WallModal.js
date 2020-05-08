@@ -1,5 +1,5 @@
 // Import needed Libs
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
     View,
     StyleSheet,
@@ -19,7 +19,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').width;
 
 
-class WallModal extends Component {
+class WallModal extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -68,8 +68,8 @@ class WallModal extends Component {
                 <TouchableOpacity style={styles.container} onPress={() => this.props.closeModal()} >
                     <TouchableWithoutFeedback>
                         <View style={styles.containerModal}>
-                            <View style={styles.containerModal}>
-                                <View>
+                            <View style={{height: '100%'}}>
+                                <View style={{maxHeight: '80%'}}>
                                     <View style={{ marginTop: 25}}>
                                         <Text style={styles.name}>{data.name}</Text>
                                         {data.area && <Text style={styles.userInfo}>{data.area.name}</Text> }
@@ -77,7 +77,7 @@ class WallModal extends Component {
 
                                     <View>
                                         {route_data.count > 0  ?
-                                            <View style={{height: '80%', overflow: 'hidden', marginTop: 20, marginBottom: 20}}>
+                                            <View style={{overflow: 'hidden', marginTop: 20, marginBottom: 20}}>
                                                 <Text style={details.not_found}>Routes At This Wall</Text>
                                                 <RouteList 
                                                     data={route_data} 

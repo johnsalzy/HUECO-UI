@@ -72,16 +72,18 @@ class Workout extends Component {
     render() {
       let {new_routes, pinned_area} = this.state;
         return (
-            <View style={app_styles.screen}>
-                <View style={{maxHeight: '60%'}}>
+            <View style={app_styles.screen2}>
+                <View>
                   {new_routes.count > 0  ?
-                      <View style={{height: '100%', overflow: 'hidden', marginTop: 5, marginBottom: 20, }}>
+                      <View style={{overflow: 'hidden', marginTop: 5, marginBottom: 20, maxHeight: 160, }}>
                           <Text style={details.not_found}>New Routes In {pinned_area.area.name}</Text>
-                          <RouteList 
-                              data={new_routes} 
-                              apiRoute={new_routes.next}
-                          />
-
+                          <View style={{alignItems: 'center'}}>
+                            <RouteList 
+                                horizontal={true}
+                                data={new_routes} 
+                                apiRoute={new_routes.next}
+                            />
+                          </View>
                       </View>
                   :
                     <View style={{alignItems: 'center', marginTop: 20}}>

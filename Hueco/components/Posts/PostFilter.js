@@ -76,9 +76,7 @@ class MediaFilter extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => this.openDataPage(data.route.id, 'route')}
                             >
-                                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center', textShadowColor: 'rgba(0, 0, 0, 0.75)',
-                                    textShadowOffset: {width: 0, height: 0},
-                                    textShadowRadius: 3}}
+                                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}
                                 >
                                     {data.route.name} - {data.route.rating}
                                 </Text>

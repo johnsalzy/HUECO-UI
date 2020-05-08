@@ -98,7 +98,9 @@ class Login extends Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <Image source={ LOGO } style={{maxHeight: windowHeight*.30, width: '100%'}}/>
+                    <View style={{alignItems: 'center', maxHeight: windowHeight*.30,}}>
+                        <Image source={ LOGO } style={{height: '100%', width: '90%'}}/>
+                    </View>
                     <View style={view_style.center}>
                         <TextInput style={text_input.default} 
                             placeholder='E-mail'

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 
+import {app_styles} from '../assets/styles/universal';
 import ProfileView from '../components/User/Profile';
 
 
@@ -25,14 +26,13 @@ class ProfileScreen extends Component {
   render(){
     let data = {id: this.state.id}
     return (
+      <View style={{backgroundColor: 'white', height: '100%'}}>
         <ScrollView>
-            <View>
-              <View style={styles.containerProfile}>
-                <ProfileView type={'user'} data={data} />
-              </View>
-            </View>
+          <View style={styles.containerProfile}>
+            <ProfileView type={'user'} data={data} />
+          </View>
         </ScrollView>
-
+      </View>
 
     );
   }

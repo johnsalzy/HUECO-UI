@@ -8,7 +8,7 @@ import SocialMedia from '../components/SocialMedia'
 
 export default function HomeScreen() {
   return (
-    <View style={app_styles.screen}>
+    <View style={app_styles.screen2}>
       <ScrollView>
         <Text style={styles.welcomeText}>Welcome to Heuco!!</Text>
 
@@ -28,15 +28,15 @@ export default function HomeScreen() {
 
         <Text style={styles.bigText}>Advangtages of Heuco - Users</Text>
         <Divider style={styles.divider} />
-        <Text>{'\u2022'} Aggressive workouts to help you train</Text>
-        <Text>{'\u2022'} Compatible for indoor & outdoor routes</Text>
-        <Text>{'\u2022'} Route & grade tracking to help visualize progress</Text>
-        <Text>{'\u2022'} Watch & cheer on friends as they complete routes</Text>
+        <Text style={styles.goalText}>{'\u2022'} Aggressive workouts to help you train</Text>
+        <Text  style={styles.goalText}>{'\u2022'} Compatible for indoor & outdoor routes</Text>
+        <Text  style={styles.goalText}>{'\u2022'} Route & grade tracking to help visualize progress</Text>
+        <Text  style={styles.goalText}>{'\u2022'} Watch & cheer on friends as they complete routes</Text>
 
         <Text style={styles.bigText}>Advangtages of Heuco - Gyms</Text>
         <Divider style={styles.divider} />
-        <Text>{'\u2022'} See what routes are/arent being climbed</Text>
-        <Text>{'\u2022'} Display to users new routes that your gym has</Text>
+        <Text  style={styles.goalText}>{'\u2022'} See what routes are/arent being climbed</Text>
+        <Text  style={styles.goalText}>{'\u2022'} Display to users new routes that your gym has</Text>
 
         <SocialMedia />
       </ScrollView>
@@ -46,8 +46,8 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-    divider: { marginTop: 5, backgroundColor: '#052F5F', height: 2 },
-    welcomeText: {fontSize: 25, fontWeight: 'bold', textAlign: 'center', color: '#052F5F'},
-    bigText: {paddingTop: 10, fontSize: 19, fontWeight: 'bold', textAlign: 'center', color: '#052F5F'},
+    divider: { marginTop: 5, backgroundColor: 'cornflowerblue', height: 2 },
+    welcomeText: {fontSize: 25, fontWeight: 'bold', textAlign: 'center', color: 'cornflowerblue'},
+    bigText: {paddingTop: 10, fontSize: 19, fontWeight: 'bold', textAlign: 'center', color: 'cornflowerblue'},
     goalText: {textAlign: 'center'},
 });

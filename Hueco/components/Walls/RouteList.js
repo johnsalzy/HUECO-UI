@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 
 
 //Import files/componenets
@@ -7,7 +7,8 @@ import {details} from '../../assets/styles/text';
 import RouteResult from '../Routes/RouteResult';
 import { fetchGet } from '../../functions/api'
 
-
+//Page Constants
+const windowWidth = Dimensions.get('window').width;
 
 
 class RouteList extends Component {
@@ -17,6 +18,7 @@ class RouteList extends Component {
         data: this.props.data,
         nextData: this.props.apiRoute,
         loading: false,
+        horizontal: this.props.horizontal,
     };
   }
   async loadMoreData(){
@@ -37,31 +39,28 @@ class RouteList extends Component {
   renderFooter = () => {
     let {loading, nextData} = this.state
     if (nextData==null){
-      return(
-        <View style={{height: '10%', alignItems:'center'}}>
-            <Text style={details.not_found}>No More Routes ):</Text>
-        </View>
-      )
+      return <View style={{paddingBottom: 25}}></View>;
     }else if (!loading){
       return null;
     } else {
-      return (<View style={{paddingBottom: 10}}><ActivityIndicator animating size="large" /></View>)
+      return (<View style={{paddingBottom: 25}}><ActivityIndicator animating size="large" /></View>)
     }
   }
 
 
   render(){
-    let { data } = this.state
+    let { data, horizontal } = this.state
     return (
-        <View style={{height: '100%'}}>
-            <View style={{height: '90%'}}>
+        <View>
+            <View>
                 <FlatList 
                     data={data.results}
                     renderItem={({ item }) => 
-                        <View style={{paddingBottom: 5}}>
-                            <RouteResult data={item}/>
+                        <View style={{alignItems: 'center', maxWidth: windowWidth*.9}}>
+                            <RouteResult scroll={'column'} data={item}/>
                         </View>
                     }
+                    horizontal={horizontal}
                     onEndReached={() => this.loadMoreData()}
                     onEndReachedThreshold={.1}
                     keyExtractor={item => item.id.toString(8)}
