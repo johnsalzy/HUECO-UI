@@ -14,6 +14,7 @@ import {
 
 import ResultFlatList from './ResultFlatList';
 import Icon from '../Ionicon';
+import RouteList from '../../components/Walls/RouteList';
 import { fetchGet } from '../../functions/api';
 import { details } from '../../assets/styles/text';
 const windowWidth = Dimensions.get('window').width;
@@ -31,13 +32,13 @@ class AreaView extends Component {
                 loading: true,
                 next: null,
             },
+            new_routes: null,
             
         };
     }
 
 
-    async loadWallData(){
-        let { data } = this.state;
+    async loadWallData(data){
         let wall_data = {}
         wall_data.next = null
         wall_data.loading = true
@@ -54,12 +55,16 @@ class AreaView extends Component {
         }
     }
 
-    componentDidMount(){
-        this.loadWallData();
+    async componentDidMount(){
+        let { data } = this.state;
+
+        let response = await fetchGet('routes/recent/?area=' + data.area.id)
+        this.setState({new_routes: response})
+        this.loadWallData(data);
     }
 
     render() {
-        let { data, wall_data } = this.state
+        let { data, wall_data, new_routes } = this.state
         return (
             <Modal
             animationType="slide"
@@ -69,15 +74,29 @@ class AreaView extends Component {
                 <TouchableOpacity style={styles.container} onPress={() => this.props.closeModal()} >
                     <TouchableWithoutFeedback>
                         <View style={styles.containerModal}>
-                            <View style={styles.containerModal}>
+                            <View style={styles.containerModal2}>
                                 <View>
-                                    <View style={{ marginTop: 45}}>
+                                    <View style={{ marginVertical: 5, alignItems: 'center'}}>
                                         <Text style={styles.name}>{data.area.name}</Text>
                                     </View>
 
+                                    {new_routes && 
+                                        <View>
+                                            <Text style={details.not_found}>New Routes In This Area</Text>
+                                            <RouteList 
+                                                horizontal={true}
+                                                data={new_routes} 
+                                                apiRoute={new_routes.next}
+                                            />
+                                        </View>
+                                    }
+
+
+
+
                                     <View>
                                         {wall_data.count > 0  ?
-                                            <View style={{maxHeight: '80%', overflow: 'hidden', marginTop: 20}}>
+                                            <View style={{maxHeight: '70%', overflow: 'hidden', marginTop: 20}}>
                                                 <Text style={details.not_found}>Walls In This Area</Text>
                                                 <ResultFlatList 
                                                     data={wall_data} 
@@ -100,7 +119,7 @@ class AreaView extends Component {
                             </View>
                             <TouchableOpacity 
                                 onPress={() => this.props.closeModal()}
-                                style={{marginRight: 'auto', position: 'absolute'}}
+                                style={{marginRight: 'auto', position: 'absolute', left: 0, top: 0}}
                             >
                                 <Icon name={'arrow-back'} size={50} color={'firebrick'}/>
                             </TouchableOpacity>
@@ -124,14 +143,21 @@ const styles = StyleSheet.create({
         height: '95%',
         width: '85%',
         backgroundColor: 'white',
+        alignItems: 'center',
         borderRadius: 10,
         top: windowHeight*.025,
         left: windowWidth*.075,
+    },
+    containerModal2: {
+        maxHeight: '93%',
+        width: '98%',
+        borderRadius: 10,
     },
     name:{
         fontSize:20,
         color:"#000000",
         fontWeight:'bold',
-        textAlign: 'center'
+        width: '85%',
+        textAlign: 'center',
       },
 });
