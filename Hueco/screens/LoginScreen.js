@@ -129,23 +129,25 @@ class Login extends Component {
                         {this.state.errorPresent ? this.state.error_text: ""}
                     </Text>
 
-                    {loginSuccess ? 
-                        <TouchableOpacity style={view_style.center } onPress={() => this.getLoginDetails(this.state.email, this.state.password)}>
-                            <Text style={buttons.primary}>
-                                Login
+                    <View style={ view_style.center }>
+                        
+                        {loginSuccess ? 
+                            <TouchableOpacity style={ buttons.primary } onPress={() => this.getLoginDetails(this.state.email, this.state.password)}>
+                                <Text style={ styles.buttonText }>
+                                    Login
+                                </Text>
+                            </TouchableOpacity>
+                        :
+                            <ActivityIndicator animating size='large'/>
+                    
+                        }
+                        
+                        <TouchableOpacity style={ buttons.primary } onPress={() => this.setState({modalVisible: true})}>
+                            <Text style={ styles.buttonText }>
+                                Register
                             </Text>
                         </TouchableOpacity>
-                    :
-                        <ActivityIndicator animating size='large'/>
-                
-                    }
-
-                    <TouchableOpacity style={ view_style.center} onPress={() => this.setState({modalVisible: true})}>
-                        <Text style={buttons.primary}
-                        >
-                            Register
-                        </Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
                 {modalVisible ? 
                     <View style={styles.viewModalIn}>
@@ -186,5 +188,11 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         left: 0
-    }
+    },
+    buttonText: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlignVertical: 'center',
+    },
 });

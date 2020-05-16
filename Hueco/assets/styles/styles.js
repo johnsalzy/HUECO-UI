@@ -3,9 +3,6 @@ import { StyleSheet } from 'react-native'
 const buttons = StyleSheet.create({
     primary: {
         height: 50,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 20,
         borderColor: 'black',
         backgroundColor: 'white',
         color: 'black',
@@ -15,8 +12,8 @@ const buttons = StyleSheet.create({
         padding: 9,
         margin: 10,
         alignItems: 'center',
-        textAlignVertical: 'center',
         alignContent: 'center',
+        justifyContent: 'center'
     },
     closeText: {
         paddingTop: 5,
