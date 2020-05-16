@@ -40,6 +40,36 @@ async function checkToken(state){
 
     return state.login.access_token
 }
+export async function fetchGetNoAuth(apiRoute) {
+    // To be used on login page/reset password
+    const state = store.getState();     // grab current state
+    const baseAPI = state.api.baseAPI
+    if(! apiRoute.includes(baseAPI)){
+      apiRoute = baseAPI + apiRoute
+    }
+    let response = await fetch(apiRoute, {
+      })
+      .then((response) => response.json())
+      .catch((err) => handleError(err))
+    return response
+}
+
+export async function fetchPostNoAuth(apiRoute, body) {
+  // To be used on login page/reset password
+  const state = store.getState();     // grab current state
+  const baseAPI = state.api.baseAPI
+  if(! apiRoute.includes(baseAPI)){
+    apiRoute = baseAPI + apiRoute
+  }
+  let response = await fetch(apiRoute, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body)
+  })
+  return response
+}
 
 export async function fetchGet(apiRoute) {
   const state = store.getState();     // grab current state
