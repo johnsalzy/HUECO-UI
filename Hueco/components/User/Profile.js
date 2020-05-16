@@ -10,8 +10,10 @@ import {
     ActivityIndicator,
 } from "react-native";
 import {connect} from 'react-redux';
-import { Tooltip, Rating } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
+import FlashMessage from "react-native-flash-message";
 
+// Our Imports
 import { setUserProfile, updateUserProfile } from '../../redux/actions'
 import Icon from '../Ionicon';
 import StatView from '../Stats/StatView';
@@ -54,6 +56,7 @@ class Profile extends Component {
         this.setState({data})
     }
 
+
     async componentDidUpdate(){
         let needToUpdate = this.props.user.needToUpdate;
         if(needToUpdate){
@@ -63,6 +66,17 @@ class Profile extends Component {
             this.props.dispatch(setUserProfile(response))
         }
         
+    }
+
+    showLocalMessage(title, description, type){
+        this.refs.localFlashMessage.showMessage({
+            message: title,
+            description: description,
+            type: type,
+            titleStyle: {fontWeight: 'bold', fontSize: 15},
+            floating: true,
+            icon: { icon: type, position: "left" }
+        })
     }
 
     async componentDidMount(){
@@ -204,9 +218,9 @@ class Profile extends Component {
                                 {type == "user" && 
                                     <View style={styles.flexInRow}>
                                         <Icon name='stars' color={'cornflowerblue'}/>
-                                        <Tooltip popover={<Text>{data.profile.achievement.desc}</Text>}>
+                                        <TouchableOpacity onPress={() => this.showLocalMessage(data.profile.achievement.name, data.profile.achievement.desc, 'info')}>
                                             <Text style={styles.userInfo}> {data.profile.achievement.name} </Text>
-                                        </Tooltip>
+                                        </TouchableOpacity>
                                     </View>
                                 }
                                 <View style={styles.flexInRow}>
@@ -220,19 +234,19 @@ class Profile extends Component {
                                 {/* Followers/Following */}
                                 {type == 'user'  && 
                                     <View style={styles.flexInRow}>
-                                        <Tooltip popover={<Text>Followers</Text>}>
+                                        <TouchableOpacity onPress={() => this.showLocalMessage('Followers', null, 'info')}>
                                             <View style={styles.flexInRow}>
                                                 <Icon color={'cornflowerblue'} name='people' />
                                                 <Text style={styles.userInfo}> {data.profile.followers} </Text>
                                             </View>
-                                        </Tooltip>
+                                        </TouchableOpacity>
                                         <Text> </Text>
-                                        <Tooltip popover={<Text>Following</Text>}>
+                                        <TouchableOpacity onPress={() => this.showLocalMessage('Following', null, 'info')}>
                                             <View style={styles.flexInRow}>
                                                 <Icon color={'cornflowerblue'} name='search' />
                                                 <Text style={styles.userInfo}> {data.profile.following} </Text>
                                             </View>
-                                        </Tooltip>
+                                        </TouchableOpacity>
                                     </View>
                                 }
                                 {type == 'route' &&
@@ -245,11 +259,11 @@ class Profile extends Component {
                                     </View>
                                 }
                                 {/* Sends count */}
-                                <Tooltip popover={<Text>Total Sends</Text>}>
+                                <TouchableOpacity onPress={() => this.showLocalMessage('Total Sends', null, 'info')}>
                                     <View style={styles.flexInRow}>
                                     <Icon name='timeline' color={'cornflowerblue'}/><Text style={styles.userInfo}> {data.profile.sends} </Text>
                                     </View>
-                                </Tooltip>
+                                </TouchableOpacity>
                             </View>
                             {/* End of profile view, start of stats view */}
                             <StatView type={type} id={data.id}/>
@@ -287,6 +301,7 @@ class Profile extends Component {
                         }}
                     />
                 }
+                <FlashMessage ref="localFlashMessage"/>
             </View>
         );
     }
