@@ -15,7 +15,6 @@ import {
 import Dropdown from '../../DropDown';
 import { connect } from 'react-redux';
 import FlashMessage from "react-native-flash-message";
-import { showMessage } from "react-native-flash-message";
 import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
 
 //Import Screens/Components/Styles
@@ -57,6 +56,7 @@ class EditGym extends Component {
             sel_grade_value: '',
             grades: boulder_grade.v_scale,
             attach_media: false,
+            creating_route: false,
         };
     }
 
@@ -70,6 +70,7 @@ class EditGym extends Component {
         this.loadWallData(apiRoute, [])
     }
     async createRoute(){
+        this.setState({creating_route: true})
         var formdata = new FormData();
         // Will create a route when submit button is pressed
         let {wallSelectID, gradeSelect, typeSelect, route_name, media, user} = this.state;
@@ -78,7 +79,7 @@ class EditGym extends Component {
         formdata.append("setter", user.id);
         formdata.append("wall", wallSelectID);
         formdata.append("rating", gradeSelect);
-        formdata.append("route_type", typeSelect);
+        formdata.append("route_type", typeSelect.toLowerCase());
         if(media){
             let uri = Platform.OS === "android" ? media.uri : media.uri.replace("file://", "")
             formdata.append("media.media", {uri:uri, type:'image/jpeg', name:'fetchPostMedia'});
@@ -97,6 +98,9 @@ class EditGym extends Component {
             message = "Please Select a Grade"
         } else {
             let response = await fetchPostMedia('routes/', formdata)
+            console.log('EditGyms.js status', JSON.stringify(response))
+            console.log('EditGyms.js form', formdata)
+
             if(response.status == 201){
                 this.setState({route_name: "", media: null, gradeSelect: "Select a Grade"})
                 type = 'success'
@@ -106,6 +110,7 @@ class EditGym extends Component {
                 message = "Could Not Create Route"
             }
         }
+        this.setState({creating_route: false})
         this.refs.localFlashMessage.showMessage({
             message: message,
             type: type,
@@ -168,7 +173,7 @@ class EditGym extends Component {
         })
     }
     render() {
-        let { areas, route_data, loading_routes, grades, wall_list, areaSelect, wallSelect, typeSelect, gradeSelect, attach_media, media } = this.state;
+        let { areas, route_data, loading_routes, grades, wall_list, areaSelect, wallSelect, typeSelect, gradeSelect, attach_media, media, creating_route } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -265,12 +270,17 @@ class EditGym extends Component {
                             </View>
                             
                             <View style={{alignItems: 'center'}}>
-                                <TouchableOpacity
-                                    onPress={() => this.createRoute()}
-                                    style={{width: '50%', alignItems: 'center', backgroundColor: 'cornflowerblue', borderRadius: 5, marginTop: 10}}
-                                >
-                                    <Text style={{textAlign: 'center', color: 'white', paddingVertical: 3}}>Create Route</Text>
-                                </TouchableOpacity>
+                                {creating_route ? 
+                                        <ActivityIndicator size={'large'} animating />
+                                    :
+                                        <TouchableOpacity
+                                            onPress={() => this.createRoute()}
+                                            style={{width: '50%', alignItems: 'center', backgroundColor: 'cornflowerblue', borderRadius: 5, marginTop: 10}}
+                                        >
+                                            <Text style={{textAlign: 'center', color: 'white', paddingVertical: 3}}>Create Route</Text>
+                                        </TouchableOpacity>
+                                }   
+
                             </View>
                         </View>
 
