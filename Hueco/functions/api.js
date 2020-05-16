@@ -6,12 +6,14 @@ async function handleError(err){
   return null
 }
 
-function checkToken(state){
+async function checkToken(state){
     let experation = state.login.expires
     const now = Date.now()/1000;
-    
+    if(now >= experation){
+      alert('Token is expired!                                    ' + now + '                           ' + experation)
+    }
 
-    // If it is expired
+    // // If it is expired
     // let body = {
     //   client_id: 'NTMtzF7gzZPU9Ka35UFsDHvpR8e4D1Fy4OPRsurx',
     //   grant_type: 'refresh_token',
@@ -21,22 +23,20 @@ function checkToken(state){
     // console.log('body', body)
     // let apiRoute = baseAPI + 'auth/token/'
     // console.log('api route: ' + apiRoute)
-    // let response = fetch(apiRoute, {
-    //   method: 'POST',
+    // let response = await fetch("http://3.133.123.120:8000/api/v1/users/2/", {
+    //   method: 'GET',
     //   headers: {
     //     'Content-Type': 'application/json'
     //   },
-    //   body: JSON.stringify(body)
+    //   // body: JSON.stringify(body)
     // })
     // .then((response) => console.log('res json', response.json()))
     // .catch((err) => handleError(err));
-    // console.log('response', response)
+    // let response2 = await response
+    // console.log('response from get new token', JSON.stringify(response2.text()))
     // store.dispatch(refreshToken({access_token: 'sfasdfas433wfd'}))
 
-    if(now >= experation){
-
-      alert('Token is expired!                                    ' + now + '                           ' + experation)
-    }
+    
 
     return state.login.access_token
 }
@@ -63,7 +63,7 @@ export async function fetchGet(apiRoute) {
 export async function fetchPost(apiRoute, body){
   const state = store.getState();
   const baseAPI = state.api.baseAPI
-  const access_token = checkToken(state)
+  const access_token = await checkToken(state)
   let response = await fetch(baseAPI + apiRoute, {
       method: 'POST',
       headers: {
@@ -81,7 +81,7 @@ export async function fetchPost(apiRoute, body){
 export async function fetchPostMedia(apiRoute, body){
   const state = store.getState();
   const baseAPI = state.api.baseAPI
-  const access_token = checkToken(state)
+  const access_token = await checkToken(state)
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json")
   myHeaders.append("Authorization", "Bearer " + access_token);
