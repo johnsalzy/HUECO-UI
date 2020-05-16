@@ -98,9 +98,6 @@ class EditGym extends Component {
             message = "Please Select a Grade"
         } else {
             let response = await fetchPostMedia('routes/', formdata)
-            console.log('EditGyms.js status', JSON.stringify(response))
-            console.log('EditGyms.js form', formdata)
-
             if(response.status == 201){
                 this.setState({route_name: "", media: null, gradeSelect: "Select a Grade"})
                 type = 'success'
@@ -203,7 +200,7 @@ class EditGym extends Component {
 
                             <View style={styles.flexRow}>
                                 <Text style={styles.createTitle}>Name</Text>
-                                <View style={{ height: 30, width: 200, borderColor: 'black', borderWidth: 1, justifyContent: 'center' }}>
+                                <View style={{ height: 30, width: 200, borderColor: 'black', borderWidth: 1, borderRadius: 5, justifyContent: 'center' }}>
                                     <TextInput 
                                         style={{paddingLeft: 5}}
                                         onChangeText = {(route_name) => this.setState({route_name})}

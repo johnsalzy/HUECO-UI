@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         width: '100%', 
         borderColor: 'black', 
         borderWidth: 1, 
+        borderRadius: 5, 
         justifyContent: 'center',
         overflow: 'hidden',
         flexDirection: 'row',
