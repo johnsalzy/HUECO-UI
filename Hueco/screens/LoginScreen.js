@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import {
     View,
+    ScrollView,
     Text,
     StyleSheet,
     TextInput,
@@ -33,7 +34,7 @@ const mapStateToProps = state => (
 class Login extends Component {
     state = {
         email: 'salzmajm@mail.uc.edu',
-        password: 'Gruffalo',
+        password: 'Password',
         loggedIn: false,
         errorPresent: false,
         error_text: '',
@@ -96,7 +97,7 @@ class Login extends Component {
     render() {
         let { modalVisible, loginSuccess, resetPassPage} = this.state
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View>
                     <View style={{alignItems: 'center', maxHeight: windowHeight*.30,}}>
                         <Image source={ LOGO } style={{height: '100%', width: '90%'}}/>
@@ -165,7 +166,7 @@ class Login extends Component {
                         modalVisible={resetPassPage}
                     />
                 }
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -177,7 +178,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'cornflowerblue',
-        paddingTop: 40
+        paddingTop: 40,
+        height: '100%', width: '100%'
     },
     viewModalIn: {
         width: windowWidth, 
