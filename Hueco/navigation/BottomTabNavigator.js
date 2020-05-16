@@ -10,7 +10,7 @@ import AboutUs from '../screens/AboutUs';
 import LoginScreen from '../screens/LoginScreen';
 import HomePage from '../screens/HomePage';
 import Profile from '../screens/ProfileScreen';
-import WorkOutScreen from '../screens/Workout';
+// import WorkOutScreen from '../screens/Workout';
 import SearchScreen from '../screens/SearchScreen';
 import { Transition } from './Transition';
 
@@ -74,14 +74,14 @@ const HomeNavigator = () => {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="search" />,
         }}
       />
-      <AppStack.Screen
+      {/* <AppStack.Screen
         name="Workout"
         component={WorkOutScreen}
         options={{
           title: 'Work Outs',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="fitness-center" />,
         }}
-      />
+      /> */}
       <AppStack.Screen
         name="Profile"
         component={Profile}
