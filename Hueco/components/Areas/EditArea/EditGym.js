@@ -147,13 +147,15 @@ class EditGym extends Component {
         if(response.status == 200){
             // Remove route from state
             let {route_data} = this.state;
+            let new_results = route_data.results
             route_data.count = route_data.count - 1
             for(const route in route_data.results){
                 if(route_data.results[route].id == data.id){
-                    route_data.results.splice(route, 1)
+                    new_results.splice(route, 1)
                     break;
                 }
             }
+            route_data.results = new_results
             this.setState({route_data: route_data})
             message = "Route:" + data.name + " Deleted"
             type = 'success'
@@ -290,17 +292,11 @@ class EditGym extends Component {
                                 :
                                     <View>
                                         {route_data ? 
-                                            <View 
-                                                style={{...ifIphoneX({
-                                                    paddingBottom: 65
-                                                }, {
-                                                    paddingBottom: 50,
-                                                })}}
-                                            >
+                                            <View style={{paddingBottom: 50}}>
                                                 <View>
                                                     {route_data.count > 0 ?
-                                                        route_data.results.map((data, index) => (
-                                                            <View key={index} style={{flexDirection: 'row', alignItems: 'center'}}>
+                                                        route_data.results.map((data) => (
+                                                            <View key={data.id} style={{flexDirection: 'row', alignItems: 'center'}}>
                                                                 <View style={{width: '90%'}}>
                                                                     <RouteResult data={data}/>
                                                                 </View>
