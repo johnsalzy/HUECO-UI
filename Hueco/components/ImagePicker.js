@@ -18,9 +18,7 @@ export default class MediaPickerComp extends React.Component {
     this.state = {
       image: null,
       type: this.props.type,
-      caption: this.props.caption,
       result: {type: null},
-      caption: null,
     };
 }
   componentDidMount() {
@@ -52,6 +50,7 @@ export default class MediaPickerComp extends React.Component {
         allowsEditing: true,
         quality: .8,  // 0-1(max)
         base64: true,
+        videoExportPreset: ImagePicker.VideoExportPreset.HighestQuality
       });
     }
     if (!result.cancelled) {
@@ -61,12 +60,12 @@ export default class MediaPickerComp extends React.Component {
   };
 
   removeImage(){
-    this.setState({image: null, result: {type: null}, caption: null})
+    this.setState({image: null, result: {type: null}})
     this.props.deleteMedia()
   }
 
   render() {
-    let { image, result, caption } = this.state;
+    let { image, result } = this.state;
     // alert(JSON.stringify(this.state))
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -78,13 +77,13 @@ export default class MediaPickerComp extends React.Component {
                     <View style={styles.image}>
                         <Image source={{ uri: image }} style={{ width: windowWidth*.94, height: windowWidth*.94 }} />
                     </View>
-                    {caption && 
+                    {/* {caption && 
                       <TextInput style={styles.mediaDescription} 
                           placeholder='Media Caption(Optional)'
                           onChangeText = {(caption) => this.props.setCaption(caption)}
                           value = {this.props.caption}
                       />
-                    }
+                    } */}
                 </View>
             }
             {/* Display if type is video */}
@@ -102,11 +101,11 @@ export default class MediaPickerComp extends React.Component {
                       style={{ width: windowWidth*.7, height: windowHeight*.6 }}
                     />
                   </View>
-                  <TextInput style={styles.mediaDescription} 
+                  {/* <TextInput style={styles.mediaDescription} 
                     placeholder='Media Caption(Optional)'
                     onChangeText = {(caption) => this.props.setCaption(caption)}
                     value = {this.props.caption}
-                  />
+                  /> */}
                 </View>
               }
           </View>
