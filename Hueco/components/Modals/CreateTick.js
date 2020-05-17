@@ -222,10 +222,10 @@ class CreateTick extends Component {
                                         {/* Section to add comment */}
                                         <View>
                                             <Text style={styles.title}>Comment</Text>
-                                            <View style={{alignItems: 'flex-start'}}>
+                                            <View style={{alignItems: 'flex-start', maxWidth: '100%'}}>
                                                 <TextInput 
                                                     placeholder={'Crux was sweet.'}
-                                                    style={{height: 40, borderColor: 'black', borderWidth: 2, paddingRight: 5, paddingLeft: 5, borderRadius: 5, width: '80%'}}
+                                                    style={{height: 40, borderColor: 'black', borderWidth: 2, paddingRight: 5, paddingLeft: 5, borderRadius: 5, width: '80%', color:'blue'}}
                                                     onChangeText = {(comment) => this.setState({comment})}
                                                     value = {this.state.comment}
                                                 />
