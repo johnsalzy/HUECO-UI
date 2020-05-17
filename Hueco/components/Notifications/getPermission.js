@@ -3,8 +3,11 @@ import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 
+import { fetchPost } from '../../functions/api';
+
 export async function registerForPushNotificationsAsync(){
     let response = {expoPushToken: null}
+    let token = ""
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
@@ -18,6 +21,8 @@ export async function registerForPushNotificationsAsync(){
       }
       token = await Notifications.getExpoPushTokenAsync();
       response.expoPushToken = token;
+      let body = {enabled: true, token: token, sound: true}
+      let respFetch = await fetchPost('notifcation-settings/change/', body)
     } else {
     //   alert('Must use physical device for Push Notifications');
       return response

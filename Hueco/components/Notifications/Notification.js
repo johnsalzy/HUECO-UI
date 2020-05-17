@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Button, Vibration, Platform } from 'react-native';
+import { View, Vibration } from 'react-native';
 import { Notifications } from 'expo';
 
 import { registerForPushNotificationsAsync } from './getPermission';
