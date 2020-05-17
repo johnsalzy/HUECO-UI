@@ -59,7 +59,9 @@ class AreaView extends Component {
         let { data } = this.state;
 
         let response = await fetchGet('routes/recent/?area=' + data.area.id)
-        this.setState({new_routes: response})
+        if(!response.count == 0){
+            this.setState({new_routes: response})
+        }
         this.loadWallData(data);
     }
 
