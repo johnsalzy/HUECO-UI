@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Rating } from 'react-native-elements';
 
@@ -8,7 +8,7 @@ import {search_results} from '../../assets/styles/styles';
 import ModalView from '../Modals/ModalView';
 import ImageWithLoader from '../ImageWithLoader';
 
-class RouteResult extends Component {
+class RouteResult extends PureComponent {
   constructor(props){
     super(props);
     this.state = {
@@ -36,7 +36,13 @@ class RouteResult extends Component {
                     onPress={() => this.setState({profileModal: true, modalData: {id: data.id}})}
                 >
                     <View style={styles.container}>
-                        <View style={search_results.resultContainer}>
+                        <View style={{
+                            borderRadius: 8, 
+                            backgroundColor: "white",
+                            borderWidth: 2,
+                            borderColor: 'black',
+                            overflow: 'hidden'
+                        }}>
                             <View style={styles.alignInRow}>
                                 <View style={{ width: '30%', justifyContent: 'center'}}>
                                   <View style={styles.avatar}>
@@ -84,14 +90,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       avatar: {
-        width: 90,
-        height: 90,
-        borderRadius: 10,
-        borderWidth: 3,
+        maxWidth: 120,
+        maxHeight: 120,
+        // borderRadius: 5,
+        borderRightWidth: 2,
         borderColor: "black",
         overflow: 'hidden',
         justifyContent: 'center',
-        alignSelf: 'center',
+        // alignSelf: 'center',
         alignItems: 'center'
       },
       name:{
