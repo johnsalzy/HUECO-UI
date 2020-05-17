@@ -315,12 +315,12 @@ class EditGym extends Component {
                                                 </View>
                                                     
                                                 <View style={{flexDirection: 'row', padding: 10}}>
-                                                    {route_data.next &&
-                                                        <TouchableOpacity onPress={() => this.loadRouteData(route_data.previous)} style={{alignItems: 'center',}}>
+                                                    {route_data.prev && 
+                                                        <TouchableOpacity onPress={() => this.loadRouteData(route_data.previous)} style={{alignItems: 'center'}}>
                                                             <Text style={styles.loadNextData}>Load Previous</Text>
                                                         </TouchableOpacity> 
                                                     }
-                                                    {route_data.prev && 
+                                                    {route_data.next &&
                                                         <TouchableOpacity onPress={() => this.loadRouteData(route_data.next)} style={{alignItems: 'center', marginLeft: 'auto'}}>
                                                             <Text style={styles.loadNextData}>Load Next</Text>
                                                         </TouchableOpacity> 
