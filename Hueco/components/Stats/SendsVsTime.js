@@ -40,7 +40,6 @@ function getStyles() {
       labelNumber: {
         textAnchor: "middle",
         fill: "#ffffff",
-        fontFamily: "inherit",
         fontSize: "14px"
       },
 
@@ -58,7 +57,6 @@ function getStyles() {
         },
         tickLabels: {
           fill: "black",
-          fontFamily: "inherit",
           fontSize: 16
         }
       },
@@ -74,13 +72,11 @@ function getStyles() {
         ticks: { strokeWidth: 0 },
         tickLabels: {
           fill: BLUE_COLOR,
-          fontFamily: "inherit",
           fontSize: 16
         }
       },
       labelOne: {
         fill: BLUE_COLOR,
-        fontFamily: "inherit",
         fontSize: 12,
         fontStyle: "italic"
       },
@@ -89,7 +85,6 @@ function getStyles() {
       },
       axisOneCustomLabel: {
         fill: BLUE_COLOR,
-        fontFamily: "inherit",
         fontWeight: 300,
         fontSize: 21
       },
@@ -99,14 +94,12 @@ function getStyles() {
         axis: { stroke: RED_COLOR, strokeWidth: 0 },
         tickLabels: {
           fill: RED_COLOR,
-          fontFamily: "inherit",
           fontSize: 16
         }
       },
       labelTwo: {
         textAnchor: "end",
         fill: RED_COLOR,
-        fontFamily: "inherit",
         fontSize: 12,
         fontStyle: "italic"
       },
@@ -205,12 +198,12 @@ class Stats extends Component {
                 <VictoryLabel style={ChartStyles.title} text={"Sends vs. Time"} x={chartWidth/2} y={30} textAnchor="middle"/>
                 {boulder.length > 1 && 
                   <VictoryLabel x={50} y={55} style={ChartStyles.labelOne}
-                      text={"Boulder Sends"}
+                      text={"Boulder"}
                   />
                 }
                 {rope.length > 1 && 
-                  <VictoryLabel x={350} y={55} style={ChartStyles.labelTwo}
-                      text={"Rope Sends"}
+                  <VictoryLabel x={300} y={55} style={ChartStyles.labelTwo}
+                      text={"Rope"}
                   />
                 }
                 {rope.length > 1 && 
