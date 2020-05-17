@@ -116,7 +116,7 @@ class Settings extends Component {
                         <TouchableOpacity 
                             onPress={() => this.setState({target: 'settings'})}
                         >
-                            <Icon size={30} name={'lock'} color={sideBarIconColor}/>
+                            <Icon size={30} name={'settings'} color={sideBarIconColor}/>
                         </TouchableOpacity>
                     </View>
                     {/* To close the modal */}
