@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
       width: '90%',
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#f5fcff",
+      // backgroundColor: "#f5fcff",
     }
 });
