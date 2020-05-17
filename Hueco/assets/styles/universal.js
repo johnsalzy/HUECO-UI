@@ -3,7 +3,7 @@ import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
 
 const app_styles = StyleSheet.create({
     background: {
-        backgroundColor: '#EBEBEB'
+        backgroundColor: 'white'
     },
     screen: {
         flex: 1,
