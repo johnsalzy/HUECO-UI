@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
 import { fetchGet } from '../../functions/api';
 import { ActivityIndicator } from 'react-native-paper';
 
-  
+import ModalView from '../Modals/ModalView';
 const mapStateToProps = state => (
   {
     stats: state.stats
@@ -19,6 +19,8 @@ class RouteComments extends Component {
       id: this.props.id,
       loading: true,
       comments: [],
+      modalVisable: false,
+      userId: null,
     }
   }
   async componentDidMount(){
@@ -26,20 +28,25 @@ class RouteComments extends Component {
     let {id} = this.state;
     let comments = await fetchGet('climbing/tick/comments/?route=' + id)
     this.setState({comments: comments, loading: false})
-    console.log('Route Comments', id, comments)
   }
 
   render(){
-    let { comments, loading } = this.state;
+    let { comments, loading, modalVisable, userId } = this.state;
     // alert('this.state render ' + JSON.stringify(this.state.data))
     return (
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', paddingBottom: 10, paddingHorizontal: 25}}>
             <Text style={styles.title}>Comments</Text>
+            {modalVisable && <ModalView type={'user'} data={{id: userId}} closeModal={() => this.setState({modalVisable: false})}/>}
             {comments.length > 0 ? 
                 <View>
                   {comments.map((comment, key) => (
-                    <Text key={key}>@Name/comment/picture</Text>
-                  
+                    <View key={key} style={{flexDirection: 'row'}}>
+                      <TouchableOpacity onPress={() => this.setState({userId: comment.user.id, modalVisable: true})}>
+                        <Text style={{fontWeight: 'bold'}}>@{comment.user.username} </Text>
+                      </TouchableOpacity>
+                      <Text style={{maxWidth: '100%'}}>{comment.comment}</Text>
+                    </View>
+                    
                   ))}
                 </View>
             : 
@@ -49,9 +56,9 @@ class RouteComments extends Component {
                 :
                   <Text style={{color: 'cornflowerblue'}}>No Comments :(</Text>
                 }
-                
               </View>
             }
+            
         </View>
     );
   }
