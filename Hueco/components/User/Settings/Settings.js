@@ -16,6 +16,7 @@ import Achievements from './Achievements';
 import DeviceSettings from './DeviceSettings';
 import Icon from '../../Ionicon';
 import { ifIphoneX, getBottomSpace } from 'react-native-iphone-x-helper'
+import { fetchLogout, fetchPost } from "../../../functions/api";
 const sideBarIconColor = 'dodgerblue'
 
 const mapStateToProps = state => (
@@ -32,7 +33,8 @@ class Settings extends Component {
             target: 'account',
         };
     }
-    logoutUser(){
+    async logoutUser(){
+        let resposne = await fetchLogout('auth/revoke-token/')
         this.props.dispatch(logoutUser(this.state.username))
         this.props.dispatch(clearProfile(this.state.username))
         this.setState({profileDataLoaded: false})

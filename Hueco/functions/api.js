@@ -1,7 +1,7 @@
 import store from '../redux/store';
 import { refreshToken } from '../redux/actions/index'
 async function handleError(err){
-  console.log('I will handle the error' + err)
+  console.log('I will handle the error - ' + err)
 
   return null
 }
@@ -89,6 +89,29 @@ export async function fetchGet(apiRoute) {
   return response
 }
 
+export async function fetchLogout(apiRoute){
+  const state = store.getState();
+  const baseAPI = state.api.baseAPI
+  const access_token = await checkToken(state)
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json")
+  // myHeaders.append("Authorization", "Bearer " + access_token);
+  myHeaders.append("Content-type", "multipart/form-data");
+  var formdata = new FormData();
+  formdata.append("client_id", "NTMtzF7gzZPU9Ka35UFsDHvpR8e4D1Fy4OPRsurx");
+  formdata.append("token", access_token);
+
+  apiRoute = 'http://3.133.123.120:8000/' + apiRoute
+  console.log('api', apiRoute, access_token)
+  let response = await fetch(apiRoute, {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata
+  })
+  // .then(response => response.json())
+  .catch((err) => handleError(err));
+  return response
+}
 
 export async function fetchPost(apiRoute, body){
   const state = store.getState();
