@@ -152,13 +152,15 @@ class AccountInfo extends Component {
                                 marginTop: 25,
                                 width: 160,
                                 height: 160,
-                                borderRadius: 1,
+                                borderRadius: 3,
                                 borderColor: 'black',
                                 borderWidth: 1,
                                 overflow: "hidden"
                             }}
                         >
-                            <ImageWithLoader uri={profile_picture}/>
+                            <TouchableOpacity onPress={() => this._pickImage()}>
+                                <ImageWithLoader uri={profile_picture}/>
+                            </TouchableOpacity>
                         </View>
                         <View>
                         </View>
@@ -169,7 +171,7 @@ class AccountInfo extends Component {
                                     position: 'absolute', bottom: 20, left: 10,
                                     backgroundColor: 'dodgerblue', borderRadius: 4, 
                                     justifyContent: 'center', marginLeft: '2%', 
-                                    paddingLeft: 10, paddingRight: 10, height: 50
+                                    paddingLeft: 10, paddingRight: 10, height: 50,
                                 }}
                             >
                                 <Text style={{color: 'white', textAlign: 'center', textAlignVertical: 'center', fontWeight: 'bold'}}>Change Picture</Text>
