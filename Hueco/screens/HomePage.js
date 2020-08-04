@@ -38,13 +38,14 @@ class FlatListItem extends PureComponent {
       let {data} = this.state;
       return(
         <View >
-        {data.type ? 
-          <AdComponent />
-        :
+          {/* {data.type ? 
+            <AdComponent />
+          :
+            <PostFilter data={data} />
+          } */}
           <PostFilter data={data} />
-        }
-        <Divider style={{paddingTop: 1, backgroundColor: 'cornflowerblue'}}/>
-      </View>
+          <Divider style={{paddingTop: 1, backgroundColor: 'cornflowerblue'}}/>
+        </View>
       );
     }
   }
