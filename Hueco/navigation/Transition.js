@@ -7,7 +7,7 @@ import {Easing} from 'react-native';
 const AnimationSpec = {
    animation: 'timing',
    config: {
-     duration: 1500,
+     duration: 1100,
     easing: Easing.ease,
   },
 };
