@@ -46,7 +46,8 @@ class CreateTick extends Component {
         this.state = {
             modalVisible: this.props.modalVisible,
             data: this.props.data,
-            tagRoute: true,
+            tagExistingRoute: true,
+            tagNonExistingRoute: false,
             date: new Date(Date.now()),
             showDatePicker: false,
             checked: 0,
@@ -113,7 +114,7 @@ class CreateTick extends Component {
 
 
     render() {
-        let { tagRoute, data, showDatePicker, date, checked, rating } = this.state;
+        let { tagNonExistingRoute, tagExistingRoute, data, showDatePicker, date, checked, rating } = this.state;
         return (
                 <Modal
                     animationType="fade"
@@ -123,9 +124,13 @@ class CreateTick extends Component {
                 >
                     <View style={styles.container}>
                         <ScrollView>
-                            <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.props.closeModal() }>
-                                <Icon size={40} color='firebrick' name='arrow-back'/>
-                            </TouchableOpacity>
+                            <View style={{flexDirection: 'row'}}>
+                                <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.props.closeModal() }>
+                                    <Icon size={40} color='firebrick' name='arrow-back'/>
+                                </TouchableOpacity>
+                                <Text style={styles.title}>Tick Route</Text>
+                            </View>
+
                             <View style={{alignItems: 'center',}}>
                                 {data ?
                                     <View>
@@ -245,17 +250,39 @@ class CreateTick extends Component {
                                     </View>
                                 :
                                     <View style={{alignItems: 'flex-start', marginRight: 'auto'}}>
-                                        <Text style={styles.text}>Search A Route</Text>
-                                        <TouchableOpacity onPress={() => this.setState({tagRoute: !tagRoute})}>
-                                            <Icon size={30} color='dodgerblue' name='map'/>
-                                        </TouchableOpacity>
+                                        <View
+                                            style={{flexDirection: 'row'}}    
+                                        >
+                                            <TouchableOpacity onPress={() => this.setState({tagNonExistingRoute: false, tagExistingRoute: true})}>
+                                                <Icon size={30} color='dodgerblue' name='map'/>
+                                            </TouchableOpacity>
 
-                                        {tagRoute && 
-                                            <TagRoute 
-                                                showMessage={(type, message) => this.showLocalMessage(type, message)}
-                                                updateRouteTag={(data) => this.chooseRoute(data)}
-                                                closeRoute={() => this.setState({tagRoute: false})}
-                                            />
+                                            <TouchableOpacity onPress={() => this.setState({tagNonExistingRoute: true, tagExistingRoute: false})}>
+                                                <Icon size={30} color='dodgerblue' name='add-circle-outline'/>
+                                            </TouchableOpacity>
+                                        </View>
+
+
+                                        {tagExistingRoute && 
+
+                                            <View>
+                                                <Text style={styles.text}>Tick Existing Route</Text>
+                                                
+                                                <TagRoute 
+                                                    showMessage={(type, message) => this.showLocalMessage(type, message)}
+                                                    updateRouteTag={(data) => this.chooseRoute(data)}
+                                                    closeRoute={() => this.setState({tagExistingRoute: false})}
+                                                />
+                                            </View>
+                                        }
+
+                                        {tagNonExistingRoute && 
+                                            <View>
+                                                <Text style={styles.text}>Tick Non-Existing Route</Text>
+                                                <View>
+                                                    <Text>Test</Text>
+                                                </View>
+                                            </View>
                                         }
                                     </View>
                                 }
@@ -318,9 +345,11 @@ const styles = StyleSheet.create({
         width: 200
     },
     title: {
-        marginTop: 5,
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: "bold",
-
+        color: "cornflowerblue",
+        textAlignVertical: 'center',
+        textAlign: 'center',
+        width: '100%',
     }
 });
