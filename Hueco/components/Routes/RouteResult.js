@@ -44,7 +44,7 @@ class RouteResult extends PureComponent {
                             overflow: 'hidden'
                         }}>
                             <View style={styles.alignInRow}>
-                                <View style={{ width: '30%', justifyContent: 'center'}}>
+                                <View style={{ width: '29%', justifyContent: 'center'}}>
                                   <View style={styles.avatar}>
                                     <ImageWithLoader uri={data.media_large}/>
                                   </View>
