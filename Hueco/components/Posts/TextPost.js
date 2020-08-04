@@ -13,10 +13,10 @@ class TextPost extends Component {
     }
     render(){
         let { data } = this.state;
-        alert('fetchdata' + JSON.stringify(data))
+        //alert('fetchdata' + JSON.stringify(data))
         return (
             <View>
-                <Text>Test Posts</Text>
+                <Text>Text Posts { data }</Text>
             </View>
         );
   }
