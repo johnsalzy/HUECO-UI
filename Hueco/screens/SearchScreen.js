@@ -100,7 +100,7 @@ class SearchScreen extends React.Component {
     }
     render(){
         let { search, fetchData, searchCat, selectedIndex, placeholder, dataFetched, prevData, nextData, loading } = this.state;
-        const buttons = [<Text>Users</Text>, <Text>Area</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
+        const buttons = [<Text>Users</Text>, <Text>Areas</Text>,<Text>Walls</Text>, <Text>Routes</Text>]
         return (
             <View style={app_styles.screen2}>
             <ScrollView >
