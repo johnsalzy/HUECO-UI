@@ -122,7 +122,7 @@ class Stats extends Component {
       id: this.props.id,
       type: this.props.type,
       switch1Value: false,
-      tickValues: [new Date(2020, 1, 1), new Date(Date.now())],
+      tickValues: [new Date(Date.now())],
       boulder: [],
       rope: []
     }
@@ -143,17 +143,28 @@ class Stats extends Component {
     this.getTickValues(response)
   }
   getTickValues(data) {
-      const dataRopeLast = data.rope[data.rope.length-1].date
-      const dataBoulderLast = data.boulder[data.boulder.length-1].date
-      const dataRopeFirst = data.rope[0].date
-      const dataBoulderFirst = data.boulder[0].date
-      let new_tick_vals = [
-        new Date(dataRopeFirst),
-        new Date(dataBoulderFirst),
-        new Date(dataBoulderLast),
-        new Date(dataRopeLast),
-      ];
-      this.setState({tickValues: new_tick_vals})
+    console.log(data)
+      // const dataRopeLast = data.rope[data.rope.length-1].date
+      // const dataBoulderLast = data.boulder[data.boulder.length-1].date
+      // const dataRopeFirst = data.rope[0].date
+      // const dataBoulderFirst = data.boulder[0].date
+      // let beginDate = '2025-02-01'
+      // console.log('-----------')
+      // console.log(dataRopeFirst)
+      // console.log(dataBoulderFirst)
+      // if(dataRopeFirst < dataBoulderFirst){
+      //   beginDate = dataRopeFirst;
+      //   console.log('rest1')
+      // } else {
+      //   beginDate = dataBoulderFirst;
+      //   console.log('rest')
+      // }
+      // console.log(beginDate)
+      // let new_tick_vals = [
+      //   new Date(beginDate),
+      //   new Date(Date.now())
+      // ];
+      // this.setState({tickValues: new_tick_vals})
   }
 
 
@@ -173,12 +184,13 @@ class Stats extends Component {
                 tickValues={tickValues}
                 tickFormat={
                     (x) => {
-                        if (x.getFullYear() % 10 === 0) {
-                            return x.getFullYear();
-                        }
-                        if (x.getFullYear() % 5 === 0) {
-                            return x.getFullYear().toString().slice(2);
-                        }
+                        // if (x.getFullYear() % 10 === 0) {
+                        //     return x.getFullYear();
+                        // }
+                        // if (x.getFullYear() % 5 === 0) {
+                        //     return x.getFullYear().toString().slice(2);
+                        // }
+                        return 'Today';
                     }
                 }
                 />
