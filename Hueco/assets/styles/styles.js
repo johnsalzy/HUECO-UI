@@ -86,7 +86,7 @@ const text_input = StyleSheet.create({
         padding: 4,
         fontSize: 15,
         borderWidth: 2,
-        backgroundColor: 'lightskyblue',
+        // backgroundColor: 'lightskyblue',
         borderColor: 'black',
         borderRadius: 4,
         paddingLeft: 10,

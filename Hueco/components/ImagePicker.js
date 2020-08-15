@@ -122,7 +122,7 @@ export default class MediaPickerComp extends React.Component {
           </View>
         :
           <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this._pickImage()}>
-            <Icon size={30} color='black' name='add-a-photo'/>
+            <Icon size={30} color='dodgerblue' name='add-a-photo'/>
           </TouchableOpacity>
         }
 

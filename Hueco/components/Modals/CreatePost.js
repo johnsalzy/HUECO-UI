@@ -40,7 +40,7 @@ class CreatePost extends Component {
             login: this.props.login,
             media: null,
             title: '',
-            tagFriend: false,
+            tagFriend: true,
             taggedFriends: [],
             taggedRoute: null,
             imagePosted: null,
@@ -56,10 +56,10 @@ class CreatePost extends Component {
         if (title == ""){
             this.refs.localFlashMessage.showMessage({
                 message: "Please Enter a Title For Your Post",
-                type: "info",
+                type: "warning",
                 titleStyle: {fontWeight: 'bold', fontSize: 15},
                 floating: true,
-                icon: { icon: "info", position: "left" }
+                icon: { icon: "warning", position: "left" }
             })
             return
         }
@@ -118,21 +118,39 @@ class CreatePost extends Component {
                                 <Icon size={40} color='firebrick' name='arrow-back'/>
                             </TouchableOpacity>
                             <View>
-                                <Text style={styles.text}>Title</Text>
-                                <TextInput style={styles.text_input} 
-                                    placeholder='Sent this sick v5 today...'
-                                    placeholderTextColor="darkblue"
-                                    onChangeText = {(title) => this.setState({title})}
-                                    value = {this.state.title}
-                                />
+                                <View style={styles.addTitle}>
+                                    <Text style={styles.text}>Post Title</Text>
+                                    <TextInput style={styles.text_input} 
+                                        placeholder='Sent this sick v5 today...'
+                                        placeholderTextColor="darkblue"
+                                        onChangeText = {(title) => this.setState({title})}
+                                        value = {this.state.title}
+                                    />
+                                </View>
+                                {/* Page Navigation */}
+                                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagFriend: !tagFriend, tagRoute: false})}>
+                                        <Icon size={32} color='dodgerblue' name='person-add'/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagRoute: !tagRoute, tagFriend: false})}>
+                                        <Icon size={32} color='dodgerblue' name='map'/>
+                                    </TouchableOpacity>
+                                    <View>
+                                        <MediaPicker 
+                                            type={'all'}
+                                            caption={true}
+                                            display={true}
+                                            setCaption= {(caption) => this.setState({caption})} 
+                                            propSetImage={(media) => this.setState({media})}
+                                            deleteMedia={() => this.setState({media: null, caption: null})}
+                                        />
+                                    </View>
+                                </View>
 
                                 {/* Tag a Friend */}
-                                <View>
-                                    <Text style={styles.text}>Tag A Friend(Optional)</Text>
-                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagFriend: !tagFriend})}>
-                                        <Icon size={30} color='dodgerblue' name='person-add'/>
-                                    </TouchableOpacity>
-                                    {tagFriend && 
+                                {tagFriend && 
+                                    <View>
+                                        <Text style={styles.text}>Tag Friends</Text>
                                         <TagFriend 
                                             showMessage={(type, message) =>
                                                 this.refs.localFlashMessage.showMessage({
@@ -145,18 +163,17 @@ class CreatePost extends Component {
                                             }
                                             currentlyTagged={taggedFriends}
                                             updateTagFriends={(tags) => this.setState({taggedFriends: tags})}
-                                            closeFriends={() => this.setState({tagFriend: false})}
+                                            // closeFriends={() => this.setState({tagFriend: false, })}
                                         />
-                                    }
-                                </View>
+                                    </View>
+                                }
+                                
 
                                 {/* Tag a Route */}
-                                <View>
-                                    <Text style={styles.text}>Tag A Route(Optional)</Text>
-                                    <TouchableOpacity style={{alignItems: 'flex-start'}} onPress={() => this.setState({tagRoute: !tagRoute})}>
-                                        <Icon size={30} color='dodgerblue' name='map'/>
-                                    </TouchableOpacity>
-                                    {tagRoute && 
+                                
+                                {tagRoute && 
+                                    <View>
+                                        <Text style={styles.text}>Tag A Route</Text>
                                         <TagRoute 
                                             showMessage={(type, message) =>
                                                 this.refs.localFlashMessage.showMessage({
@@ -169,19 +186,12 @@ class CreatePost extends Component {
                                             }
                                             currentlyTagged={taggedRoute}
                                             updateRouteTag={(id) => this.setState({taggedRoute: id})}
-                                            closeRoute={() => this.setState({tagRoute: false})}
+                                            // closeRoute={() => this.setState({tagRoute: false})}
                                         />
-                                    }
-                                </View>
-                                <Text style={styles.text}>Attach Media(Optional)</Text>
-                                <MediaPicker 
-                                    type={'all'}
-                                    caption={true}
-                                    display={true}
-                                    setCaption= {(caption) => this.setState({caption})} 
-                                    propSetImage={(media) => this.setState({media})}
-                                    deleteMedia={() => this.setState({media: null, caption: null})}
-                                />
+                                    </View>
+                                }
+                                
+                                
 
                                 {postingMedia ? 
                                     <View style={{paddingTop: 20}}>
@@ -229,9 +239,12 @@ const styles = StyleSheet.create({
     },
     text_input: {
         borderWidth: 2,
-        backgroundColor: 'lightskyblue',
+        // backgroundColor: 'lightskyblue',
         borderColor: 'black',
         borderRadius: 4,
         paddingLeft: 10,
+    },
+    addTitle: {
+        paddingBottom: 10
     }
 });

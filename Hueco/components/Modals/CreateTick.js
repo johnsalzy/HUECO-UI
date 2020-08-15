@@ -124,11 +124,11 @@ class CreateTick extends Component {
                 >
                     <View style={styles.container}>
                         <ScrollView>
-                            <View style={{flexDirection: 'row'}}>
+                            <View >
                                 <TouchableOpacity style={{marginRight: 'auto'}} onPress={() => this.props.closeModal() }>
                                     <Icon size={40} color='firebrick' name='arrow-back'/>
                                 </TouchableOpacity>
-                                <Text style={styles.title}>Tick Route</Text>
+                                {/* <Text style={styles.title}>Tick Route</Text> */}
                             </View>
 
                             <View style={{alignItems: 'center',}}>
@@ -345,11 +345,13 @@ const styles = StyleSheet.create({
         width: 200
     },
     title: {
-        fontSize: 30,
+        paddingTop: 10,
+        fontSize: 20,
         fontWeight: "bold",
         color: "cornflowerblue",
         textAlignVertical: 'center',
-        textAlign: 'center',
+        // textAlign: 'center',
         width: '100%',
+        textDecorationLine: 'underline'
     }
 });

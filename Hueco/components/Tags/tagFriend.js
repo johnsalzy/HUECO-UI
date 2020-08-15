@@ -189,10 +189,10 @@ class TagFriend extends Component {
 
 
                 </View>
-                <TouchableOpacity onPress={() => this.props.closeFriends()}>
+                {/* <TouchableOpacity onPress={() => this.props.closeFriends()}>
                     <Text style={buttons.closeText}>Close Friends Tab</Text>
-                </TouchableOpacity>
-                <Divider style={dividers.standard}/>
+                </TouchableOpacity> */}
+                {/* <Divider style={dividers.standard}/> */}
             </View>
         );
     }

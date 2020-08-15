@@ -93,14 +93,14 @@ class TagRoute extends Component {
                 <Divider style={dividers.standard}/>
                 {selected_area && 
                     <View style={{paddingBottom: 5}}>
-                        <Text>Searching In Your Currently Selected Area: </Text>
+                        <Text>Searching In Your Currently Selected Area... </Text>
                         <TouchableOpacity
                             style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}
                             onPress={() => 
                                 this.props.showMessage("info", "Change Area On Search Page")
                             }
                         >
-                            <Text>{selected_area.area.name}</Text>
+                            <Text style={styles.selectedArea}>{selected_area.area.name}</Text>
                             <Text style={{paddingLeft: 5, color: 'red'}}>Change Area</Text>
                         </TouchableOpacity>
                     </View>
@@ -189,10 +189,10 @@ class TagRoute extends Component {
                             
     
                     
-                <TouchableOpacity onPress={() => this.props.closeRoute()}>
+                {/* <TouchableOpacity onPress={() => this.props.closeRoute()}>
                     <Text style={buttons.closeText}>Close Route Tab</Text>
-                </TouchableOpacity>
-                <Divider style={dividers.standard}/>
+                </TouchableOpacity> */}
+                {/* <Divider style={dividers.standard}/> */}
             </View>
         );
     }
@@ -213,4 +213,7 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: 'row',
     },
+    selectedArea: {
+        fontWeight: "bold",
+    }
 });
