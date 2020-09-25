@@ -113,6 +113,14 @@ View of the create post page
 View from the Create Post page, showing users that you are able to tag
 
 
+---
+#### Things not Pictured
+1. Login/Register Screen
+2. Ability to post videos
+3. Tabs on the settings page
+4. Search results from routes & areas
+5. Seamless flow of posts on the home page
+
 
 ## Project Status
 
@@ -121,6 +129,7 @@ View from the Create Post page, showing users that you are able to tag
 2. Time (I need more of this, this project was primarily a quarantine project for me and my brother)
 3. The project has about 0 testing (oops)
 4. While most things are cross phone compatible Apples iPhone X bar at the top causes a few issues
+5. Fix a design problem turned into a "feature", involving circular imports when you go from a Users Page -> Users Post -> Users Page
 
 ### Still Needs Done
 1. Utilize local phone storage to store area info ( similar to mountain projects downloading area)
