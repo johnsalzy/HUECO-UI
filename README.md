@@ -120,6 +120,8 @@ View from the Create Post page, showing users that you are able to tag
 3. Tabs on the settings page
 4. Search results from routes & areas
 5. Seamless flow of posts on the home page
+6. How push notifications are presented
+7. Popup that show when some action is done
 
 
 ## Project Status
