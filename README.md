@@ -8,4 +8,4 @@
 ![CreateButton](./Screenshots/Screenshot_20200915-002500.png =250x)
 https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002746.png
 
-<img src="Screenshot_20200915-002530.png" alt ="TickRouteView" width="200" height="200" />
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002530.png" alt ="TickRouteView" width="200" height="200" />
