@@ -77,10 +77,42 @@ View from search page, looking for users
 ---
 
 
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003028.png" alt ="Search Page - Users profile" height="640" width='360'/>
+View from search page, if you click on a users profile
+
+---
+
+
 <img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002746.png" alt ="Search Page - Routes" height="640" width='360'/>
 View from search page, looking for routes
 
 ---
+
+
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003101.png" alt ="Stats view - Routes" height="640" width='360'/>
+View from profile page if you select the stats view
+
+---
+
+
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003120.png" alt ="Edit Area page" height="640" width='360'/>
+View from the Edit area page, toggled in the + from the home screen
+
+---
+
+
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003318.png" alt ="Create Post Page" height="640" width='360'/>
+View of the create post page
+
+---
+
+
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003120.png" alt ="Create Post, but showing user tag selection" height="640" width='360'/>
+View from the Create Post page, showing users that you are able to tag
+
+
+https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003355.png
+
 
 ## Project Status
 
@@ -95,6 +127,7 @@ View from search page, looking for routes
 2. Use refresh tokens to make app more secure
 3. Need to implement the climbing game(Halfdome climber) that I developed along with it
 4. Many more things
+5. Ability to change grades between differnt systems (YDS, UIAA, British)
 
 
 #### Footnotes
