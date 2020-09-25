@@ -126,9 +126,9 @@ https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_2020091
 1. Utilize local phone storage to store area info ( similar to mountain projects downloading area)
 2. Use refresh tokens to make app more secure
 3. Need to implement the climbing game(Halfdome climber) that I developed along with it
-4. Many more things
-5. Ability to change grades between differnt systems (YDS, UIAA, British)
-
+4. Ability to change grades between differnt systems (YDS, UIAA, British)
+5. Do a better job at showing user climbing stats
+6. Many more things
 
 #### Footnotes
 <b id="f1">1</b> All screenshots were taken on a Google Pixel(1st Gen). More images can be provided to show cross phone compatability [↩](#a1)
