@@ -1,5 +1,6 @@
 # HUECO
 A social media & progress tracking based rock climbing app for iOS and Andriod
+
 Made to fill the current void of tracking indoor climbing process there are plenty of others for outdoors
  
 ## Backend
@@ -28,7 +29,7 @@ Push notifcations are used for the following
 2. Alerting a user if their photo/post was commented on
 3. Alerting a user if they were tagged in a post
 
-## Project Screenshots<sup id="a1">[1](#f1)</sup>
+### Project Screenshots<sup id="a1">[1](#f1)</sup>
 <img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002447.png" alt ="Home Page Post View" height="640" width='360' />
 A screenshot from the home page demonstrating a user post with user added media, a tagged user, and tagged route
 
@@ -57,25 +58,26 @@ A view of the profile page
 
 ---
 
+
 <img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002948.png" alt ="Profile Page" height="640" width='360' />
 A view of lower down on the profile page
 
 ---
 
 
-<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002718.png' height="640" width='360'/>
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002718.png" alt ="Settings Page" height="640" width='360'/>
 View if you click the settings icon on your profile page
 
 ---
 
 
-<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002729.png' height="640" width='360'/>
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002729.png" alt ="Search Page - Users" height="640" width='360'/>
 View from search page, looking for users
 
 ---
 
 
-<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002746.png' height="640" width='360'/>
+<img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002746.png" alt ="Search Page - Routes" height="640" width='360'/>
 View from search page, looking for routes
 
 ---
