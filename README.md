@@ -113,8 +113,6 @@ View of the create post page
 View from the Create Post page, showing users that you are able to tag
 
 
-https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-003355.png
-
 
 ## Project Status
 
