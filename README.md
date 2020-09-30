@@ -32,6 +32,8 @@ Push notifcations are used for the following
 3. Alerting a user if they were tagged in a post
 
 ### Project Screenshots<sup id="a1">[1](#f1)</sup>
+Watch a full demo [video](https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Hueco.mp4)
+
 <img src="https://github.com/johnsalzy/HUECO-UI/blob/master/Screenshots/Screenshot_20200915-002447.png" alt ="Home Page Post View" height="640" width='360' />
 A screenshot from the home page demonstrating a user post with user added media, a tagged user, and tagged route
 
