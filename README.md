@@ -15,7 +15,7 @@ Our current media (photos, videos) are stored and resized/edited on cloudinary
 PostgreSQL hosted on AWS
 
 ### Task Management
-Python Celery, currently being used for just push notifications 
+Python Celery, currently being used for push notifications 
 
 ## User Interface
 
