@@ -1,7 +1,7 @@
 # HUECO
 A social media & progress tracking based rock climbing app for iOS and Andriod
 
-Made to fill the current void of tracking indoor climbing process there are plenty of others for outdoors
+Made to fill the current void of tracking indoor climbing progress, there are plenty of others for outdoors
  
 ## Backend
 
